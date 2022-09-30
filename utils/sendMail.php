@@ -1,7 +1,9 @@
 <?php
+    //ESTO SE UTILIZARA PROXIMAMENTE CUANDO SE HAGA EL DISEÑO DEL FORMULARIO
     /*if($_SERVER['REQUEST_METHOD'] != 'POST' ){
         header("Location: ../index.html" );
     }*/
+
 
     require('vendor/autoload.php');
     require "vendor/phpmailer/phpmailer/src/PHPMailer.php";
@@ -22,10 +24,8 @@
         HTML;
 
         $mailer = new PHPMailer();
-        //var_dump($mailer);
         $mailer->isSMTP();
         $mailer->SMTPAuth = true;
-
         $mailer->SMTPSecure = 'tls';
         $mailer->SMTPAutoTLS = false;
         $mailer->Port = 25;
@@ -35,7 +35,6 @@
         $mailer->isHTML(true);
 
         $mailer->AddAddress($destino);
-
         $mailer -> setFrom($destino, "Clinica dental Jireh");
     
         $mailer->Subject = "Recordatorio Clinica dental Jireh";
@@ -43,5 +42,5 @@
         $mailer->AltBody = strip_tags($body);
         $res = $mailer->send();
 
-        var_dump($res);
+        var_dump($res); //regresa true si el email se envio correctamente de lo contrario retorna false
     }
