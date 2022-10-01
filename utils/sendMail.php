@@ -16,7 +16,7 @@
     function enviarMail($destino,$mensaje){
         $body = <<< HTML
             <h1>Clinica dental Jireh</h1>
-            <p>De: Metafusion / $destino</p>
+            <p>Estimado $destino</p>
             <h3>$mensaje</h3>
             <p>WhatsApp: +516463238495</p>
             <p>Numero telefonico: 6452935483</p>
