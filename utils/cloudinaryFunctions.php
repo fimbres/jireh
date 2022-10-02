@@ -10,41 +10,34 @@
     $config->cloud->apiSecret = '-T7ev2kaYOJ_CFFsxLxy7jIOniA';
     $config->url->secure = true;
 
-    function uploadFile(){
+    function uploadFile($rutaArchivo,$tipoArchivo){
         $upload = new uploadApi();
-        $upload->upload('../archivo.pdf',[
+        $upload->upload("$rutaArchivo",[
             'use_filename' => true,
             'overwrite' => true,
-            'tags' => ['animal','dog']]);
+            'tags' => ["$tipoArchivo"]]);
     }
 
-    function callFile(){
+    function callFile($tag){
         $search = new searchApi();
-        $search->expression('resource_type:image');
+        $search->expression("$tag");
         $resultado = $search->execute();
 
         if($resultado){
-            /*MOSTRAR INFORMACION
-            echo "correcto";
-            echo ("<pre>");
-            var_dump($resultado);
-            echo ("</pre>");
-            */
-
             //CREAMOS LA PILA DONDE SE GUARDARAN LAS RUTAS
             $pilaRutas = new SplStack();
 
             //ITERAMOS SOBRE LOS RESULTADOS GUARDANDO LAS RUTAS EN LA PILA
             foreach($resultado['resources'] as $nombre){
                 $pilaRutas->push($nombre['url']);
-                //print_r($nombre['filename']);
             }
 
-            //echo $stack->count();
             //SITUAR PUNTERO AL FINAL DE LA PILA
             $pilaRutas->rewind();
 
             return $pilaRutas;
+        }else{
+            return false;
         }
     }
 

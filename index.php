@@ -2,7 +2,7 @@
     require_once('utils/sendMail.php');
     require_once('utils/cloudinaryFunctions.php');
 
-    //Prueba con mi correo
+    //PRUEBA ENVIAR CORREO ELECTRONICO
     //enviarMail("ariel.incgarcia@gmail.com","Hola este es un mensaje de prueba para recordarle su proxima cita el dia 02 de octubre a las 14:00 con el doctor Jose Lopez");
 ?>
 
@@ -12,16 +12,26 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Index</title>
 </head>
 <body>
     <div>
-        <h1>Imagen</h1>
+        <h1>Documento</h1>
         
         <?php 
-            $pilaArchivos = callFile();
+            //PRUEBA SUBIR ARCHIVO PDF
+            //uploadFile("files/archivo.pdf","pdf");
+
+            //PRUEBA SUBIR ARCHIVO PNG
+            //uploadFile("files/image.png","png");
+
+            //CREAMOS LA PILA CON LAS RUTAS DE LOS ARCHIVOS PDF
+            $pilaArchivosPDF = callFile("pdf");
+
         ?>
-        <img src="<?php echo $pilaArchivos->current(), PHP_EOL;?>" alt="">
+        <!--Mostramos el archivo PDF con el visor de google-->
+        <iframe src="http://docs.google.com/gview?url=<?php echo $pilaArchivosPDF->current(), PHP_EOL;?>
+        &embedded=true" style="width:100%; height:700px;" frameborder="0" ></iframe>
     </div>
 </body>
 </html>
