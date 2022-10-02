@@ -28,6 +28,8 @@
             //CREAMOS LA PILA CON LAS RUTAS DE LOS ARCHIVOS PDF
             $pilaArchivosPDF = callFile("pdf");
 
+            /*NOTA PARA MOSTRAR EL ULTIMO ARCHIVO CARGADO DEBE MOVERSE EL PUNTERO DE LA PILA */
+
         ?>
         <!--Mostramos el archivo PDF con el visor de google-->
         <iframe src="http://docs.google.com/gview?url=<?php echo $pilaArchivosPDF->current(), PHP_EOL;?>
