@@ -1,0 +1,16 @@
+/* Todos los estilos aqui seran para poder hacer que luzca de manera mas apropiada el calendario */
+
+.fc-toolbar-title,#fc-dom-1{
+    position: absolute ;
+    display: none ;
+}
+#titulo-calendario{
+    text-align: center;
+    text-transform: capitalize;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.fc-event:hover{
+    cursor: pointer;
+}
