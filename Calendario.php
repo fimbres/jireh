@@ -41,7 +41,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        ...
                     </div>
                     <div class="modal-footer d-flex">
                         <div class="col-3 justify-content-start m-0 d-flex">

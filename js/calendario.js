@@ -1,11 +1,36 @@
 const mostrarInfoEvento = (info) => {
-  $('#infoCita').modal('show');
+  const cita = info.event;
+  fetch('includes/ajax/cita.php?id=' + cita.id)
+  .then(res => res.json())
+  .then(res => {
+    const tipo = res.respuesta;
+    if(tipo == 'Exito'){
+      const cita = res.resultados[0];
+      $('.modal-body').text('')
+      $('.modal-body').append(`
+        <br>
+        <p>Fecha inicio: ${cita.FechaInicio}</p>
+        <br>
+        <br>
+        <p>Fecha final: ${cita.FechaFinal}</p>
+        <br>
+        <br>
+        <p>id_doctor: ${cita.IdDoctor}</p>
+        <br>
+        <br>
+        <p>id_paciente: ${cita.IdPaciente}</p>
+        <br>
+      `)
+      $('#infoCita').modal('show');
+    }
+  })
+  
 }
 const coloresDoctores = (citas) => {
   let doc = [...new Set(citas.map(item => parseInt(item.IdDoctor)))];
   let doc_ordenado = doc.sort()
   let array_colores = {}
-  let colores = ['#EC7063','#C39BD3','#76D7C4','#DC7633','#DC7633']
+  let colores = ['#E74C3C','#9B59B6','#2980B9','#1ABC9C','#2ECC71','#F1C40F','#E67E22']
   for (let i = 0; i < doc_ordenado.length; i++) {
     array_colores[doc_ordenado[i]] = colores[i];
   }
@@ -32,70 +57,10 @@ document.addEventListener('DOMContentLoaded', function() {
         selectable: false,
         nowIndicator: true,
         dayMaxEvents: true, // allow "more" link when too many events
-        // showNonCurrentDates: false,
-        // events: [
-        //   {
-        //     title: 'All Day Event',
-        //     start: '2022-09-01',
-        //     id: 80,
-        //     // backgroundColor: 'red'
-        //   },
-        //   {
-        //     title: 'Long Event',
-        //     start: '2022-09-07',
-        //     end: '2022-09-10'
-        //   },
-        //   {
-        //     groupId: 999,
-        //     title: 'Repeating Event',
-        //     start: '2022-09-09T16:00:00'
-        //   },
-        //   {
-        //     groupId: 999,
-        //     title: 'Repeating Event',
-        //     start: '2022-09-16T16:00:00'
-        //   },
-        //   {
-        //     title: 'Conference',
-        //     start: '2022-09-11',
-        //     end: '2022-09-13'
-        //   },
-        //   {
-        //     title: 'Meeting',
-        //     start: '2022-09-12T10:30:00',
-        //     end: '2022-09-12T12:30:00'
-        //   },
-        //   {
-        //     title: 'Lunch',
-        //     start: '2022-09-12T12:00:00'
-        //   },
-        //   {
-        //     title: 'Meeting',
-        //     start: '2022-09-12T14:30:00'
-        //   },
-        //   {
-        //     title: 'Happy Hour',
-        //     start: '2022-09-12T17:30:00'
-        //   },
-        //   {
-        //     title: 'Dinner',
-        //     start: '2022-09-12T20:00:00'
-        //   },
-        //   {
-        //     title: 'Birthday Party',
-        //     start: '2022-09-13T07:00:00'
-        //   },
-        //   {
-        //     title: 'Click for Google',
-        //     url: 'http://google.com/',
-        //     start: '2022-09-28'
-        //   }
-        // ],
         eventClick: mostrarInfoEvento,
-        // eventHover: 
       });
     
-    fetch('includes/ajax/citas.php',{
+    fetch('includes/ajax/citas-calendario.php',{
       method: 'POST',
       body: JSON.stringify({
         id_doctor: doctor ? parseInt(doctor) : false
