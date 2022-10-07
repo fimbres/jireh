@@ -13,16 +13,18 @@ const coloresDoctores = (citas) => {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
+    var calendarEl = document.getElementById('calendario');
     var calendar;
+    const doctor = $('#calendario').attr('data-doctor') 
     calendar = new FullCalendar.Calendar(calendarEl, {
+        timeZone: 'UTC',
         themeSystem: 'bootstrap5',
         headerToolbar: {
-            left: 'dayGridMonth,timeGridWeek,timeGridDay',
+            left: doctor ? 'dayGridMonth,timeGridWeek,timeGridDay,listDay' : 'dayGridMonth,timeGridDay,listDay' ,
             center: 'title',
             right: 'prev,next',
         },
-        initialDate: '2022-09-12',
+        initialDate: '2022-08-01',
         locale: 'es',
         height: 800,
         navLinks: true, // can click day/week names to navigate views
@@ -92,8 +94,12 @@ document.addEventListener('DOMContentLoaded', function() {
         eventClick: mostrarInfoEvento,
         // eventHover: 
       });
+    
     fetch('includes/ajax/citas.php',{
       method: 'POST',
+      body: JSON.stringify({
+        id_doctor: doctor ? parseInt(doctor) : false
+      }),
       headers: {
         'Content-Type': 'application/json'
       }

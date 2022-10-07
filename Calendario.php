@@ -1,6 +1,8 @@
 <?php
-
-
+    $id_doctor = false;
+    if(false){
+        $id_doctor = 1;
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,7 +27,11 @@
 
     <body>
         <h2 id="titulo-calendario"></h2>
-        <div id='calendar'></div>
+        <!-- Los atributos que tiene el calendario nos podrán ayudar a definir que 
+        tipo de persona lo mostrara, si lo estará viendo la recepcionista, el doctor o el administrador
+        esto con la idea de que podamos definir el calendario dependiendo el usuario que lo visualizara-->
+        <div id='calendario' <?php if($id_doctor){ echo "data-doctor='$id_doctor'";} ?>></div>
+        
         <!-- Este modal nos mostrara toda la informacion de una cita -->
         <div class="modal fade" id="infoCita" data-bs-keyboard="false" tabindex="-1" aria-labelledby="infoCitaLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
