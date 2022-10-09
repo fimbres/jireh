@@ -54,14 +54,5 @@
     <footer>
 
     </footer>
-
-    <script>
-        let viewport = window.innerHeight;
-
-        console.log(viewport);
-
-        let menu = document.querySelector('#sideBar');
-        menu.style.height = viewport;
-    </script>
 </body>
 </html>
