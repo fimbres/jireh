@@ -14,9 +14,9 @@
 <body>
     <main class="d-flex flex-wrap flex-row">
         <div id="sideBar" class="d-flex flex-column flex-shrink-0 p-3">
-            <div class="d-flex justify-content-center align-items-center"><a href="#"><img class="rounded" src="files/logo_jireh.jpg" width="180px" alt=""></a></div>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
+            <div id="top-sideBar" class=""><a href="#"><img class="rounded" src="files/logo_jireh.jpg" width="180px" alt=""></a><ul class=""><li><a href="#" onclick="desplegarMenu()" class="link-light pt-2 pb-2 ps-4 pe-4">Menu</a></li></ul></div>
+            <hr class="separator">
+            <ul id="list-menu" class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
                     <a href="#" class="nav-link link-light mt-2 text-center" aria-current="page">
                     Agregar Cliente
@@ -54,5 +54,32 @@
     <footer>
 
     </footer>
+    <script>
+        var menu = document.querySelector("#list-menu");
+        var separator = document.querySelector(".separator");
+
+        function desplegarMenu(){
+
+            if(menu.style.display == "block"){
+                menu.style.display = "none";
+                separator.style.display = "none";
+            }else{
+                menu.style.display = "block";
+                separator.style.display = "block";
+            }
+        }
+
+        function orientacionCambiada(){
+            if(screen.width > 1073){
+                menu.style.display = "block";
+                separator.style.display = "block";
+            }else{
+                menu.style.display = "none";
+                separator.style.display = "none";
+            }
+        }
+
+        window.addEventListener("orientationchange",orientacionCambiada,false);
+    </script>
 </body>
 </html>
