@@ -1,0 +1,38 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+main{
+    width:100%;
+    height:auto;
+}
+
+#sideBar{
+    width:20%;
+    background-color:#1E3B7E;
+}
+
+#sideBar li a{
+    background-color:#1A3064;
+}
+
+#sidebar ul li{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+}
+
+#sidebar ul li a{
+    text-align: center;
+}
+
+ .nav-link:hover{
+    color:white;
+ }
+ 
+
+ #displayActions{
+    width:80%;
+ }
