@@ -13,38 +13,12 @@
 </head>
 <body>
     <main class="d-flex flex-wrap flex-row">
-        <div id="sideBar" class="d-flex flex-column flex-shrink-0 p-3">
-            <div id="top-sideBar" class=""><a href="#"><img class="rounded" src="files/logo_jireh.jpg" width="180px" alt=""></a><ul class=""><li><a href="#" onclick="desplegarMenu()" class="link-light pt-2 pb-2 ps-4 pe-4">Menu</a></li></ul></div>
-            <hr class="separator">
-            <ul id="list-menu" class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="#" class="nav-link link-light mt-2 text-center" aria-current="page">
-                    Agregar Cliente
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link link-light mt-2 text-center">
-                    Administrar Clientes
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link link-light mt-2 text-center">
-                    Administrar Citas
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link link-light mt-2 text-center">
-                    Registrar Pago
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link link-light mt-2 text-center">
-                    Ver Calendario
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <!--COMPONENTE MENU-->
+        <?php
+            require_once('components/menu.php');
+        ?>
 
+        <!--CONTENEDOR ALMACENAR CONTENIDO OTRAS PAGINAS-->
         <div id="displayActions" class="d-flex bg-white p-4">
             <?php
             require_once('Calendario.php');
@@ -52,8 +26,8 @@
         </div>
     </main>
     <footer>
-
     </footer>
+    
     <script src="js/systemFunctions.js"></script>
 </body>
 </html>
