@@ -17,7 +17,10 @@
         }
     }
 
+    //CREANDO LISTA DE OBJETOS
     $list = array();
+
+    //OPCIONES DEL MENU
     array_push($list,$item1 = new menuItem("Agregar Cliente","agregarCliente.php"));
     array_push($list,$item2 = new menuItem("Administrar Clientes","administrarCliente.php"));
     array_push($list,$item3 = new menuItem("Administrar Citas","administrarCitas.php"));
