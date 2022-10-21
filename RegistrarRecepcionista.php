@@ -56,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $intento_fallido = true;
         $mensaje_principal = "Se encontraron los siguientes problemas en el formulario";
-        print_r($mensaje);
     }
 }
 ?>
@@ -153,8 +152,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </footer>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!-- <script src="js/jquery.mask.js"></script> -->
-    
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/systemFunctions.js"></script>
-
+    <!-- LLamada a la funcion de sweet alert en caso de haber ingresado algun dato -->
+    <?php if ($intento_fallido) { ?>
+        <script>
+            let html_er = "<?php echo $mensaje_principal?>"
+            html_er += '<ul></ul>' + `<?php foreach ($mensaje as $val) {
+                echo "<li>" . $val . "</li>";
+            }?> ` + "<ul></ul>"
+            Swal.fire({
+                title: 'Hubo un error',
+                icon: 'error',
+                html: html_er,
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+            })
+        </script>
+    <?php } ?>
+    <?php if ($exito) { ?>
+        <script>
+            Swal.fire({
+                title: '<?php echo $mensaje_principal?>',
+                icon: 'success',
+                showCloseButton: true,
+                showCancelButton: false,
+                showConfirmButton: false,
+            })
+        </script>
+    <?php } ?>
 </body> 
 </html>
