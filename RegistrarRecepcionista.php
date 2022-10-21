@@ -97,46 +97,134 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="nombre_inpt_recepcionista">Nombre(s)</label>
-                                <input id="nombre_inpt_recepcionista" name="nombre" type="text" class="form-control <?php if(isset($mensaje) && in_array("Nombre",$mensaje)) echo "is-invalid"; else if($intento_fallido) echo "is-valid"; ?>" placeholder="Nombre(s)" required <?php if ($intento_fallido) echo "value='" . $_POST['nombre']  . "'" ?>>
+                                <input 
+                                    id="nombre_inpt_recepcionista" 
+                                    name="nombre" type="text" 
+                                    class="form-control text-capitalize
+                                    <?php if(isset($mensaje) && in_array("Nombre",$mensaje)) echo "is-invalid"; else if($intento_fallido) echo "is-valid"; ?>" 
+                                    placeholder="Nombre(s)" 
+                                    required 
+                                    maxlength="20"
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['nombre']  . "'" ?>
+                                    
+                                    >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="apellido_pat_inpt_recepcionista">Apellido Paterno</label>
-                                <input id="apellido_pat_inpt_recepcionista" name="apellido_p" type="text" class="form-control <?php if(isset($mensaje) && in_array("Apellido Paterno",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" placeholder="Apellido Paterno" required <?php if ($intento_fallido) echo "value='" . $_POST['apellido_p']  . "'" ?>>
+                                <input 
+                                    id="apellido_pat_inpt_recepcionista" 
+                                    name="apellido_p" 
+                                    type="text" 
+                                    class="form-control text-capitalize
+                                    <?php if(isset($mensaje) && in_array("Apellido Paterno",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
+                                    placeholder="Apellido Paterno" 
+                                    required 
+                                    maxlength="15"
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['apellido_p']  . "'" ?>
+                                    >
                             </div>
                         </div>
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="apellido_mat_inpt_recepcionista">Apellido Materno</label>
-                                <input id="apellido_mat_inpt_recepcionista" name="apellido_m" type="text" class="form-control <?php if(isset($mensaje) && in_array("Apellido Materno",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" placeholder="Apellido Materno" required <?php if ($intento_fallido) echo "value='" . $_POST['apellido_m']  . "'" ?>>
+                                <input 
+                                    id="apellido_mat_inpt_recepcionista" 
+                                    name="apellido_m" 
+                                    type="text" 
+                                    class="form-control text-capitalize
+                                    <?php if(isset($mensaje) && in_array("Apellido Materno",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
+                                    placeholder="Apellido Materno" 
+                                    required 
+                                    maxlength="15"
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['apellido_m']  . "'" ?>
+                                    >
                             </div>
                             <!-- data-mask='(+00) 000-000-0000' -->
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="telefono_inpt_recepcionista">Teléfono</label>
-                                <input id="telefono_inpt_recepcionista" name="telefono" type="text" class="form-control <?php if(isset($mensaje) && in_array("Teléfono",$mensaje)) echo "is-invalid"; else if($intento_fallido) echo "is-valid"; ?>" placeholder="(+52) 646-117-6388" required <?php if ($intento_fallido) echo "value='" . $_POST['telefono']  . "'" ?>>
+                                <input 
+                                    id="telefono_inpt_recepcionista" 
+                                    name="telefono" 
+                                    type="tel" 
+                                    class="form-control 
+                                    <?php if(isset($mensaje) && in_array("Teléfono",$mensaje)) echo "is-invalid"; else if($intento_fallido) echo "is-valid"; ?>" 
+                                    placeholder="(+52) 646-117-6388" 
+                                    required 
+                                    maxlength="13"
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['telefono']  . "'" ?>
+                                    >
                             </div>
                         </div>
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="correo_inpt_recepcionista">Correo electrónico</label>
-                                <input id="correo_inpt_recepcionista" name="correo" type="email" class="form-control <?php if(isset($mensaje) && (in_array("No coinciden los Correos Electrónicos",$mensaje) || in_array("Correo Electrónico",$mensaje))) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" placeholder="ejemplo@jireh.com" required <?php if ($intento_fallido) echo "value='" . $_POST['correo']  . "'" ?>>
+                                <input 
+                                    id="correo_inpt_recepcionista" 
+                                    name="correo" 
+                                    type="email" 
+                                    class="form-control 
+                                    <?php if(isset($mensaje) && (in_array("No coinciden los Correos Electrónicos",$mensaje) || in_array("Correo Electrónico",$mensaje))) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
+                                    placeholder="ejemplo@jireh.com" 
+                                    required 
+                                    maxlength="50"
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['correo']  . "'" ?>
+                                    >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="correo_conf_inpt_recepcionista">Confirmar correo electrónico</label>
-                                <input id="correo_conf_inpt_recepcionista" name="correo_conf" type="email" class="form-control <?php if(isset($mensaje) && (in_array('No coinciden los Correos Electrónicos',$mensaje) || in_array("Confirmación Correo Electrónico",$mensaje))) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" placeholder="ejemplo@jireh.com" required <?php if ($intento_fallido) echo "value='" . $_POST['correo_conf']  . "'" ?>>
+                                <input 
+                                    id="correo_conf_inpt_recepcionista" 
+                                    name="correo_conf" 
+                                    type="email" 
+                                    class="form-control 
+                                    <?php if(isset($mensaje) && (in_array('No coinciden los Correos Electrónicos',$mensaje) || in_array("Confirmación Correo Electrónico",$mensaje))) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
+                                    placeholder="ejemplo@jireh.com" 
+                                    required 
+                                    maxlength="50"
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['correo_conf']  . "'" ?>
+                                    >
                             </div>
                         </div>
                         <div class="form-row row justify-content-center">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="usuario_inpt_recepcionista">Usuario</label>
-                                <input id="usuario_inpt_recepcionista" name="usuario" type="text" class="form-control <?php if(isset($mensaje) && in_array("Usuario",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" placeholder="Usuario" required <?php if ($intento_fallido) echo "value='" . $_POST['usuario']  . "'" ?>>
+                                <input 
+                                    id="usuario_inpt_recepcionista" 
+                                    name="usuario" 
+                                    type="text" 
+                                    class="form-control 
+                                    <?php if(isset($mensaje) && in_array("Usuario",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
+                                    placeholder="Usuario" 
+                                    required 
+                                    maxlength="10"
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['usuario']  . "'" ?>
+                                    >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="contra_inpt_recepcionista">Contraseña</label>
-                                <input id="contra_inpt_recepcionista" name="contra" type="password" class="form-control <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Contraseña",$mensaje))) echo "is-invalid"; ?>" placeholder="*******" required>
+                                <input 
+                                    id="contra_inpt_recepcionista" 
+                                    name="contra" 
+                                    type="password" 
+                                    class="form-control 
+                                    <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Contraseña",$mensaje))) echo "is-invalid"; ?>" 
+                                    placeholder="*******" 
+                                    required
+                                    maxlength="15"
+                                    >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="contra_conf_inpt_recepcionista">Confirmar Contraseña</label>
-                                <input id="contra_conf_inpt_recepcionista" name="contra_conf" type="password" class="form-control <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Confirmación Contraseña",$mensaje))) echo "is-invalid"; ?>" placeholder="*******" required>
+                                <input 
+                                    id="contra_conf_inpt_recepcionista" 
+                                    name="contra_conf" 
+                                    type="password" 
+                                    class="form-control 
+                                    <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Confirmación Contraseña",$mensaje))) echo "is-invalid"; ?>" 
+                                    placeholder="*******"
+                                    required
+                                    maxlength="15"
+                                    >
                             </div>
                         </div>
                         <div class="form-row row justify-content-center pt-3">
@@ -167,7 +255,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 html: html_er,
                 showCloseButton: true,
                 showCancelButton: false,
-                showConfirmButton: false,
+                showConfirmButton: true,
+                confirmButtonColor: "#dc3545",
+                confirmButtonText: "Aceptar",
             })
         </script>
     <?php } ?>
@@ -178,7 +268,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 icon: 'success',
                 showCloseButton: true,
                 showCancelButton: false,
-                showConfirmButton: false,
+                showConfirmButton: true,
+                confirmButtonColor: "#28a745",
+                confirmButtonText: "Aceptar",
             })
         </script>
     <?php } ?>
