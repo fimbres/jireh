@@ -32,7 +32,10 @@ const coloresDoctores = (citas) => {
   let array_colores = {}
   let colores = ['#E74C3C','#9B59B6','#2980B9','#1ABC9C','#2ECC71','#F1C40F','#E67E22']
   for (let i = 0; i < doc_ordenado.length; i++) {
-    array_colores[doc_ordenado[i]] = colores[i];
+    if(i >= 6)
+      array_colores[doc_ordenado[i]] = colores[i];
+    else
+      array_colores[doc_ordenado[i]] = colores[0];
   }
   return array_colores;
 }
