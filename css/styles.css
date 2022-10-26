@@ -2,7 +2,10 @@
 
 
 
-/* Formulario de registrar recepcionistas */
-.formulario-registrar-recepcionista .form-row .btn{
+/* Formulario de registrar recepcionistas-pacientes */
+.formulario-registrar .form-row .btn{
     font-size: 1.4rem;
+}
+.formulario-registrar .form-row .form-group label b{
+    color: #dc3545;
 }
