@@ -15,7 +15,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     //$mensaje = array_merge($mensaje,Paciente::verificar_archivos_formulario($_FILES));
     if(!$mensaje){
         $paciente = new Paciente($_POST);
-        
+        //Agregamos al paciente a la base de datos
+        $res = $paciente->agregar_BD($BD,$_FILES);
+        if($res[0]){
+            $alerta = new Alerta($res[1]);
+        } else{
+            $alerta = new Alerta("Error",[$res[1]]);
+            $alerta->setOpcion('icon',"'error'");
+            $alerta->setOpcion("confirmButtonColor","'#dc3545'");
+        }
     } else {
         //Si entra aquí encontró un error al 
         $intento_fallido = true;

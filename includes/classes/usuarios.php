@@ -96,7 +96,66 @@ class Paciente extends Usuario
         parent::__construct($datos);
     }
 
-    
+    public function agregar_BD(BaseDeDatos $BD,$archivos){
+        $res = [false,''];
+        $BD->next_result();
+        
+        //Conseguimos los datos de idstatus
+        $status = $BD->getTb_Status('Activo');
+        if(gettype($status) != 'boolean'){
+            $status = $status->fetch_assoc();
+        } else {
+            return [false,"Hubo un error al hacer la conexión, vuelva a intentarlo"];
+        }
+        //Conseguimos los datos de idestadocivil, donde
+        // siempre se pondrá soltero, ya que no se especifica en el formulario
+        $estado_civil = $BD->getTb_estadocivil('Soltero(a)');
+        if(gettype($estado_civil) != 'boolean'){
+            $estado_civil = $estado_civil->fetch_assoc();
+        } else {
+            return [false,"Hubo un error al hacer la conexión, vuelva a intentarlo"];
+        }
+        $sql = "INSERT INTO Tb_Paciente(Nombre,APaterno,AMaterno,IdSexo,Direccion,
+        CodigoPostal,Email,NumTelefono,FechaNacimiento,IdEstadoCivil,MedicoEnvia,Representante,IdStatus)";
+        $sql .= " values('{$this->nombre}','{$this->apellido_p}','{$this->apellido_p}',{$this->id_sexo},";
+        $this->direccion ? $sql .= "'{$this->direccion}'," : $sql .= "NULL,"; 
+        $this->codigo_postal ? $sql .= "'{$this->codigo_postal}'," : "NULL,";
+
+        $sql .= "'{$this->correo}','{$this->telefono}','{$this->fecha->format('Y-m-d')}',{$estado_civil['IdEstadoCivil']},";
+        $this->medio_envia ? $sql .= "'{$this->medio_envia}'," : $sql .= "NULL,";
+        $this->persona_responsable ? $sql .= "'{$this->persona_responsable}'," : $sql .= "NULL,";
+        $sql .= "{$status['IdStatus']})";
+        if($BD->query($sql)){
+            //Cuando logramos esto, ahora podemos de verdad agregar los archivos
+            // al cloudinary
+            foreach ($archivos as $documento => $arch) {
+                //Verificamos que el archivo a guardar exista y no tenga error
+                if($arch['error'] == 0){
+                    //Primero deberemos de guardar el archivo en una carpeta temporal
+                    // para eso haremos los siguientes pasos
+                    //Conseguimos la extension del archivo
+                    $nombre_array = explode('.', $arch['name']);
+                    $extension = strtolower(end($nombre_array));
+                    //GUARDAMOS EL ARCHIVO 
+                    $path = "files/temp/". $documento . $extension;
+                    move_uploaded_file($arch['tmp_name'], $path);
+                    //Guardamos el archivo dentro de cloudinary
+                    $destino = "Pacientes/{$BD->insert_id}_{$this->nombre}/";
+                    $BD->subir_archivo($path,$extension,$documento,$destino);
+                    unlink($path);
+                }
+            }
+            //En teoria deberiamos de borrar los archivos una vez hayan sido subidos pero,
+            // por el momento dejaremos eso pendiente, ya que puede llegar a causar problemas
+            // en los casos que la conexión con cloudinary tarde mucho en realizarse.
+            $res = [true,'Se han guardado los datos correctamente'];
+        } 
+        else {
+            $res = [false,'Hubo un error al hacer la conexion, intentalo de nuevo'];
+        }
+        return $res;
+        
+    }
     // *********************
     // Funciones SET
     // *********************
