@@ -8,6 +8,23 @@ $alerta = false;
 $BD = new BaseDeDatos();
 //Agarammos los datos necesarios para poder mostrar el select del SEXO
 $sexo_inpt = $BD->getTb_Sexo();
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    // print_r($_FILES);
+    //Verificamos que los datos obtenidos por el formulario esten de manera correcta
+    $mensaje = Paciente::verificar_datos_formulario($_POST);
+    //$mensaje = array_merge($mensaje,Paciente::verificar_archivos_formulario($_FILES));
+    if(!$mensaje){
+        $paciente = new Paciente($_POST);
+        
+    } else {
+        //Si entra aquí encontró un error al 
+        $intento_fallido = true;
+        $alerta = new Alerta("Error",["Se encontraron los siguientes problemas en el formulario"],[$mensaje]);
+        $alerta->setOpcion('icon',"'error'");
+        $alerta->setOpcion("confirmButtonColor","'#dc3545'");
+    }
+
+}
 // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 //     $vacio = 0;
 //     // VERIFICAMOS CADA DATO TENGA ALGO
@@ -71,7 +88,7 @@ $BD->close();
                     <h1 class="text-center">Registrar Paciente</h1>
                 </div>
                 <div class="col-12 d-flex justify-content-center pt-5">
-                    <form method="POST" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar">
+                    <form method="POST" enctype="multipart/form-data" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar">
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="nombre_inpt_paciente"><b>*</b>Nombre(s)</label>
@@ -217,9 +234,10 @@ $BD->close();
                                 <label for="doc_poliza_inpt_paciente">Documento de póliza</label>
                                 <input 
                                     id="doc_poliza_inpt_paciente" 
-                                    name="doc_poliza" 
+                                    name="documento_poliza" 
                                     type="file" 
                                     class="form-control" 
+                                    accept="image/*,.pdf"
                                     >
                             </div>
                         </div>
@@ -228,18 +246,20 @@ $BD->close();
                                 <label for="doc_ant_inpt_paciente">Documento de antecedentes</label>
                                 <input 
                                     id="doc_ant_inpt_paciente" 
-                                    name="doc_antecedentes" 
-                                    type="text" 
+                                    name="documento_antecedentes" 
+                                    type="file" 
                                     class="form-control" 
+                                    accept="image/*,.pdf"
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="doc_presupuesto_inpt_paciente">Documento de presupuesto</label>
                                 <input 
                                     id="doc_presupuesto_inpt_paciente" 
-                                    name="doc_presupuesto" 
+                                    name="documento_presupuesto" 
                                     type="file" 
                                     class="form-control" 
+                                    accept="image/*,.pdf"
                                     >
                             </div>
                         </div>
@@ -281,5 +301,9 @@ $BD->close();
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/systemFunctions.js"></script>
     <!-- LLamada a la funcion de sweet alert en caso de haber ingresado algun dato -->
+    <?php 
+        if($alerta)
+            $alerta->activar_sweet_alert();
+    ?>
 </body> 
 </html>

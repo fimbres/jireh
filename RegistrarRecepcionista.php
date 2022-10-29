@@ -9,14 +9,12 @@ $mensaje = [];
 $alerta = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $vacio = 0;
     // VERIFICAMOS CADA DATO TENGA ALGO
-    //nombre
-    $mensaje = Recepcionista::verificar_datos_formulario_recepcionista($_POST);
+    $mensaje = Recepcionista::verificar_datos_formulario($_POST);
     if (!$mensaje) {
         $BD = new BaseDeDatos();
         $recep = new Recepcionista($_POST);
-        $res = $recep->crear_recepcionista_BD($BD);
+        $res = $recep->agregar_BD($BD);
         $intento_fallido = !$res[0];
         if($res[0]){
             $alerta = new Alerta($res[1]);
@@ -102,12 +100,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="apellido_mat_inpt_recepcionista">Apellido Materno</label>
+                                <!-- Se puso en comentarios lo siguiente, que serviría para verificar si el apellido materno
+                                    esta correcto o no, pero como el apellido materno es opcional, entonces no es necesario
+                                    agregar este tipo de validación -->
+                                <?php // if(isset($mensaje) && in_array("Apellido Materno",$mensaje)) 
+                                    //echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>
                                 <input 
                                     id="apellido_mat_inpt_recepcionista" 
                                     name="apellido_m" 
                                     type="text" 
-                                    class="form-control text-capitalize
-                                    <?php if(isset($mensaje) && in_array("Apellido Materno",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
+                                    class="form-control text-capitalize" 
                                     placeholder="Apellido Materno"
                                     maxlength="15"
                                     <?php if ($intento_fallido) echo "value='" . $_POST['apellido_m']  . "'" ?>
