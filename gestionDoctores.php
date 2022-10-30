@@ -61,6 +61,7 @@
                                 $conexion = crear_conexion();
                                 $query = "SELECT Tb_Doctor.Nombre as Nombre, Tb_Doctor.APaterno as APaterno, Tb_Doctor.Email as Email, Tb_Status.Descripcion as Status FROM Tb_Doctor, Tb_Status WHERE Tb_Doctor.IdStatus = Tb_Status.IdStatus;";
                                 $res = mysqli_query($conexion,$query);
+                                $conexion->close();
                                 while($fila = mysqli_fetch_array($res))
                                 {
                             ?>
