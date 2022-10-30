@@ -11,7 +11,7 @@
     $config->url->secure = true;
 
     function uploadFile($rutaArchivo,$tipoArchivo){
-        $upload = new uploadApi();
+        $upload = new UploadApi();
         $upload->upload("$rutaArchivo",[
             'use_filename' => true,
             'overwrite' => true,

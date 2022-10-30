@@ -1,61 +1,34 @@
 <?php
 //Agregamos las librerias
-include("includes/funciones_BD.php");
+include("includes/includes.php");
 
 // VERIFICAR QUE ESTE CONECTADO EL USUARIO
 // VERIFICAR QUE EL USUARIO SEA TIPO ADMINISTRADOR
-
-$exito = false;
 $intento_fallido = false;
-$mensaje_principal = false;
 $mensaje = [];
+$alerta = false;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $vacio = 0;
     // VERIFICAMOS CADA DATO TENGA ALGO
-    //nombre
-    !isset($_POST['nombre']) ? array_push($mensaje, 'Nombre') : $vacio++;
-    !isset($_POST['apellido_p']) ? array_push($mensaje, 'Apellido Paterno') : $vacio++;
-    !isset($_POST['apellido_m']) ? array_push($mensaje, 'Apellido Materno') : $vacio++;
-    !isset($_POST['telefono']) ? array_push($mensaje, 'Teléfono') : $vacio++;
-    !isset($_POST['correo']) ? array_push($mensaje, 'Correo Electrónico') : $vacio++;
-    !isset($_POST['correo_conf']) ? array_push($mensaje, 'Confirmación Correo Electrónico') : $vacio++;
-    !isset($_POST['usuario']) ? array_push($mensaje, 'Usuario') : $vacio++;
-    !isset($_POST['contra']) ? array_push($mensaje, 'Contraseña') : $vacio++;
-    !isset($_POST['contra_conf']) ? array_push($mensaje, 'Confirmación Contraseña') : $vacio++;
-    strcmp($_POST['correo'], $_POST['correo_conf']) != 0 ? array_push($mensaje, 'No coinciden los Correos Electrónicos') : false;
-    strcmp($_POST['contra'], $_POST['contra_conf']) != 0 ? array_push($mensaje, 'No coinciden las Contraseñas') : false;
+    $mensaje = Recepcionista::verificar_datos_formulario($_POST);
     if (!$mensaje) {
-            //Guardamos todos los valores de POST en las variables, para que a la
-            // hora de hacer el script sea mas sencillo de realizar
-            //Guardamos los datos de post en una variable para que sea mas sencillo de entender
-            $nombre = $apellido_p = $apellido_m = $telefono = $correo = '';
-            $correo_conf = $usuario = $contra = $contra_conf = '';
-            $nombre = $_POST['nombre'];
-            $apellido_p = $_POST['apellido_p'];
-            $apellido_m = $_POST['apellido_m'];
-            $telefono = $_POST['telefono'];
-            $correo = $_POST['correo'];
-            $correo_conf = $_POST['correo_conf'];
-            $usuario = $_POST['usuario'];
-            $contra = $_POST['contra'];
-            $contra_conf = $_POST['contra_conf'];
-            //Una vez entramos aqui estamos seguros que todos los datos estan de manera correcta
-            // y podemos agregarlos a la base de datos
-            $BD = crear_conexion();
-            $sql = "INSERT INTO Tb_Recepcionista(Nombre,APaterno,AMaterno,NumTelefono,Email,Usuario,Contrasena,IdStatus) 
-                values('$nombre','$apellido_p','$apellido_m','$telefono','$correo','$usuario','$contra',3)";
-            if ($BD->query($sql)) {
-                $exito = true;
-                
-                $mensaje_principal = "Se han guardado los datos correctamente" ;
-            } else {
-                $intento_fallido = true;
-                $mensaje_principal = "Hubo un error al intentar guardar los datos, vuelve a intentarlo" . $BD->error;
-            }
-            $BD->close();
+        $BD = new BaseDeDatos();
+        $recep = new Recepcionista($_POST);
+        $res = $recep->agregar_BD($BD);
+        $intento_fallido = !$res[0];
+        if($res[0]){
+            $alerta = new Alerta($res[1]);
+        } else{
+            $alerta = new Alerta("Error",[$res[1]]);
+            $alerta->setOpcion('icon',"'error'");
+            $alerta->setOpcion("confirmButtonColor","'#dc3545'");
+        }
+        $BD->close();
     } else {
         $intento_fallido = true;
-        $mensaje_principal = "Se encontraron los siguientes problemas en el formulario";
+        $alerta = new Alerta("Error",["Se encontraron los siguientes problemas en el formulario"],[$mensaje]);
+        $alerta->setOpcion('icon',"'error'");
+        $alerta->setOpcion("confirmButtonColor","'#dc3545'");
     }
 }
 ?>
@@ -67,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Recepcionista</title>
+    <title>Registrar Recepcionista</title>
     <!-- CSS only -->
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
@@ -93,10 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <h1 class="text-center">Registrar Recepcionista</h1>
                 </div>
                 <div class="col-12 d-flex justify-content-center pt-5">
-                    <form method="POST" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar-recepcionista">
+                    <form method="POST" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar">
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="nombre_inpt_recepcionista">Nombre(s)</label>
+                                <label for="nombre_inpt_recepcionista"><b>*</b>Nombre(s)</label>
                                 <input 
                                     id="nombre_inpt_recepcionista" 
                                     name="nombre" type="text" 
@@ -110,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="apellido_pat_inpt_recepcionista">Apellido Paterno</label>
+                                <label for="apellido_pat_inpt_recepcionista"><b>*</b>Apellido Paterno</label>
                                 <input 
                                     id="apellido_pat_inpt_recepcionista" 
                                     name="apellido_p" 
@@ -127,21 +100,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="apellido_mat_inpt_recepcionista">Apellido Materno</label>
+                                <!-- Se puso en comentarios lo siguiente, que serviría para verificar si el apellido materno
+                                    esta correcto o no, pero como el apellido materno es opcional, entonces no es necesario
+                                    agregar este tipo de validación -->
+                                <?php // if(isset($mensaje) && in_array("Apellido Materno",$mensaje)) 
+                                    //echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>
                                 <input 
                                     id="apellido_mat_inpt_recepcionista" 
                                     name="apellido_m" 
                                     type="text" 
-                                    class="form-control text-capitalize
-                                    <?php if(isset($mensaje) && in_array("Apellido Materno",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
-                                    placeholder="Apellido Materno" 
-                                    required 
+                                    class="form-control text-capitalize" 
+                                    placeholder="Apellido Materno"
                                     maxlength="15"
                                     <?php if ($intento_fallido) echo "value='" . $_POST['apellido_m']  . "'" ?>
                                     >
                             </div>
                             <!-- data-mask='(+00) 000-000-0000' -->
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="telefono_inpt_recepcionista">Teléfono</label>
+                                <label for="telefono_inpt_recepcionista"><b>*</b>Teléfono</label>
                                 <input 
                                     id="telefono_inpt_recepcionista" 
                                     name="telefono" 
@@ -157,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="correo_inpt_recepcionista">Correo electrónico</label>
+                                <label for="correo_inpt_recepcionista"><b>*</b>Correo electrónico</label>
                                 <input 
                                     id="correo_inpt_recepcionista" 
                                     name="correo" 
@@ -171,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="correo_conf_inpt_recepcionista">Confirmar correo electrónico</label>
+                                <label for="correo_conf_inpt_recepcionista"><b>*</b>Confirmar correo electrónico</label>
                                 <input 
                                     id="correo_conf_inpt_recepcionista" 
                                     name="correo_conf" 
@@ -187,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <div class="form-row row justify-content-center">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="usuario_inpt_recepcionista">Usuario</label>
+                                <label for="usuario_inpt_recepcionista"><b>*</b>Usuario</label>
                                 <input 
                                     id="usuario_inpt_recepcionista" 
                                     name="usuario" 
@@ -201,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="contra_inpt_recepcionista">Contraseña</label>
+                                <label for="contra_inpt_recepcionista"><b>*</b>Contraseña</label>
                                 <input 
                                     id="contra_inpt_recepcionista" 
                                     name="contra" 
@@ -214,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="contra_conf_inpt_recepcionista">Confirmar Contraseña</label>
+                                <label for="contra_conf_inpt_recepcionista"><b>*</b>Confirmar Contraseña</label>
                                 <input 
                                     id="contra_conf_inpt_recepcionista" 
                                     name="contra_conf" 
@@ -242,37 +218,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- <script src="js/jquery.mask.js"></script> -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/systemFunctions.js"></script>
+
+
     <!-- LLamada a la funcion de sweet alert en caso de haber ingresado algun dato -->
-    <?php if ($intento_fallido) { ?>
-        <script>
-            let html_er = "<?php echo $mensaje_principal?>"
-            html_er += '<ul></ul>' + `<?php foreach ($mensaje as $val) {
-                echo "<li>" . $val . "</li>";
-            }?> ` + "<ul></ul>"
-            Swal.fire({
-                title: 'Hubo un error',
-                icon: 'error',
-                html: html_er,
-                showCloseButton: true,
-                showCancelButton: false,
-                showConfirmButton: true,
-                confirmButtonColor: "#dc3545",
-                confirmButtonText: "Aceptar",
-            })
-        </script>
-    <?php } ?>
-    <?php if ($exito) { ?>
-        <script>
-            Swal.fire({
-                title: '<?php echo $mensaje_principal?>',
-                icon: 'success',
-                showCloseButton: true,
-                showCancelButton: false,
-                showConfirmButton: true,
-                confirmButtonColor: "#28a745",
-                confirmButtonText: "Aceptar",
-            })
-        </script>
-    <?php } ?>
+    <?php 
+        if($alerta){
+            $alerta->activar_sweet_alert();
+        }
+    ?>
 </body> 
 </html>
