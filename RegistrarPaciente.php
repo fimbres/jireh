@@ -33,31 +33,6 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 
 }
-// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-//     $vacio = 0;
-//     // VERIFICAMOS CADA DATO TENGA ALGO
-//     //nombre
-//     $mensaje = Recepcionista::verificar_datos_formulario_recepcionista($_POST);
-//     if (!$mensaje) {
-        
-//         $recep = new Recepcionista($_POST);
-//         $res = $recep->crear_recepcionista_BD($BD);
-//         $intento_fallido = !$res[0];
-//         if($res[0]){
-//             $alerta = new Alerta($res[1]);
-//         } else{
-//             $alerta = new Alerta("Error",[$res[1]]);
-//             $alerta->setOpcion('icon',"'error'");
-//             $alerta->setOpcion("confirmButtonColor","'#dc3545'");
-//         }
-        
-//     } else {
-//         $intento_fallido = true;
-//         $alerta = new Alerta("Error",["Se encontraron los siguientes problemas en el formulario"],[$mensaje]);
-//         $alerta->setOpcion('icon',"'error'");
-//         $alerta->setOpcion("confirmButtonColor","'#dc3545'");
-//     }
-// }
 $BD->close();
 ?>
 

@@ -71,6 +71,7 @@ class Paciente extends Usuario
     private $rfc = false;
     private $codigo_postal = false;
 
+    protected $id_poliza = false;
     protected $path_documento_poliza = false;
     protected $path_documento_antecedentes = false;
     protected $path_documento_presupuesto = false;
@@ -95,7 +96,29 @@ class Paciente extends Usuario
         
         parent::__construct($datos);
     }
-
+    //Esta funcion solo sera llamada cuando ocurra un error a la hora de 
+    // agregar al paciente dentro de la base de datos
+    private function eliminar_fisico_BD(BaseDeDatos $BD){
+        $BD->next_result();
+        //Borramos primero la poliza que esta conectada al paciente
+        if($this->id_poliza){
+            $sql = "DELETE FROM Tb_Polizas WHERE IdPoliza = {$this->id_poliza}";
+            $BD->query($sql);
+        }
+        $BD->next_result();
+        //Borramos al paciente
+        $sql = "DELETE FROM Tb_Paciente WHERE IdPaciente = {$this->id}";
+        $BD->query($sql);
+        //De aqui borramos los posibles archivos que esten dentro de cloudinary
+        if(!empty($this->path_documento_poliza))
+            $BD->cloud_borrar_archivo($this->path_documento_poliza);
+        if(!empty($this->path_documento_antecedentes))
+            $BD->cloud_borrar_archivo($this->path_documento_antecedentes);
+        if(!empty($this->path_documento_presupuesto))
+            $BD->cloud_borrar_archivo($this->path_documento_presupuesto);
+        //Una vez hecho eso se ha borrado todo de manera correcta.
+        return true;  
+    }
     public function agregar_BD(BaseDeDatos $BD,$archivos){
         $res = [false,''];
         $BD->next_result();
@@ -131,7 +154,7 @@ class Paciente extends Usuario
             //Cuando logramos esto, ahora podemos de verdad agregar los archivos
             // al cloudinary
             $sql = "UPDATE Tb_Paciente SET";
-            $id_paciente = $BD->insert_id;
+            $this->id = $BD->insert_id;
             foreach ($archivos as $documento => $arch) {
                 //Verificamos que el archivo a guardar exista y no tenga error
                 if($arch['error'] == 0){
@@ -144,36 +167,42 @@ class Paciente extends Usuario
                     $path = "files/temp/". $documento . $extension;
                     move_uploaded_file($arch['tmp_name'], $path);
                     //Guardamos el archivo dentro de cloudinary
-                    $destino = "Pacientes/{$id_paciente}_{$this->nombre}/";
-                    $BD->subir_archivo($path,$extension,$documento,$destino);
+                    $destino = "Pacientes/{$this->id}_{$this->nombre}/";
+                    $BD->cloud_subir_archivo($path,$extension,$documento,$destino);
                     $arch_loc = $destino . $documento;
                     //Hacemos un switch para agregar al update
                     switch ($documento) {
                         case 'documento_poliza':
+                            $this->path_documento_poliza = $arch_loc;
                             //Cuando tratamos con un documento de poliza este, debemos
                             // de agregarlo a una tabla
-                            $query = "INSERT INTO Tb_Poliza(Archivo) values('$arch_loc')";
+                            $query = "INSERT INTO Tb_Polizas(Archivo) values('$arch_loc')";
                             if($BD->query($query))
                                $sql .= ( $sql === "UPDATE Tb_Paciente SET" ? " IdPoliza = {$BD->insert_id}" : " , IdPoliza = {$BD->insert_id}");
-                            //Aqui deberiamos de agregar un else, que cuando falle este insert, lo que hace es llamar
+                            else
+                                return [!($this->eliminar_fisico_BD($BD)),"Hubo un error al guardar los archivos, inténtalo de nuevo"];
+                            //Cuando falle este insert, lo que hace es llamar
                             // a una funcion privada, que borrara todos los datos, dentro de cloudinary y la base
                             // de datos del paciente, esto de manera FISICA, y no logica, ya que hubo
                             // un error al intentar registrar el paciente
                             $BD->next_result();
+                            $this->id_poliza = $BD->insert_id;
                             break;
                         
                         case 'documento_antecedentes':
                             $sql .= ( $sql === "UPDATE Tb_Paciente SET" ? " ArchivoAntecedentes = '$arch_loc' " : " , ArchivoAntecedentes = '$arch_loc' ");
+                            $this->path_documento_antecedentes = $arch_loc;
                             break;
                         case 'documento_presupuesto':
                             $sql .= ( $sql === "UPDATE Tb_Paciente SET" ? " ArchivoPresupuesto = '$arch_loc' " : " , ArchivoPresupuesto = '$arch_loc' ");
+                            $this->path_documento_presupuesto = $arch_loc;
                             break;
                     }
                     unlink($path);
                 }
             }
             if($sql != "UPDATE Tb_Paciente SET"){
-                $sql .= " WHERE IdPaciente = $id_paciente";
+                $sql .= " WHERE IdPaciente = {$this->id}";
                 $res = ($BD->query($sql) ? [true,"Se han guardado los datos correctamente"] : [false,"Hubo un error al guardar los archivos, intentalo de nuevo"]);
                 $BD->next_result();
             } else {

@@ -4,31 +4,32 @@
  use Cloudinary\Api\Upload\UploadApi;
 
 //Cloudinary de ejemplo (alexis)
-//  $config = Configuration::instance();
-//  $config->cloud->cloudName = 'dymuy4udb';
-//  $config->cloud->apiKey = '524848689883964';
-//  $config->cloud->apiSecret = '0fZ6QUc_G1HccUf9AcksfRTQOo0';
-//  $config->url->secure = true;
-$config = Configuration::instance();
-$config->cloud->cloudName = 'dh23vdshc';
-$config->cloud->apiKey = '512523944414583';
-$config->cloud->apiSecret = '-T7ev2kaYOJ_CFFsxLxy7jIOniA';
-$config->url->secure = true;
+ $config = Configuration::instance();
+ $config->cloud->cloudName = 'dymuy4udb';
+ $config->cloud->apiKey = '524848689883964';
+ $config->cloud->apiSecret = '0fZ6QUc_G1HccUf9AcksfRTQOo0';
+ $config->url->secure = true;
+// $config = Configuration::instance();
+// $config->cloud->cloudName = 'dh23vdshc';
+// $config->cloud->apiKey = '512523944414583';
+// $config->cloud->apiSecret = '-T7ev2kaYOJ_CFFsxLxy7jIOniA';
+// $config->url->secure = true;
 class BaseDeDatos extends mysqli{
     //Datos para conectarse a la BD de MySQL
     private $host = 'blhfarhgxzvfusb9hkvg-mysql.services.clever-cloud.com';
     private $usuario = 'ulsqbptq4rtdnjup';
     private $contra = 'VERq8gpiuRHtBGSFFcaO';
     private $nom_bd = 'blhfarhgxzvfusb9hkvg';
+    private $upload_cloud;
 
     public function __construct(){
+        $this->upload_cloud = new UploadApi();
         parent::__construct($this->host,$this->usuario,$this->contra,$this->nom_bd);
     }
 
     //Funcion para guardar archivos dentro de cloudinary
-    public function subir_archivo($path,$extension,$nombre,$path_destino = ''){
-        $upload = new UploadApi();
-        return $upload->upload($path,[
+    public function cloud_subir_archivo($path,$extension,$nombre,$path_destino = ''){
+        return $this->upload_cloud->upload($path,[
             'public_id' => $nombre,
             'folder' => $path_destino,
             'use_filename' => true,
@@ -36,6 +37,9 @@ class BaseDeDatos extends mysqli{
             'tags' => [$extension]
             ]
         );
+    }
+    public function cloud_borrar_archivo($path){
+        return $this->upload_cloud->destroy($path);
     }
     // *********************
     // Funciones GET
