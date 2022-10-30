@@ -9,7 +9,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="css/index.css">
     <!-- JavaScript Bundle with Popper -->
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/rowreorder/1.2.8/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/responsive/2.3.0/css/responsive.dataTables.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -20,7 +22,7 @@
         ?>
 
         <!--CONTENEDOR ALMACENAR CONTENIDO OTRAS PAGINAS-->
-        <div id="displayActions" class="d-flex bg-white p-4 flex-column">
+        <div id="displayActions" class="d-flex bg-white p-4 flex-column" style="overflow-x: scroll;">
             <div class="d-flex flex-row justify-content-between" style="margin-bottom: 60px; margin-top: 30px;">
                 <h1 class="text-center">Gestión de Doctores</h1>
                 <a href="./Registrardoctor.php"><button class="btn btn-success w-40 m-1">Agregar</button></a>
@@ -30,7 +32,11 @@
                     Doctores
                 </div>
                 <div class="card-body">
-                    <table id="datatablesSimple">
+                    <table 
+                        id="datatablesSimple"
+                        class="display nowrap"
+                        style="width:100%"
+                    >
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -81,7 +87,11 @@
     </main>
     <footer>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables.js"></script>
     <script src="js/systemFunctions.js"></script>
 </body>
