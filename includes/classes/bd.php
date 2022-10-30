@@ -41,6 +41,7 @@ class BaseDeDatos extends mysqli{
     // Funciones GET
     // *********************
     public function getTb_Sexo($nombre = ''){
+        $this->next_result();
         $sql ="SELECT * FROM Tb_Sexo";
         if(!empty($nombre))
             $sql .= " where Sexo = '$nombre'";
@@ -49,6 +50,7 @@ class BaseDeDatos extends mysqli{
         return ($this->error ? false :  $res);
     }
     public function getTb_Status($nombre = ''){
+        $this->next_result();
         $sql = "SELECT * FROM Tb_Status";
         if(!empty($nombre))
             $sql .= " where Descripcion = '$nombre'";
@@ -57,6 +59,7 @@ class BaseDeDatos extends mysqli{
         return ($this->error ? false :  $res);
     }
     public function getTb_estadocivil($estado = ''){
+        $this->next_result();
         $sql = "SELECT * FROM Tb_estadocivil";
         if(!empty($estado))
             $sql .= " where EstadoCivil = '$estado'";

@@ -116,7 +116,7 @@ class Paciente extends Usuario
             return [false,"Hubo un error al hacer la conexión, vuelva a intentarlo"];
         }
         $sql = "INSERT INTO Tb_Paciente(Nombre,APaterno,AMaterno,IdSexo,Direccion,
-        CodigoPostal,Email,NumTelefono,FechaNacimiento,IdEstadoCivil,MedicoEnvia,Representante,IdStatus)";
+        CodigoPostal,Email,NumTelefono,FechaNacimiento,IdEstadoCivil,MedicoEnvia,Representante,RFC,IdStatus)";
         $sql .= " values('{$this->nombre}','{$this->apellido_p}','{$this->apellido_p}',{$this->id_sexo},";
         $this->direccion ? $sql .= "'{$this->direccion}'," : $sql .= "NULL,"; 
         $this->codigo_postal ? $sql .= "'{$this->codigo_postal}'," : "NULL,";
@@ -124,10 +124,14 @@ class Paciente extends Usuario
         $sql .= "'{$this->correo}','{$this->telefono}','{$this->fecha->format('Y-m-d')}',{$estado_civil['IdEstadoCivil']},";
         $this->medio_envia ? $sql .= "'{$this->medio_envia}'," : $sql .= "NULL,";
         $this->persona_responsable ? $sql .= "'{$this->persona_responsable}'," : $sql .= "NULL,";
+        $this->rfc ? $sql .= "'{$this->rfc}'," : $sql .= "NULL,";
         $sql .= "{$status['IdStatus']})";
         if($BD->query($sql)){
+            $BD->next_result();
             //Cuando logramos esto, ahora podemos de verdad agregar los archivos
             // al cloudinary
+            $sql = "UPDATE Tb_Paciente SET";
+            $id_paciente = $BD->insert_id;
             foreach ($archivos as $documento => $arch) {
                 //Verificamos que el archivo a guardar exista y no tenga error
                 if($arch['error'] == 0){
@@ -140,17 +144,43 @@ class Paciente extends Usuario
                     $path = "files/temp/". $documento . $extension;
                     move_uploaded_file($arch['tmp_name'], $path);
                     //Guardamos el archivo dentro de cloudinary
-                    $destino = "Pacientes/{$BD->insert_id}_{$this->nombre}/";
+                    $destino = "Pacientes/{$id_paciente}_{$this->nombre}/";
                     $BD->subir_archivo($path,$extension,$documento,$destino);
+                    $arch_loc = $destino . $documento;
+                    //Hacemos un switch para agregar al update
+                    switch ($documento) {
+                        case 'documento_poliza':
+                            //Cuando tratamos con un documento de poliza este, debemos
+                            // de agregarlo a una tabla
+                            $query = "INSERT INTO Tb_Poliza(Archivo) values('$arch_loc')";
+                            if($BD->query($query))
+                               $sql .= ( $sql === "UPDATE Tb_Paciente SET" ? " IdPoliza = {$BD->insert_id}" : " , IdPoliza = {$BD->insert_id}");
+                            //Aqui deberiamos de agregar un else, que cuando falle este insert, lo que hace es llamar
+                            // a una funcion privada, que borrara todos los datos, dentro de cloudinary y la base
+                            // de datos del paciente, esto de manera FISICA, y no logica, ya que hubo
+                            // un error al intentar registrar el paciente
+                            $BD->next_result();
+                            break;
+                        
+                        case 'documento_antecedentes':
+                            $sql .= ( $sql === "UPDATE Tb_Paciente SET" ? " ArchivoAntecedentes = '$arch_loc' " : " , ArchivoAntecedentes = '$arch_loc' ");
+                            break;
+                        case 'documento_presupuesto':
+                            $sql .= ( $sql === "UPDATE Tb_Paciente SET" ? " ArchivoPresupuesto = '$arch_loc' " : " , ArchivoPresupuesto = '$arch_loc' ");
+                            break;
+                    }
                     unlink($path);
                 }
             }
-            //En teoria deberiamos de borrar los archivos una vez hayan sido subidos pero,
-            // por el momento dejaremos eso pendiente, ya que puede llegar a causar problemas
-            // en los casos que la conexión con cloudinary tarde mucho en realizarse.
-            $res = [true,'Se han guardado los datos correctamente'];
-        } 
-        else {
+            if($sql != "UPDATE Tb_Paciente SET"){
+                $sql .= " WHERE IdPaciente = $id_paciente";
+                $res = ($BD->query($sql) ? [true,"Se han guardado los datos correctamente"] : [false,"Hubo un error al guardar los archivos, intentalo de nuevo"]);
+                $BD->next_result();
+            } else {
+                $res = [true,'Se han guardado los datos correctamente'];
+            }
+            
+        } else {
             $res = [false,'Hubo un error al hacer la conexion, intentalo de nuevo'];
         }
         return $res;
@@ -215,8 +245,10 @@ class Recepcionista extends Usuario
         empty($this->apellido_m) ? $sql .= "NULL," : $sql .= "'{$this->apellido_m}',";
         $sql = "'". $this->telefono ."','". $this->correo ."','" . $this->usuario_nombre ."','". $this->contra ."',". $status['IdStatus'] .")";
         if ($BD->query($sql)) {
+            $BD->next_result();
             return [true,"Se han guardado los datos correctamente"];
         } else {
+            $BD->next_result();
             return [false, "Hubo un error al intentar guardar los datos, vuelve a intentarlo"];
         }
     }

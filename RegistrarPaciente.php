@@ -163,6 +163,7 @@ $BD->close();
                                     <?php if(isset($mensaje) && in_array("Direccion",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
                                     placeholder="Direccion"
                                     required
+                                    maxlength="100"
                                     <?php if ($intento_fallido) echo "value='" . $_POST['correo']  . "'" ?>
                                     >
                             </div>
@@ -223,6 +224,7 @@ $BD->close();
                                     name="medico_envia" 
                                     type="text" 
                                     class="form-control" 
+                                    maxlength="50"
                                     <?php if ($intento_fallido) echo "value='" . $_POST['medico_envia']  . "'" ?>
                                     >
                             </div>
@@ -235,6 +237,7 @@ $BD->close();
                                     name="persona_responsable" 
                                     type="text" 
                                     class="form-control" 
+                                    maxlength="50"
                                     <?php if ($intento_fallido) echo "value='" . $_POST['persona_responsable']  . "'" ?>
                                     >
                             </div>
@@ -279,6 +282,7 @@ $BD->close();
                                     name="rfc" 
                                     type="text" 
                                     class="form-control" 
+                                    maxlength="15"
                                     <?php if ($intento_fallido) echo "value='" . $_POST['persona_responsable']  . "'" ?>
                                     >
                             </div>
