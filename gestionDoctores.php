@@ -22,7 +22,7 @@
         ?>
 
         <!--CONTENEDOR ALMACENAR CONTENIDO OTRAS PAGINAS-->
-        <div id="displayActions" class="d-flex bg-white p-4 flex-column" style="overflow-x: scroll;">
+        <div id="displayActions" class="d-flex bg-white p-4 flex-column">
             <div class="d-flex flex-row justify-content-between" style="margin-bottom: 60px; margin-top: 30px;">
                 <h1 class="text-center">Gestión de Doctores</h1>
                 <a href="./Registrardoctor.php"><button class="btn btn-success w-40 m-1">Agregar</button></a>
