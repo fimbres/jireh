@@ -44,6 +44,9 @@
                                             </div>
                                         </form>
                                     </div>
+                                    <div class="card-footer text-center py-3">
+                                        <div class="small"><a href="#">Sistema de Pagos</a></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
