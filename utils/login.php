@@ -9,7 +9,14 @@
     $username_validado = str_replace($caracteres_especiales,"",$username);
     $password_validado = str_replace($caracteres_especiales,"",$password);
 
-    $query = "SELECT * FROM " . $rol . " WHERE Usuario = '" . $username_validado . "' AND Contrasena = '" . $password_validado . "' AND IdStatus = 3;";
+    if($rol == "Tb_Admin"){
+        $endPoint = "';";
+    }
+    else {
+        $endPoint = "' AND IdStatus = 3;";
+    }
+
+    $query = "SELECT * FROM " . $rol . " WHERE Usuario = '" . $username_validado . "' AND Contrasena = '" . $password_validado . $endPoint;
     $res = mysqli_query($conexion,$query); 
     $row = mysqli_num_rows($res);
 
