@@ -1,7 +1,12 @@
 <?php 
+require_once('utils/sessionCheck.php');
+if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
+    header('location: login.php');
+}
+
 include("includes/includes.php");
 // VERIFICAR QUE ESTE CONECTADO EL USUARIO
-// VERIFICAR QUE EL USUARIO SEA TIPO ADMINISTRADOR
+// VERIFICAR QUE EL USUARIO SEA TIPO RECEPCIONISTA
 $intento_fallido = false;
 $mensaje = [];
 $alerta = false;

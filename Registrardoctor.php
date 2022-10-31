@@ -1,4 +1,9 @@
 <?php 
+require_once('utils/sessionCheck.php');
+if(!comprobar_sesion_y_rol("Tb_Admin")){
+    header('location: login.php');
+}
+
 //Librerias
  include("includes/funciones_BD.php");
 
