@@ -10,7 +10,7 @@
         <!--Recorremos la lista para generar el menu-->
         <?php foreach($list as $key=>$value):?>
             <li class="nav-item">
-                <a href="#" class="nav-link link-light mt-2 text-center" aria-current="page">
+                <a href="<?php print($list[$key]->getUrl());?>" class="nav-link link-light mt-2 text-center" aria-current="page">
                     <?php print($list[$key]->getName());?>
                 </a>
             </li>

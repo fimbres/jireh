@@ -1,4 +1,6 @@
 <?php 
+    include('sessionCheck.php');
+
     class menuItem{
         protected $name;
         protected $url;
@@ -21,9 +23,19 @@
     $list = array();
 
     //OPCIONES DEL MENU
-    array_push($list,$item1 = new menuItem("Agregar Cliente","agregarCliente.php"));
-    array_push($list,$item2 = new menuItem("Administrar Clientes","administrarCliente.php"));
-    array_push($list,$item3 = new menuItem("Administrar Citas","administrarCitas.php"));
-    array_push($list,$item4 = new menuItem("Registrar Pago","registrarPago.php"));
-    array_push($list,$item5 = new menuItem("Ver Calendario","verCalendario.php"));
+    
+    if(comprobar_sesion()){
+        switch($_SESSION['rol']){
+            case 'Tb_Doctor': array_push($list,$item5 = new menuItem("Agenda","index.php")); break;
+            case 'Tb_Recepcionista':  array_push($list,$item5 = new menuItem("Agenda","index.php")); 
+                array_push($list,$item2 = new menuItem("Gestión de Pacientes","gestionPacientes.php"));
+                array_push($list,$item2 = new menuItem("Gestión de Pagos","gestionPagos.php"));
+                break;
+            case 'Tb_Admin': array_push($list,$item1 = new menuItem("Gestion de Doctores","gestionDoctores.php"));
+                array_push($list,$item2 = new menuItem("Gestion de Recepcionistas","gestionRecepcionistas.php"));
+                break;
+            default: break;
+        }
+        array_push($list,$item5 = new menuItem("Cerrar Sesión","utils/logout.php"));
+    }
 ?>
