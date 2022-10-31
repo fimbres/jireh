@@ -1,5 +1,5 @@
 <?php 
-    include('sessionCheck.php');
+    require_once('sessionCheck.php');
 
     class menuItem{
         protected $name;
