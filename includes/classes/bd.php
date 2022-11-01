@@ -4,16 +4,16 @@
  use Cloudinary\Api\Upload\UploadApi;
 
 //Cloudinary de ejemplo (alexis)
- $config = Configuration::instance();
- $config->cloud->cloudName = 'dymuy4udb';
- $config->cloud->apiKey = '524848689883964';
- $config->cloud->apiSecret = '0fZ6QUc_G1HccUf9AcksfRTQOo0';
- $config->url->secure = true;
-// $config = Configuration::instance();
-// $config->cloud->cloudName = 'dh23vdshc';
-// $config->cloud->apiKey = '512523944414583';
-// $config->cloud->apiSecret = '-T7ev2kaYOJ_CFFsxLxy7jIOniA';
-// $config->url->secure = true;
+//  $config = Configuration::instance();
+//  $config->cloud->cloudName = 'dymuy4udb';
+//  $config->cloud->apiKey = '524848689883964';
+//  $config->cloud->apiSecret = '0fZ6QUc_G1HccUf9AcksfRTQOo0';
+//  $config->url->secure = true;
+$config = Configuration::instance();
+$config->cloud->cloudName = 'dh23vdshc';
+$config->cloud->apiKey = '512523944414583';
+$config->cloud->apiSecret = '-T7ev2kaYOJ_CFFsxLxy7jIOniA';
+$config->url->secure = true;
 class BaseDeDatos extends mysqli{
     //Datos para conectarse a la BD de MySQL
     private $host = 'blhfarhgxzvfusb9hkvg-mysql.services.clever-cloud.com';
@@ -38,9 +38,10 @@ class BaseDeDatos extends mysqli{
             ]
         );
     }
-    public function cloud_borrar_archivo($path){
-        return $this->upload_cloud->destroy($path);
-    }
+    // dejamos esto pendiente
+    // public function cloud_borrar_archivo($path){
+    //     return $this->upload_cloud->destroy($path);
+    // }
     // *********************
     // Funciones GET
     // *********************
