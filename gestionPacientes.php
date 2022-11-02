@@ -32,7 +32,7 @@
                 <h1 class="text-center">Gestión de Pacientes</h1>
                 <a href="./RegistrarPaciente.php"><button class="btn btn-success w-40 m-1">Agregar</button></a>
             </div>
-            <div class="card mb-4 w-100">
+            <div id="tablaPacientes" class="card mb-4 w-100">
                 <div class="card-header">
                     Pacientes
                 </div>
@@ -77,9 +77,13 @@
                                     <td><?php echo $fila['Status'];?></td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <button class="btn btn-danger w-40 m-1 ">Eliminar</button>
-                                            <button class="btn btn-warning w-40 m-1">Modificar</button>
-                                            <button class="btn btn-primary m-1" onclick="mostrarInformacion(<?php echo $fila['IdPaciente'];?>);">Ver</button>
+                                            <?php if($fila['Status'] == 'Activo'): ?>
+                                                <input type="button" class="btn btn-danger w-40 m-1"  onclick="tablaPacientesAcciones(<?php echo $fila['IdPaciente'];?>,this.value,this);" value="Eliminar"/>
+                                            <?php elseif($fila['Status'] == 'Inactivo'): ?>
+                                                <input type="button" class="btn btn-danger w-40 m-1"  onclick="tablaPacientesAcciones(<?php echo $fila['IdPaciente'];?>,this.value,this);" value="Eliminar" disabled/>
+                                            <?php endif;?>
+                                            <input type="button" class="btn btn-warning w-40 m-1" onclick="tablaPacientesAcciones(<?php echo $fila['IdPaciente'];?>,this.value,0);" value="Modificar"/>
+                                            <input type="button" class="btn btn-primary m-1" onclick="tablaPacientesAcciones(<?php echo $fila['IdPaciente'];?>,this.value,0);" value="Ver">
                                         </div>
                                     </td>
                                 </tr>
@@ -90,177 +94,12 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </main>
-    <div class="modal fade show" id="modalExpediente" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalLabel">Expediente del Paciente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-row row">
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="nombre_inpt_recepcionista"><b>*</b>Nombre(s)</label>
-                            <input 
-                                id="Nombre"
-                                type="text" 
-                                class="form-control text-capitalize"
-                                placeholder="Nombre(s)"
-                                readonly
-                            >
-                        </div>
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="apellido_pat_inpt_recepcionista"><b>*</b>Apellido Paterno</label>
-                            <input
-                                id="APaterno"
-                                type="text" 
-                                class="form-control text-capitalize"
-                                placeholder="Apellido Paterno"
-                                readonly
-                            >
-                        </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="apellido_mat_inpt_recepcionista">Apellido Materno</label>
-                            <input
-                                id="AMaterno"
-                                type="text" 
-                                class="form-control text-capitalize" 
-                                placeholder="Apellido Materno"
-                                readonly
-                            >
-                        </div>
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="sexo_inpt_paciente"><b>*</b>Sexo</label>
-                            <input
-                                id="IdSexo"
-                                type="text" 
-                                class="form-control"
-                                placeholder="Sexo"
-                                readonly
-                            >
-                        </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="form-group col-12 pb-4">
-                            <label for="telefono_inpt_recepcionista"><b>*</b>Dirección</label>
-                            <input 
-                                id="Direccion"
-                                type="text"
-                                class="form-control text-capitalize"
-                                placeholder="Direccion"
-                                readonly
-                            >
-                        </div>
-                    </div>
-                    <div class="form-row row">
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="telefono_inpt_recepcionista"><b>*</b>Teléfono</label>
-                            <input
-                                id="NumTelefono"
-                                type="tel" 
-                                class="form-control"
-                                placeholder="(+52) 646-117-6388"
-                                readonly
-                            >
-                        </div>
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="correo_inpt_recepcionista"><b>*</b>Correo electrónico</label>
-                            <input
-                                id="Email"
-                                type="email" 
-                                class="form-control"
-                                placeholder="ejemplo@jireh.com"
-                                readonly
-                            >
-                        </div>
-                    </div>
-                    <div class="form-row row justify-content-center">
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="fecha_inpt_paciente"><b>*</b>Fecha de nacimiento</label>
-                            <input 
-                                id="FechaNacimiento"
-                                type="date" 
-                                class="form-control"
-                                readonly
-                            >
-                        </div>
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="medico_envia_inpt_paciente">Medico que lo Envía</label>
-                            <input 
-                                id="MedicoEnvia"
-                                type="text" 
-                                class="form-control"
-                                readonly
-                            >
-                        </div>
-                    </div>
-                    <div class="form-row row justify-content-center">
-                        <div class="form-group col-12 pb-4">
-                            <label for="perso_resp_inpt_paciente">Persona Responsable</label>
-                            <input
-                                id="Representante"
-                                type="text" 
-                                class="form-control"
-                                readonly
-                            >
-                        </div>
-                    </div>
-                    <div class="form-row row justify-content-center">
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="rfc_inpt_paciente">RFC</label>
-                            <input
-                                id="RFC"
-                                type="text" 
-                                class="form-control"
-                                readonly
-                            >
-                        </div>
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="cp_inpt_paciente">Código Postal</label>
-                            <input
-                                id="CodigoPostal"
-                                type="text" 
-                                class="form-control"
-                                readonly
-                            >
-                        </div>
-                    </div>
-                    <div class="form-group col-12 pb-4">
-                        <label for="doc_poliza_inpt_paciente">Documento de póliza</label>
-                        <input
-                            type="file" 
-                            class="form-control" 
-                            accept="image/*,.pdf"
-                            readonly
-                        >
-                    </div>
-                    <div class="form-row row justify-content-center">
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="doc_ant_inpt_paciente">Documento de antecedentes</label>
-                            <input
-                                type="file" 
-                                class="form-control" 
-                                accept="image/*,.pdf"
-                                readonly
-                            >
-                        </div>
-                        <div class="form-group col-xl-6 col-md-12 pb-4">
-                            <label for="doc_presupuesto_inpt_paciente">Documento de presupuesto</label>
-                            <input
-                                type="file" 
-                                class="form-control" 
-                                accept="image/*,.pdf"
-                            >
-                        </div>
-                    </div>
-                </div>
+
+            <div id="containerTableActions" class="visually-hidden">
+                
             </div>
         </div>
-    </div>
+    </main>
     <footer>
     </footer>
     <!-- <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script> -->
@@ -271,35 +110,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <script src="js/datatables.js"></script>
     <script src="js/systemFunctions.js"></script>
-    <script>
-        function mostrarInformacion(id){
-            $.ajax({
-                type: "POST",
-                url: "utils/getExpediente.php",
-                data: { pacienteId: id },
-                dataType: 'json',
-                success: function(data){
-                    for(let item in data){
-                        let fieldValue;
-
-                        switch(item){
-                            case 'IdSexo': fieldValue = data[item] === "1" ? "Masculino" : "Femenino"; break;
-                            default: fieldValue = data[item]; break;
-                        }
-                        
-                        let formField = document.getElementById(item);
-
-                        if(formField && fieldValue){
-                            formField.setAttribute('value', fieldValue);
-                        }
-                    }
-                    $('#modalExpediente').modal('show');
-                },
-                error: function (xhr, exception) {
-                    console.log("error", xhr);
-                }
-            });
-        }
-    </script>
+    <script src="js/gestionPacientes.js"></script>
 </body>
 </html>

@@ -4,6 +4,10 @@
     box-sizing:border-box;
 }
 
+body{
+    overflow-x:hidden;
+}
+
 main{
     width:100%;
     min-height:100vh;
@@ -63,6 +67,8 @@ main{
  #top-sideBar li a{
     text-decoration:none;
  }
+
+
 
  @media (max-width: 1070px){
     #sideBar{
