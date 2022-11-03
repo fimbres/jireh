@@ -21,7 +21,7 @@
         $idSexo = $datosValidados[3] === "Masculino" ? "1" : "2"; 
         $idStatus = $datosValidados[15] === "Activo" ? "3" : "4";
 
-        require_once('../includes/classes/bd.php');
+        //require_once('../includes/classes/bd.php');
 
 
         //ACTUALIZAMOS LA INFORMACION
