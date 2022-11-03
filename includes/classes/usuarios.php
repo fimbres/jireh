@@ -272,7 +272,7 @@ class Recepcionista extends Usuario
         $sql = "INSERT INTO Tb_Recepcionista(Nombre,APaterno,AMaterno,NumTelefono,Email,Usuario,Contrasena,IdStatus) 
                 values('" .$this->nombre ."','". $this->apellido_p ."',";
         empty($this->apellido_m) ? $sql .= "NULL," : $sql .= "'{$this->apellido_m}',";
-        $sql = "'". $this->telefono ."','". $this->correo ."','" . $this->usuario_nombre ."','". $this->contra ."',". $status['IdStatus'] .")";
+        $sql .= "'". $this->telefono ."','". $this->correo ."','" . $this->usuario_nombre ."','". $this->contra ."',". $status['IdStatus'] .")";
         if ($BD->query($sql)) {
             $BD->next_result();
             return [true,"Se han guardado los datos correctamente"];
