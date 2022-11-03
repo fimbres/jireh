@@ -20,14 +20,12 @@ if(!$recepcionista){
 $intento_fallido = false;
 $mensaje = [];
 $alerta = false;
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // VERIFICAMOS CADA DATO TENGA ALGO
-    
-    $mensaje = Recepcionista::verificar_datos_formulario($_POST,$BD,"modificar");
+    $modif  = ($recepcionista->getUsuarioNombre() == $_POST['usuario'] ? "modificar_usuario_igual" : "modificar");
+    $mensaje = Recepcionista::verificar_datos_formulario($_POST,$BD,$modif);
     if (!$mensaje) {
-        $recep = new Recepcionista($_POST);
-        $res = $recep->agregar_BD($BD);
+        $res = $recepcionista->modificar_BD($_POST,$BD);
         $intento_fallido = !$res[0];
         if($res[0]){
             $alerta = new Alerta($res[1]);
@@ -113,11 +111,6 @@ $BD->close();
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="apellido_mat_inpt_recepcionista">Apellido Materno</label>
-                                <!-- Se puso en comentarios lo siguiente, que serviría para verificar si el apellido materno
-                                    esta correcto o no, pero como el apellido materno es opcional, entonces no es necesario
-                                    agregar este tipo de validación -->
-                                <?php // if(isset($mensaje) && in_array("Apellido Materno",$mensaje)) 
-                                    //echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>
                                 <input 
                                     id="apellido_mat_inpt_recepcionista" 
                                     name="apellido_m" 
@@ -126,7 +119,8 @@ $BD->close();
                                     placeholder="Apellido Materno"
                                     maxlength="15"
                                     <?php 
-                                    $recepcionista->getApellido_m() ? "value='{$recepcionista->getApellido_m()}'" : false;
+                                    if($recepcionista->getApellido_m())
+                                        echo "value='{$recepcionista->getApellido_m()}'";
                                     ?>
                                     >
                             </div>
@@ -186,7 +180,7 @@ $BD->close();
                                     name="contra" 
                                     type="password" 
                                     class="form-control 
-                                    <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Contraseña",$mensaje))) echo "is-invalid"; ?>" 
+                                    <?php if(isset($mensaje) && in_array("Contraseña",$mensaje)) echo "is-invalid"; ?>" 
                                     placeholder="*******" 
                                     required
                                     maxlength="15"
@@ -195,7 +189,7 @@ $BD->close();
                         </div>
                         <div class="form-row row justify-content-center pt-3">
                             <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Actualizar</button>
-                            <a class="row btn btn-danger mx-3 col-md-3  col-5" href="index.php">Cancelar</a>
+                            <a class="row btn btn-danger mx-3 col-md-3  col-5" href="gestionRecepcionistas.php">Cancelar</a>
                         </div>
                     </form>
                 </div>

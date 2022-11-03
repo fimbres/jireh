@@ -2,7 +2,6 @@
 
 class Usuario
 {
-    private $id = false;
     protected $nombre;
     protected $apellido_p;
     protected $apellido_m = false;
@@ -62,7 +61,7 @@ class Usuario
 }
 class Paciente extends Usuario
 {
-    
+    private $id = false;
     protected $sexo;
     private $id_sexo;
     private $direccion;
@@ -240,6 +239,7 @@ class Paciente extends Usuario
 }
 class Recepcionista extends Usuario
 {
+    private $id = false;
     protected $usuario_nombre;
     private $contra;
     protected $id_status = false;
@@ -289,8 +289,25 @@ class Recepcionista extends Usuario
         }
     }
 
-    public function modificar_BD(BaseDeDatos $BD){
-        
+    public function modificar_BD($datos,BaseDeDatos $BD){
+        $this->nombre = $datos['nombre'];
+        $this->apellido_p = $datos['apellido_p'];
+        $this->apellido_m = (isset($datos['apellido_m']) ? $datos['apellido_m'] : false);
+        $this->telefono = $datos['telefono'];
+        $this->correo = $datos['correo'];
+        $this->usuario = $datos['usuario'];
+        $this->contra = $datos['contra'];
+        if(!$this->id)
+            return [false,"Hubo un error al cargar los datos, inténtalo de nuevo"];
+        $BD->next_result();
+        $sql = "UPDATE Tb_Recepcionista SET Nombre = '{$this->nombre}', APaterno = '{$this->apellido_p}',";
+        $sql .= ($this->apellido_m ? " AMaterno = '{$this->apellido_m}', " : " AMaterno = NULL, ");
+        $sql .=" Email = '{$this->correo}', NumTelefono = '{$this->telefono}', Usuario = '{$this->usuario_nombre}',
+        Contrasena = '{$this->contra}'  WHERE IdRecepcionista = {$this->id}";
+        if($BD->query($sql))
+            return [true, "Se han hecho los cambios"];
+        else 
+            return [false,"Hubo un error en la conexión, vuelve a intentarlo"];
     }
 
     // *********************
@@ -359,14 +376,16 @@ class Recepcionista extends Usuario
             strcmp($datos['contra'], $datos['contra_conf']) != 0 ? array_push($res, 'No coinciden las Contraseñas') : false;
         }
         
-        $BD->next_result();
-        $sql = "SELECT * FROM Tb_Recepcionista WHERE Usuario = '{$datos['usuario']}'";
-        $res_query = $BD->query($sql);
-        if(gettype($res_query) != 'boolean'){
-            if($res_query->num_rows > 0)
-                array_push($res,"El nombre de usuario ya esta ocupado");
-        } 
-        $BD->next_result();
+        if($tipo != "modificar_usuario_igual"){
+            $BD->next_result();
+            $sql = "SELECT * FROM Tb_Recepcionista WHERE Usuario = '{$datos['usuario']}'";
+            $res_query = $BD->query($sql);
+            if(gettype($res_query) != 'boolean'){
+                if($res_query->num_rows > 0)
+                    array_push($res,"El nombre de usuario ya esta ocupado");
+            } 
+            $BD->next_result();
+        }
         return $res;
     }
 }
