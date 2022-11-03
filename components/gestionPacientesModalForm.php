@@ -82,7 +82,7 @@
                         <input type="file" class="form-control" accept="image/*,.pdf">
                     </div>
                 </div>
-                <div id="formBajaPaciente" class="form-row row justify-content-center hidden-visually">
+                <div id="formBajaPaciente" class="form-row row justify-content-center visually-hidden">
                     <div class="form-group col-12 pb-4 d-flex justify-content-center align-items-center">
                         <input id="btnCancelar" type="button" class="btn btn-warning ms-3 me-2 text-white" value="Cancelar" data-bs-dismiss="modal"/>
                         <input id="btnEliminar" type="button" class="btn btn-danger ms-2 me-3" onclick="bajaPaciente()" value="Eliminar"/>
