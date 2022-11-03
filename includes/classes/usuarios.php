@@ -256,6 +256,7 @@ class Recepcionista extends Usuario
 
     //Con esta funcion agregamos a la recepcionista a la base de datos
     public function agregar_BD(BaseDeDatos $BD){
+        $BD->next_result();
         //Primero buscamos el valor del id de estado activo dentro de la base de datos
         $status = $BD->getTb_Status('Activo');
         // al verificar que no sea boleando evitamos el error de 
@@ -271,12 +272,17 @@ class Recepcionista extends Usuario
         empty($this->apellido_m) ? $sql .= "NULL," : $sql .= "'{$this->apellido_m}',";
         $sql = "'". $this->telefono ."','". $this->correo ."','" . $this->usuario_nombre ."','". $this->contra ."',". $status['IdStatus'] .")";
         if ($BD->query($sql)) {
+            $this->id = $BD->insert_id;
             $BD->next_result();
             return [true,"Se han guardado los datos correctamente"];
         } else {
             $BD->next_result();
             return [false, "Hubo un error al intentar guardar los datos, vuelve a intentarlo"];
         }
+    }
+
+    public function modificar_BD(BaseDeDatos $BD){
+        
     }
 
     // *********************
@@ -301,19 +307,28 @@ class Recepcionista extends Usuario
     // *********************
     // Funciones ESTATICAS
     // *********************
-    static public function verificar_datos_formulario($datos){
+    static public function verificar_datos_formulario($datos,BaseDeDatos $BD,$tipo = 'agregar'){
         $res = [];
         !isset($datos['nombre']) ? array_push($res, 'Nombre') : false;
         !isset($datos['apellido_p']) ? array_push($res, 'Apellido Paterno') : false;
         // !isset($datos['apellido_m']) ? array_push($res, 'Apellido Materno') : false;
         !isset($datos['telefono']) ? array_push($res, 'Teléfono') : false;
         !isset($datos['correo']) ? array_push($res, 'Correo Electrónico') : false;
-        !isset($datos['correo_conf']) ? array_push($res, 'Confirmación Correo Electrónico') : false;
         !isset($datos['usuario']) ? array_push($res, 'Usuario') : false;
         !isset($datos['contra']) ? array_push($res, 'Contraseña') : false;
-        !isset($datos['contra_conf']) ? array_push($res, 'Confirmación Contraseña') : false;
-        strcmp($datos['correo'], $datos['correo_conf']) != 0 ? array_push($res, 'No coinciden los Correos Electrónicos') : false;
-        strcmp($datos['contra'], $datos['contra_conf']) != 0 ? array_push($res, 'No coinciden las Contraseñas') : false;
+
+        if($tipo == 'agregar'){
+            !isset($datos['correo_conf']) ? array_push($res, 'Confirmación Correo Electrónico') : false;
+            !isset($datos['contra_conf']) ? array_push($res, 'Confirmación Contraseña') : false;
+            strcmp($datos['correo'], $datos['correo_conf']) != 0 ? array_push($res, 'No coinciden los Correos Electrónicos') : false;
+            strcmp($datos['contra'], $datos['contra_conf']) != 0 ? array_push($res, 'No coinciden las Contraseñas') : false;
+        }
+        
+        $BD->next_result();
+        $sql = "SELECT * FROM Tb_Recepcionista WHERE Usuario = '{$datos['usuario']}'";
+        if(!$BD->query($sql))
+            array_push($res,"El nombre de usuario ya esta ocupado");
+        $BD->next_result();
         return $res;
     }
 }

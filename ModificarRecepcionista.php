@@ -14,9 +14,9 @@ $mensaje = [];
 $alerta = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $BD = new BaseDeDatos();
     // VERIFICAMOS CADA DATO TENGA ALGO
-    $mensaje = Recepcionista::verificar_datos_formulario($_POST,$BD);
+    $BD = new BaseDeDatos();
+    $mensaje = Recepcionista::verificar_datos_formulario($_POST,$BD,"modificar");
     if (!$mensaje) {
         $recep = new Recepcionista($_POST);
         $res = $recep->agregar_BD($BD);
@@ -28,13 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $alerta->setOpcion('icon',"'error'");
             $alerta->setOpcion("confirmButtonColor","'#dc3545'");
         }
-        $BD->close();
+        
     } else {
         $intento_fallido = true;
         $alerta = new Alerta("Error",["Se encontraron los siguientes problemas en el formulario"],[$mensaje]);
         $alerta->setOpcion('icon',"'error'");
         $alerta->setOpcion("confirmButtonColor","'#dc3545'");
     }
+    $BD->close();
 }
 ?>
 
@@ -68,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div id="displayActions" class="d-block bg-white p-4">
             <div class="row d-flex">
                 <div class="col-12">
-                    <h1 class="text-center">Registrar Recepcionista</h1>
+                    <h1 class="text-center">Modificar Recepcionista</h1>
                 </div>
                 <div class="col-12 d-flex justify-content-center pt-5">
                     <form method="POST" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar">
@@ -135,8 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <?php if ($intento_fallido) echo "value='" . $_POST['telefono']  . "'" ?>
                                     >
                             </div>
-                        </div>
-                        <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="correo_inpt_recepcionista"><b>*</b>Correo electrónico</label>
                                 <input 
@@ -152,22 +151,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="correo_conf_inpt_recepcionista"><b>*</b>Confirmar correo electrónico</label>
-                                <input 
-                                    id="correo_conf_inpt_recepcionista" 
-                                    name="correo_conf" 
-                                    type="email" 
-                                    class="form-control 
-                                    <?php if(isset($mensaje) && (in_array('No coinciden los Correos Electrónicos',$mensaje) || in_array("Confirmación Correo Electrónico",$mensaje))) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
-                                    placeholder="ejemplo@jireh.com" 
-                                    required 
-                                    maxlength="50"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['correo_conf']  . "'" ?>
-                                    >
-                            </div>
-                        </div>
-                        <div class="form-row row justify-content-center">
-                            <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="usuario_inpt_recepcionista"><b>*</b>Usuario</label>
                                 <input 
                                     id="usuario_inpt_recepcionista" 
@@ -181,6 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <?php if ($intento_fallido) echo "value='" . $_POST['usuario']  . "'" ?>
                                     >
                             </div>
+                        </div>
+                        <div class="form-row row justify-content-center">
+                            
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="contra_inpt_recepcionista"><b>*</b>Contraseña</label>
                                 <input 
@@ -190,19 +176,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     class="form-control 
                                     <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Contraseña",$mensaje))) echo "is-invalid"; ?>" 
                                     placeholder="*******" 
-                                    required
-                                    maxlength="15"
-                                    >
-                            </div>
-                            <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="contra_conf_inpt_recepcionista"><b>*</b>Confirmar Contraseña</label>
-                                <input 
-                                    id="contra_conf_inpt_recepcionista" 
-                                    name="contra_conf" 
-                                    type="password" 
-                                    class="form-control 
-                                    <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Confirmación Contraseña",$mensaje))) echo "is-invalid"; ?>" 
-                                    placeholder="*******"
                                     required
                                     maxlength="15"
                                     >
