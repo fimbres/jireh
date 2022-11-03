@@ -53,8 +53,21 @@ function tablaPacientesAcciones(id, event, objeto) {
           }
 
           //ASIGNAMOS UN VALOR DIFERENTE CADA VEZ QUE RECORREMOS
-          if (fieldValue) {
-            $("#" + item).val(fieldValue);
+          if (fieldValue){
+            if(item === "ArchivoAntecedentes" || item === "ArchivoPresupuesto" || item === "Archivo"){
+                if(fieldValue === "NULL"){
+                    console.log("no hay nada");
+                }else{
+                    $("#"+item).attr("src",fieldValue);
+                    $("#"+item).removeClass("visually-hidden");
+                    console.log("Si hay algo");
+                }
+            }
+            else{
+                $("#" + item).val(fieldValue);
+            }
+          }else{
+
           }
         }
 
