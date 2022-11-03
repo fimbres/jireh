@@ -3,7 +3,7 @@ let idPaciente = 0;
 function tablaPacientesAcciones(id, event, objeto) {
   idPaciente = id;
 
-  //Obtenemos los nodos del elemento clickeado
+  //OBTENEMOS LOS NODOS DEL PACIENTE CLICKEADO, PARA MOSTRAR LOS DATOS DE LA RESPUESTA
   if (event === "Eliminar") {
     level1 = objeto.parentNode;
     level2 = level1.parentNode;
@@ -12,6 +12,7 @@ function tablaPacientesAcciones(id, event, objeto) {
     botonEliminar = objeto;
   }
 
+  //VERIFICAMOS QUE SEA UNA ACCION VALIDA POR EL SISTEMA
   if (event === "Modificar" || event === "Ver" || event === "Eliminar") {
     $.ajax({
       type: "POST",
@@ -34,7 +35,7 @@ function tablaPacientesAcciones(id, event, objeto) {
           );
       },
       success: function (data) {
-        //LLENAR EL FORMULARIO CON LOS DATOS
+        //RECORREMOS EL EXPEDIENTE
         for (let item in data) {
           let fieldValue;
 
@@ -42,15 +43,18 @@ function tablaPacientesAcciones(id, event, objeto) {
             case "IdSexo":
               fieldValue = data[item] === "1" ? "Masculino" : "Femenino";
               break;
+            case "IdStatus":
+              if (data[item] >= "3")
+                fieldValue = data[item] === "3" ? "Activo" : "Inactivo";
+              break;
             default:
               fieldValue = data[item];
               break;
           }
 
-          let formField = document.getElementById(item);
-
-          if (formField && fieldValue) {
-            formField.setAttribute("value", fieldValue);
+          //ASIGNAMOS UN VALOR DIFERENTE CADA VEZ QUE RECORREMOS
+          if (fieldValue) {
+            $("#" + item).val(fieldValue);
           }
         }
 
@@ -74,7 +78,37 @@ function tablaPacientesAcciones(id, event, objeto) {
 }
 
 function actualizarInfoPaciente() {
-  console.log(idPaciente);
+
+    var dataPaciente = new Array();
+    var inputValues = $('.formModificarInput'),
+    namesValues = [].map.call(inputValues,function(dataInput){
+        dataPaciente.push(dataInput.value);
+    });
+
+    console.log(dataPaciente);
+/*
+    if (username && password && rol) {
+      $.ajax({
+        type: "POST",
+        url: "utils/login.php",
+        data: { username, password, rol },
+        dataType: "json",
+        success: function (data) {
+          if (data.response === "success") {
+            window.location = "index.php";
+          } else {
+            swal("Error: Petición", data.message, "error");
+          }
+        },
+        error: function (xhr, exception) {
+          swal("Error: Petición", exception.toString(), "error");
+          console.error(xhr);
+        },
+      });
+    } else {
+      swal("Error: Campos Vacíos", "Todos los campos son necesarios", "error");
+    }
+    */
 }
 
 function bajaPaciente() {
@@ -88,7 +122,7 @@ function bajaPaciente() {
       if (data.response === "success") {
         statusPaciente = level3.children[3];
         statusPaciente.innerHTML = "Inactivo";
-        botonEliminar.setAttribute("disabled","");
+        botonEliminar.setAttribute("disabled", "");
         $("#btnCloseModal").trigger("click");
       } else if (data.response === "invalid") {
         $(".modal-body").addClass("visually-hidden");
