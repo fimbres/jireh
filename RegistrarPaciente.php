@@ -144,7 +144,7 @@ $BD->close();
                                     placeholder="Direccion"
                                     required
                                     maxlength="100"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['correo']  . "'" ?>
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['direccion']  . "'" ?>
                                     >
                             </div>
                         </div>
@@ -263,7 +263,7 @@ $BD->close();
                                     type="text" 
                                     class="form-control" 
                                     maxlength="15"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['persona_responsable']  . "'" ?>
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['rfc']  . "'" ?>
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
@@ -273,7 +273,7 @@ $BD->close();
                                     name="codigo_postal" 
                                     type="text" 
                                     class="form-control"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['persona_responsable']  . "'" ?> 
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['codigo_postal']  . "'" ?> 
                                     >
                             </div>
                         </div>
