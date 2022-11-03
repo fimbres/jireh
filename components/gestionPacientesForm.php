@@ -13,11 +13,14 @@
     <div class="form-row row">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="apellido_mat_inpt_recepcionista">Apellido Materno</label>
-            <input id="AMaterno" type="text" class="form-control text-capitalize" placeholder="Apellido Materno">
+            <input id="AMaterno" type="text" class="form-control text-capitalize formModificarInput" placeholder="Apellido Materno">
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="sexo_inpt_paciente"><b>*</b>Sexo</label>
-            <input id="IdSexo" type="text" class="form-control formModificarInput" placeholder="Sexo">
+            <select id="IdSexo" class="form-select formModificarInput" aria-label="Default select example">
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+            </select>
         </div>
     </div>
     <div class="form-row row">

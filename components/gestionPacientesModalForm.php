@@ -71,15 +71,18 @@
                 <div class="form-group col-12 pb-4">
                     <label for="doc_poliza_inpt_paciente">Documento de póliza</label>
                     <input type="file" class="form-control" accept="image/*,.pdf" readonly>
+                    <iframe id="Archivo" class="visually-hidden" src="" style="width:100%; height:500px;" frameborder="0" ></iframe>
                 </div>
                 <div class="form-row row justify-content-center">
-                    <div class="form-group col-xl-6 col-md-12 pb-4">
+                    <div class="form-group col-xxl-6 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 pb-4">
                         <label for="doc_ant_inpt_paciente">Documento de antecedentes</label>
                         <input type="file" class="form-control" accept="image/*,.pdf" readonly>
+                        <iframe id="ArchivoAntecedentes" class="visually-hidden" src="" style="width:100%; height:500px;" frameborder="0" ></iframe>
                     </div>
-                    <div class="form-group col-xl-6 col-md-12 pb-4">
+                    <div class="form-group col-xxl-6 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 pb-4">
                         <label for="doc_presupuesto_inpt_paciente">Documento de presupuesto</label>
                         <input type="file" class="form-control" accept="image/*,.pdf">
+                        <iframe id="ArchivoPresupuesto" class="visually-hidden" src="" style="width:100%; height:500px;" frameborder="0" ></iframe>
                     </div>
                 </div>
                 <div id="formBajaPaciente" class="form-row row justify-content-center visually-hidden">

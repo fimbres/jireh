@@ -53,21 +53,17 @@ function tablaPacientesAcciones(id, event, objeto) {
           }
 
           //ASIGNAMOS UN VALOR DIFERENTE CADA VEZ QUE RECORREMOS
-          if (fieldValue){
-            if(item === "ArchivoAntecedentes" || item === "ArchivoPresupuesto" || item === "Archivo"){
-                if(fieldValue === "NULL"){
-                    console.log("no hay nada");
-                }else{
-                    $("#"+item).attr("src",fieldValue);
-                    $("#"+item).removeClass("visually-hidden");
-                    console.log("Si hay algo");
-                }
-            }
-            else{
-                $("#" + item).val(fieldValue);
-            }
-          }else{
-
+          if (fieldValue) {
+            if (
+              item === "ArchivoAntecedentes" ||
+              item === "ArchivoPresupuesto" ||
+              item === "Archivo"
+            ) {
+              if (fieldValue !== "NULL") {
+                $("#" + item).attr("src", fieldValue);
+                $("#" + item).removeClass("visually-hidden");
+              }
+            } else $("#" + item).val(fieldValue);
           }
         }
 
@@ -91,16 +87,62 @@ function tablaPacientesAcciones(id, event, objeto) {
 }
 
 function actualizarInfoPaciente() {
-
-    var dataPaciente = new Array();
-    var inputValues = $('.formModificarInput'),
-    namesValues = [].map.call(inputValues,function(dataInput){
-        dataPaciente.push(dataInput.value);
+  var dataPaciente = new Array();
+  var inputValues = $(".formModificarInput"),
+    namesValues = [].map.call(inputValues, function (dataInput) {
+      dataPaciente.push(dataInput.value);
     });
 
-    console.log(dataPaciente);
-/*
-    if (username && password && rol) {
+  console.log(dataPaciente);
+  console.log(dataPaciente[1].length);
+
+  if (dataPaciente[0].length !== 0) {
+    if (dataPaciente[1].length !== 0 || dataPaciente[2].length !== 0) {
+      if (dataPaciente[3].length !== 0) {
+        if (dataPaciente[15].length !== 0) {
+          $.ajax({
+            type: "POST",
+            url: "utils/updatePaciente.php",
+            data: { idPaciente: idPaciente,datos: dataPaciente },
+            dataType: "json",
+            success: function (data) {
+              if (data.response === "success") {
+                console.log(data.message);
+              } else {
+                swal("Error: Petición", data.message, "error");
+              }
+            },
+            error: function (xhr, exception) {
+              swal("Error: Petición", exception.toString(), "error");
+              console.error(xhr);
+            },
+          });
+        } else {
+          swal(
+            "Error: Campos Vacíos",
+            "El paciente debe tener un estado valido",
+            "error"
+          );
+        }
+      } else {
+        swal(
+          "Error: Campos Vacíos",
+          "Debes ingresar el sexo de la persona",
+          "error"
+        );
+      }
+    } else {
+      swal(
+        "Error: Campos Vacíos",
+        "Debes ingresar al menos un apellido",
+        "error"
+      );
+    }
+  } else {
+    swal("Error: Campos Vacíos", "El campo nombre es requerido", "error");
+  }
+
+  /*if (username && password && rol) {
       $.ajax({
         type: "POST",
         url: "utils/login.php",
