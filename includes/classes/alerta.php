@@ -1,5 +1,6 @@
 <?php 
     class Alerta{
+        
         protected $mensaje_principal;
         protected $descripciones = [];
         //Los mensajes listados funcionaran como una matriz, donde
@@ -9,6 +10,13 @@
         
         //Datos para el sweet alert
         private $opciones_sweet = [];
+
+        //Esta variable sirve para saber que elemento vamos
+        // a esperar que le suceda algo
+        protected $escuchar= false;
+        //Esta variable tendra la informacion, que sera ejecutada
+        // en un posible then
+        protected $then = "";
 
         public function __construct(string $men_princ,$descrip= [],$men = []){
             $this->mensaje_principal=  $men_princ;
@@ -26,7 +34,7 @@
             $this->opciones_sweet['confirmButtonColor'] = "'#28a745'";
             $this->opciones_sweet['confirmButtonText'] = "'Aceptar'";
         }
-        public function activar_sweet_alert(){
+        public function activar_sweet_alert($regresar = true,$tipo = 'click'){
             //Verifcamos que los datos de descripcion y de listado de mensajes
             // tengan valores
             $html = '';
@@ -69,22 +77,45 @@
             foreach ($this->opciones_sweet as $llave => $valor) {
                 $ops .= " {$llave}: {$valor},";
             }
-            $res = "
-            <script>
-                Swal.fire({
-                    title: '{$this->mensaje_principal}',
-                    {$ops}
-
-                })
-            </script>
-            ";
-            echo $res;
+            if($this->escuchar){
+                $res = "
+                    $('{$this->escuchar}').on('{$tipo}', () =>{
+                        Swal.fire({
+                            title: '{$this->mensaje_principal}',
+                            {$ops}
+                        })
+                        .then(res =>{
+                            {$this->then}
+                        })
+                    })
+                ";
+            } else {
+                $res = "
+                    Swal.fire({
+                        title: '{$this->mensaje_principal}',
+                        {$ops}
+                    })
+                    .then(res =>{
+                        {$this->then}
+                    })
+                ";
+            }
+            if($regresar)
+                return $res;
+            else 
+                echo $res;
         }
         // *********************
         // Funciones SET
         // *********************
         public function setOpcion($llave,$valor){
             $this->opciones_sweet[$llave] = $valor;
+        }
+        public function setThen($valor){
+            $this->then = $valor;
+        }
+        public function setEscuchar($valor){
+            $this->escuchar = $valor;
         }
         // *********************
         // Funciones GET
@@ -97,6 +128,9 @@
         }
         public function getMensajesListados(){
             return $this->mensajes_listados;
+        }
+        public function getThen($valor){
+
         }
 
     }
