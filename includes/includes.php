@@ -1,7 +1,7 @@
 <?php 
-    include("classes/bd.php");
-    include("classes/usuarios.php");
-    include("classes/alerta.php");
+    require_once("classes/bd.php");
+    require_once("classes/usuarios.php");
+    require_once("classes/alerta.php");
 
 
 ?>

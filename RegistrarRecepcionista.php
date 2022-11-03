@@ -5,7 +5,7 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
 }
 
 //Agregamos las librerias
-include("includes/includes.php");
+require_once("includes/includes.php");
 
 // VERIFICAR QUE ESTE CONECTADO EL USUARIO
 // VERIFICAR QUE EL USUARIO SEA TIPO ADMINISTRADOR
@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     name="usuario" 
                                     type="text" 
                                     class="form-control 
-                                    <?php if(isset($mensaje) && in_array("Usuario",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
+                                    <?php if(isset($mensaje) && (in_array("Usuario",$mensaje)) || in_array("El nombre de usuario ya esta ocupado",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
                                     placeholder="Usuario" 
                                     required 
                                     maxlength="10"

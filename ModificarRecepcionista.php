@@ -3,19 +3,27 @@ require_once('utils/sessionCheck.php');
 if(!comprobar_sesion_y_rol("Tb_Admin")){
     header('location: login.php');
 }
-
+if(empty($_GET['id'])){
+    header('location: index.php');
+}
 //Agregamos las librerias
-include("includes/includes.php");
-
-// VERIFICAR QUE ESTE CONECTADO EL USUARIO
-// VERIFICAR QUE EL USUARIO SEA TIPO ADMINISTRADOR
+require_once("includes/includes.php");
+//Se hace la conexion a la base de datos
+$BD = new BaseDeDatos();
+//Se crea al recepcionista
+$recepcionista = Recepcionista::crear_recepcionista($_GET['id'],$BD);
+//Si no se tiene ninguna recepcionista bajo ese id, se manda al index
+if(!$recepcionista){
+    $BD->close();
+    header('location: index.php');
+}
 $intento_fallido = false;
 $mensaje = [];
 $alerta = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // VERIFICAMOS CADA DATO TENGA ALGO
-    $BD = new BaseDeDatos();
+    
     $mensaje = Recepcionista::verificar_datos_formulario($_POST,$BD,"modificar");
     if (!$mensaje) {
         $recep = new Recepcionista($_POST);
@@ -34,9 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $alerta = new Alerta("Error",["Se encontraron los siguientes problemas en el formulario"],[$mensaje]);
         $alerta->setOpcion('icon',"'error'");
         $alerta->setOpcion("confirmButtonColor","'#dc3545'");
-    }
-    $BD->close();
+    } 
 }
+$BD->close();
 ?>
 
 <!DOCTYPE html>
@@ -84,8 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     placeholder="Nombre(s)" 
                                     required 
                                     maxlength="20"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['nombre']  . "'" ?>
-                                    
+                                    <?php echo "value='{$recepcionista->getNombre()}'"?>
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
@@ -99,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     placeholder="Apellido Paterno" 
                                     required 
                                     maxlength="15"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['apellido_p']  . "'" ?>
+                                    <?php echo "value='{$recepcionista->getApellido_p()}'"?>
                                     >
                             </div>
                         </div>
@@ -118,7 +125,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     class="form-control text-capitalize" 
                                     placeholder="Apellido Materno"
                                     maxlength="15"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['apellido_m']  . "'" ?>
+                                    <?php 
+                                    $recepcionista->getApellido_m() ? "value='{$recepcionista->getApellido_m()}'" : false;
+                                    ?>
                                     >
                             </div>
                             <!-- data-mask='(+00) 000-000-0000' -->
@@ -133,7 +142,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     placeholder="(+52) 646-117-6388" 
                                     required 
                                     maxlength="13"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['telefono']  . "'" ?>
+                                    <?php echo "value='{$recepcionista->getTelefono()}'"?>
+
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
@@ -147,7 +157,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     placeholder="ejemplo@jireh.com" 
                                     required 
                                     maxlength="50"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['correo']  . "'" ?>
+                                    <?php echo "value='{$recepcionista->getCorreo()}'"?>
+                                    
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
@@ -157,11 +168,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     name="usuario" 
                                     type="text" 
                                     class="form-control 
-                                    <?php if(isset($mensaje) && in_array("Usuario",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
+                                    <?php if(isset($mensaje) && (in_array("Usuario",$mensaje)) || in_array("El nombre de usuario ya esta ocupado",$mensaje)) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
                                     placeholder="Usuario" 
                                     required 
                                     maxlength="10"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['usuario']  . "'" ?>
+                                    <?php echo "value='{$recepcionista->getUsuarioNombre()}'"?>
+                                    
                                     >
                             </div>
                         </div>
@@ -182,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
                         <div class="form-row row justify-content-center pt-3">
-                            <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Registrar</button>
+                            <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Actualizar</button>
                             <a class="row btn btn-danger mx-3 col-md-3  col-5" href="index.php">Cancelar</a>
                         </div>
                     </form>
