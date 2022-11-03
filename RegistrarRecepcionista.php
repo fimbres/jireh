@@ -228,7 +228,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <!-- LLamada a la funcion de sweet alert en caso de haber ingresado algun dato -->
     <?php 
         if($alerta){
-            $alerta->activar_sweet_alert();
+            echo "<script>
+            {$alerta->activar_sweet_alert()}
+            </script>";
         }
     ?>
 </body> 

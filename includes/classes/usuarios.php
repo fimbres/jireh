@@ -328,6 +328,12 @@ class Recepcionista extends Usuario
     private function getContra(){
         return $this->contra;
     }
+    public function getIdStatus(){
+        return $this->id_status;
+    }
+    public function getId(){
+        return $this->id;
+    }
 
     // *********************
     // Funciones ESTATICAS
