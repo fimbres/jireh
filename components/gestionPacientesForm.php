@@ -13,11 +13,14 @@
     <div class="form-row row">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="apellido_mat_inpt_recepcionista">Apellido Materno</label>
-            <input id="AMaterno" type="text" class="form-control text-capitalize" placeholder="Apellido Materno">
+            <input id="AMaterno" type="text" class="form-control text-capitalize formModificarInput" placeholder="Apellido Materno">
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="sexo_inpt_paciente"><b>*</b>Sexo</label>
-            <input id="IdSexo" type="text" class="form-control formModificarInput" placeholder="Sexo">
+            <select id="IdSexo" class="form-select formModificarInput" aria-label="Default select example">
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+            </select>
         </div>
     </div>
     <div class="form-row row">
@@ -64,18 +67,18 @@
     </div>
     <div class="form-group col-12 pb-4">
         <label for="doc_poliza_inpt_paciente">Documento de póliza</label>
-        <input type="file" class="form-control formModificarInput" accept="image/*,.pdf">
+        <input  id="filePoliza" type="file" class="form-control formModificarInput" accept="image/*,.pdf">
         <iframe id="Archivo" class="visually-hidden" src="" style="width:100%; height:500px;" frameborder="0" ></iframe>
     </div>
     <div class="form-row row justify-content-center">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="doc_ant_inpt_paciente">Documento de antecedentes</label>
-            <input type="file" class="form-control formModificarInput" accept="image/*,.pdf">
+            <input id="fileAntecedentes" type="file" class="form-control formModificarInput" accept="image/*,.pdf">
             <iframe id="ArchivoAntecedentes" class="visually-hidden" src="" style="width:100%; height:500px;" frameborder="0" ></iframe>
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="doc_presupuesto_inpt_paciente">Documento de presupuesto</label>
-            <input type="file" class="form-control formModificarInput" accept="image/*,.pdf">
+            <input id="filePresupuesto" type="file" class="form-control formModificarInput" accept="image/*,.pdf">
             <iframe id="ArchivoPresupuesto" class="visually-hidden" src="" style="width:100%; height:500px;" frameborder="0" ></iframe>
         </div>
     </div>

@@ -1,10 +1,11 @@
 <?php
+
 if(isset($extra_diagonal_path)){
     require_once($extra_diagonal_path .'vendor/autoload.php');
 } else{
     require_once('vendor/autoload.php');
 }
- 
+
  use Cloudinary\Configuration\Configuration;
  use Cloudinary\Api\Upload\UploadApi;
 

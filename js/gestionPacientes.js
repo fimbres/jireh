@@ -53,21 +53,17 @@ function tablaPacientesAcciones(id, event, objeto) {
           }
 
           //ASIGNAMOS UN VALOR DIFERENTE CADA VEZ QUE RECORREMOS
-          if (fieldValue){
-            if(item === "ArchivoAntecedentes" || item === "ArchivoPresupuesto" || item === "Archivo"){
-                if(fieldValue === "NULL"){
-                    console.log("no hay nada");
-                }else{
-                    $("#"+item).attr("src",fieldValue);
-                    $("#"+item).removeClass("visually-hidden");
-                    console.log("Si hay algo");
-                }
-            }
-            else{
-                $("#" + item).val(fieldValue);
-            }
-          }else{
-
+          if (fieldValue) {
+            if (
+              item === "ArchivoAntecedentes" ||
+              item === "ArchivoPresupuesto" ||
+              item === "Archivo"
+            ) {
+              if (fieldValue !== "NULL") {
+                $("#" + item).attr("src", fieldValue);
+                $("#" + item).removeClass("visually-hidden");
+              }
+            } else $("#" + item).val(fieldValue);
           }
         }
 
@@ -91,37 +87,85 @@ function tablaPacientesAcciones(id, event, objeto) {
 }
 
 function actualizarInfoPaciente() {
+  var data = new FormData();
 
-    var dataPaciente = new Array();
-    var inputValues = $('.formModificarInput'),
-    namesValues = [].map.call(inputValues,function(dataInput){
-        dataPaciente.push(dataInput.value);
+  data.append("IdPaciente", idPaciente);
+
+  var inputValues = $(".formModificarInput"),
+    namesValues = [].map.call(inputValues, function (dataInput) {
+      switch (dataInput.id) {
+        case "filePoliza":
+          if (dataInput.files[0] != null) {
+            data.append("archivoPoliza", dataInput.files[0]);
+          }
+          break;
+        case "fileAntecedentes":
+          if (dataInput.files[0] != null)
+            data.append("archivoAntecedentes", dataInput.files[0]);
+          break;
+        case "filePresupuesto":
+          if (dataInput.files[0] != null)
+            data.append("archivoPresupuesto", dataInput.files[0]);
+          break;
+      }
+      data.append("" + dataInput.id, dataInput.value);
     });
 
-    console.log(dataPaciente);
-/*
-    if (username && password && rol) {
-      $.ajax({
-        type: "POST",
-        url: "utils/login.php",
-        data: { username, password, rol },
-        dataType: "json",
-        success: function (data) {
-          if (data.response === "success") {
-            window.location = "index.php";
-          } else {
-            swal("Error: Petición", data.message, "error");
-          }
-        },
-        error: function (xhr, exception) {
-          swal("Error: Petición", exception.toString(), "error");
-          console.error(xhr);
-        },
-      });
+  if (data.get("Nombre").length !== 0) {
+    if (data.get("APaterno").length !== 0 || data.get("AMaterno").length) {
+      if (data.get("IdSexo").length !== 0) {
+        if (data.get("IdStatus").length !== 0) {
+          fetch("utils/updatePaciente.php", {
+            method: "POST",
+            body: data,
+          })
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              if (data.success) {
+                Swal.fire(
+                  'Correcto!',
+                  'Se ha guardado la informacion!',
+                  'success'
+                );
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: data.message
+                })
+              }
+            })
+            .catch((error) => console.error(error));
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'El paciente debe tener un estado valido!'
+          });
+        }
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Debes ingresar el sexo de la persona!'
+        });
+      }
     } else {
-      swal("Error: Campos Vacíos", "Todos los campos son necesarios", "error");
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debes ingresar al menos un apellido!'
+      });
     }
-    */
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'No puedes dejar el campo nombre vacio!'
+    });
+  }
 }
 
 function bajaPaciente() {
@@ -141,7 +185,6 @@ function bajaPaciente() {
         $(".modal-body").addClass("visually-hidden");
         $(".modal-messages").removeClass("visually-hidden");
         $("#messagesModal").text(data.message);
-        console.log(data.message);
       }
     },
     error: function (xhr, exception) {
