@@ -89,44 +89,54 @@ function tablaPacientesAcciones(id, event, objeto) {
 function actualizarInfoPaciente() {
   var data = new FormData();
 
-  data.append("IdPaciente",idPaciente);
+  data.append("IdPaciente", idPaciente);
 
   var inputValues = $(".formModificarInput"),
     namesValues = [].map.call(inputValues, function (dataInput) {
-      switch(dataInput.id){
+      switch (dataInput.id) {
         case "filePoliza":
-          if(dataInput.files[0] != null){
-            data.append("archivoPoliza",dataInput.files[0]);
+          if (dataInput.files[0] != null) {
+            data.append("archivoPoliza", dataInput.files[0]);
           }
           break;
         case "fileAntecedentes":
-          if(dataInput.files[0] != null)
-            data.append("archivoAntecedentes",dataInput.files[0]);
+          if (dataInput.files[0] != null)
+            data.append("archivoAntecedentes", dataInput.files[0]);
           break;
         case "filePresupuesto":
-          if(dataInput.files[0] != null)
-            data.append("archivoPresupuesto",dataInput.files[0]);
+          if (dataInput.files[0] != null)
+            data.append("archivoPresupuesto", dataInput.files[0]);
           break;
       }
-      data.append(""+dataInput.id,dataInput.value);
+      data.append("" + dataInput.id, dataInput.value);
     });
 
   //console.log(data.get('archivoPoliza'));
 
-
-  if (data.get('Nombre').length !== 0) {
-    if (data.get('APaterno').length !== 0 || data.get('AMaterno').length) {
-      if (data.get('IdSexo').length !== 0) {
-        if (data.get('IdStatus').length !== 0) {
+  if (data.get("Nombre").length !== 0) {
+    if (data.get("APaterno").length !== 0 || data.get("AMaterno").length) {
+      if (data.get("IdSexo").length !== 0) {
+        if (data.get("IdStatus").length !== 0) {
           fetch("utils/updatePaciente.php", {
-            method: 'POST',
+            method: "POST",
             body: data,
           })
-            .then(respuesta => respuesta.text())
-            .then(decodificado => {
-                console.log(decodificado);
-            });
-
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              if (data.success) {
+                Swal.fire(
+                  'Correcto!',
+                  'Se ha guardado la informacion!',
+                  'success'
+                );
+                console.log(data.message);
+              } else {
+                console.log(data.message);
+              }
+            })
+            .catch((error) => console.error(error));
 
           /*$.ajax({
             type: "POST",
@@ -149,28 +159,32 @@ function actualizarInfoPaciente() {
             },
           });*/
         } else {
-          swal(
-            "Error: Campos Vacíos",
-            "El paciente debe tener un estado valido",
-            "error"
-          );
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'El paciente debe tener un estado valido!'
+          })
         }
       } else {
-        swal(
-          "Error: Campos Vacíos",
-          "Debes ingresar el sexo de la persona",
-          "error"
-        );
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Debes ingresar el sexo de la persona!'
+        });
       }
     } else {
-      swal(
-        "Error: Campos Vacíos",
-        "Debes ingresar al menos un apellido",
-        "error"
-      );
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Debes ingresar al menos un apellido!'
+      });
     }
   } else {
-    swal("Error: Campos Vacíos", "El campo nombre es requerido", "error");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'No puedes dejar el campo nombre vacio!'
+    });
   }
 }
 

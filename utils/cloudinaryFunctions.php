@@ -12,7 +12,7 @@
 
     function uploadFile($rutaArchivo,$tipoArchivo,$path_destino,$nombre){
         $upload = new UploadApi();
-        $upload->upload("$rutaArchivo",[
+        return $upload->upload("$rutaArchivo",[
             'public_id' => $nombre,
             'folder' => $path_destino,
             'use_filename' => true,
