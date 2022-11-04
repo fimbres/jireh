@@ -87,24 +87,55 @@ function tablaPacientesAcciones(id, event, objeto) {
 }
 
 function actualizarInfoPaciente() {
-  var dataPaciente = new Array();
+  var data = new FormData();
+
+  data.append("IdPaciente",idPaciente);
+
   var inputValues = $(".formModificarInput"),
     namesValues = [].map.call(inputValues, function (dataInput) {
-      dataPaciente.push(dataInput.value);
+      switch(dataInput.id){
+        case "filePoliza":
+          if(dataInput.files[0] != null){
+            data.append("archivoPoliza",dataInput.files[0]);
+          }
+          break;
+        case "fileAntecedentes":
+          if(dataInput.files[0] != null)
+            data.append("archivoAntecedentes",dataInput.files[0]);
+          break;
+        case "filePresupuesto":
+          if(dataInput.files[0] != null)
+            data.append("archivoPresupuesto",dataInput.files[0]);
+          break;
+      }
+      data.append(""+dataInput.id,dataInput.value);
     });
 
-  console.log(dataPaciente);
-  console.log(dataPaciente[1].length);
+  //console.log(data.get('archivoPoliza'));
 
-  if (dataPaciente[0].length !== 0) {
-    if (dataPaciente[1].length !== 0 || dataPaciente[2].length !== 0) {
-      if (dataPaciente[3].length !== 0) {
-        if (dataPaciente[15].length !== 0) {
-          $.ajax({
+
+  if (data.get('Nombre').length !== 0) {
+    if (data.get('APaterno').length !== 0 || data.get('AMaterno').length) {
+      if (data.get('IdSexo').length !== 0) {
+        if (data.get('IdStatus').length !== 0) {
+          fetch("utils/updatePaciente.php", {
+            method: 'POST',
+            body: data,
+          })
+            .then(respuesta => respuesta.text())
+            .then(decodificado => {
+                console.log(decodificado);
+            });
+
+
+          /*$.ajax({
             type: "POST",
             url: "utils/updatePaciente.php",
-            data: { idPaciente: idPaciente,datos: dataPaciente },
+            data: { idPaciente: idPaciente,datos: dataPaciente, documentos: documentos},
             dataType: "json",
+            beforeSend: function(data){
+              
+            },
             success: function (data) {
               if (data.response === "success") {
                 console.log(data.message);
@@ -116,7 +147,7 @@ function actualizarInfoPaciente() {
               swal("Error: Petición", exception.toString(), "error");
               console.error(xhr);
             },
-          });
+          });*/
         } else {
           swal(
             "Error: Campos Vacíos",
@@ -141,29 +172,6 @@ function actualizarInfoPaciente() {
   } else {
     swal("Error: Campos Vacíos", "El campo nombre es requerido", "error");
   }
-
-  /*if (username && password && rol) {
-      $.ajax({
-        type: "POST",
-        url: "utils/login.php",
-        data: { username, password, rol },
-        dataType: "json",
-        success: function (data) {
-          if (data.response === "success") {
-            window.location = "index.php";
-          } else {
-            swal("Error: Petición", data.message, "error");
-          }
-        },
-        error: function (xhr, exception) {
-          swal("Error: Petición", exception.toString(), "error");
-          console.error(xhr);
-        },
-      });
-    } else {
-      swal("Error: Campos Vacíos", "Todos los campos son necesarios", "error");
-    }
-    */
 }
 
 function bajaPaciente() {

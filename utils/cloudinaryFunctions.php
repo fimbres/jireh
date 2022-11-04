@@ -1,5 +1,5 @@
 <?php
-    require_once('vendor/autoload.php');
+    require_once($_SERVER["DOCUMENT_ROOT"]."/jireh-php/vendor/autoload.php");
     use Cloudinary\Configuration\Configuration;
     use Cloudinary\Api\Upload\UploadApi;
     use Cloudinary\Api\Search\SearchApi;
@@ -10,9 +10,11 @@
     $config->cloud->apiSecret = '-T7ev2kaYOJ_CFFsxLxy7jIOniA';
     $config->url->secure = true;
 
-    function uploadFile($rutaArchivo,$tipoArchivo){
+    function uploadFile($rutaArchivo,$tipoArchivo,$path_destino,$nombre){
         $upload = new UploadApi();
         $upload->upload("$rutaArchivo",[
+            'public_id' => $nombre,
+            'folder' => $path_destino,
             'use_filename' => true,
             'overwrite' => true,
             'tags' => ["$tipoArchivo"]]);

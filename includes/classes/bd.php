@@ -1,5 +1,5 @@
 <?php
- require_once('vendor/autoload.php');
+ require_once($_SERVER["DOCUMENT_ROOT"]."/jireh-php/vendor/autoload.php");
  use Cloudinary\Configuration\Configuration;
  use Cloudinary\Api\Upload\UploadApi;
 
