@@ -60,53 +60,57 @@
         $idStatus = $datosValidados[12] === "Activo" ? "3" : "4";
 
         //MANEJO DE ARCHIVOS, SUBIDA A CLOUDINARY, ACTUALIZACION DE URL EN BASE DE DATOS
-        foreach ($archivos as $contador => $arch) {
-            if ($arch['error'] == 0) {
-                $random = md5($datosValidados[7]);
-                $pathDestino = "Pacientes/{$datosValidados[0]}_{$random}/";
-
-                //VERIFICAR DOCUMENTO
-                if($poliza){
-                    $nombreArchivoFinal = "documento_poliza";
-                    $tbUpdate = "Tb_Polizas";
-                    $columna = "Archivo";
-                    $poliza = false;
-                }else if(!$poliza && $antecedentes){
-                    $nombreArchivoFinal = "documento_antecedentes";
-                    $tbUpdate = "Tb_Paciente";
-                    $columna = "ArchivoAntecedentes";
-                    $antecedentes = false;
-                }else if(!$poliza && !$antecedentes && $presupuesto){
-                    $nombreArchivoFinal = "documento_presupuesto";
-                    $tbUpdate = "Tb_Paciente";
-                    $columna = "ArchivoPresupuesto";
-                    $presupuesto = false;
-                }
-
-                //SUBIR ARCHIVO Y OBTENER LINK
-                $archCloudinary = uploadFile("$arch[tmp_name]","pdf",$pathDestino,$nombreArchivoFinal);
-                $urlArch = $archCloudinary['secure_url'];
-
-                //ACTUALIZAR URL EN BASE DE DATOS
-                if($tbUpdate == "Tb_Paciente"){
-                    $consulta = $conexion->query("UPDATE Tb_Paciente SET {$columna}='{$urlArch}' WHERE IdPaciente='{$idPaciente}';");
-                }
-                else if($tbUpdate == "Tb_Polizas"){
-                    $insertar = $conexion->query("INSERT INTO Tb_Polizas (Archivo) VALUES ('{$urlArch}');");
-
-                    if($insertar){
-
-                        $cantidad = mysqli_num_rows($conexion->query("SELECT IdPoliza FROM Tb_Polizas;"));
-                        $actualizar = $conexion->query("UPDATE Tb_Paciente SET IdPoliza='{$cantidad}' WHERE IdPaciente='{$idPaciente}';");
+        if($poliza || $antecedentes || $presupuesto){
+            foreach ($archivos as $contador => $arch) {
+                if ($arch['error'] == 0) {
+                    $random = md5($datosValidados[7]);
+                    $pathDestino = "Pacientes/{$datosValidados[0]}_{$random}/";
+    
+                    //VERIFICAR DOCUMENTO
+                    if($poliza){
+                        $nombreArchivoFinal = "documento_poliza";
+                        $tbUpdate = "Tb_Polizas";
+                        $columna = "Archivo";
+                        $poliza = false;
+                    }else if(!$poliza && $antecedentes){
+                        $nombreArchivoFinal = "documento_antecedentes";
+                        $tbUpdate = "Tb_Paciente";
+                        $columna = "ArchivoAntecedentes";
+                        $antecedentes = false;
+                    }else if(!$poliza && !$antecedentes && $presupuesto){
+                        $nombreArchivoFinal = "documento_presupuesto";
+                        $tbUpdate = "Tb_Paciente";
+                        $columna = "ArchivoPresupuesto";
+                        $presupuesto = false;
+                    }
+    
+                    //SUBIR ARCHIVO Y OBTENER LINK
+                    $archCloudinary = uploadFile("$arch[tmp_name]","pdf",$pathDestino,$nombreArchivoFinal);
+                    $urlArch = $archCloudinary['secure_url'];
+    
+                    //ACTUALIZAR URL EN BASE DE DATOS
+                    if($tbUpdate == "Tb_Paciente"){
+                        $consulta = $conexion->query("UPDATE Tb_Paciente SET {$columna}='{$urlArch}' WHERE IdPaciente='{$idPaciente}';");
+                    }
+                    else if($tbUpdate == "Tb_Polizas"){
+                        $insertar = $conexion->query("INSERT INTO Tb_Polizas (Archivo) VALUES ('{$urlArch}');");
+    
+                        if($insertar){
+    
+                            $cantidad = mysqli_num_rows($conexion->query("SELECT IdPoliza FROM Tb_Polizas;"));
+                            $actualizar = $conexion->query("UPDATE Tb_Paciente SET IdPoliza='{$cantidad}' WHERE IdPaciente='{$idPaciente}';");
+                        }
                     }
                 }
             }
+        }else{
+
         }
 
         //ACTUALIZAMOS LA INFORMACION
         $consulta = $conexion->query("UPDATE Tb_Paciente SET Nombre='$datosValidados[0]',APaterno='$datosValidados[1]',AMaterno='$datosValidados[2]',IdSexo='$idSexo',Direccion='$datosValidados[4]',CodigoPostal='$datosValidados[5]',Email='$datosValidados[6]',NumTelefono='$datosValidados[7]',FechaNacimiento='$datosValidados[8]',MedicoEnvia='$datosValidados[9]',Representante='$datosValidados[10]',RFC='$datosValidados[11]',IdStatus='$idStatus' WHERE IdPaciente='$idPaciente'");
         if($consulta){
-            $data = ["success"=>true,"message"=>$urlArch];
+            $data = ["success"=>true,"message"=>""];
         }else{
             $data = ["success"=>false,"message"=>"No se ha podido actualizar los datos"];
         }

@@ -111,8 +111,6 @@ function actualizarInfoPaciente() {
       data.append("" + dataInput.id, dataInput.value);
     });
 
-  //console.log(data.get('archivoPoliza'));
-
   if (data.get("Nombre").length !== 0) {
     if (data.get("APaterno").length !== 0 || data.get("AMaterno").length) {
       if (data.get("IdSexo").length !== 0) {
@@ -131,39 +129,21 @@ function actualizarInfoPaciente() {
                   'Se ha guardado la informacion!',
                   'success'
                 );
-                console.log(data.message);
               } else {
-                console.log(data.message);
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: data.message
+                })
               }
             })
             .catch((error) => console.error(error));
-
-          /*$.ajax({
-            type: "POST",
-            url: "utils/updatePaciente.php",
-            data: { idPaciente: idPaciente,datos: dataPaciente, documentos: documentos},
-            dataType: "json",
-            beforeSend: function(data){
-              
-            },
-            success: function (data) {
-              if (data.response === "success") {
-                console.log(data.message);
-              } else {
-                swal("Error: Petición", data.message, "error");
-              }
-            },
-            error: function (xhr, exception) {
-              swal("Error: Petición", exception.toString(), "error");
-              console.error(xhr);
-            },
-          });*/
         } else {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
             text: 'El paciente debe tener un estado valido!'
-          })
+          });
         }
       } else {
         Swal.fire({
@@ -205,7 +185,6 @@ function bajaPaciente() {
         $(".modal-body").addClass("visually-hidden");
         $(".modal-messages").removeClass("visually-hidden");
         $("#messagesModal").text(data.message);
-        console.log(data.message);
       }
     },
     error: function (xhr, exception) {
