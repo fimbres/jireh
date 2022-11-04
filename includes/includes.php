@@ -1,7 +1,5 @@
 <?php 
-    include($_SERVER["DOCUMENT_ROOT"]."/jireh-php/includes/classes/bd.php");
-    include($_SERVER["DOCUMENT_ROOT"]."/jireh-php/includes/classes/usuarios.php");
-    include($_SERVER["DOCUMENT_ROOT"]."/jireh-php/includes/classes/alerta.php");
-
-
+    require_once("classes/bd.php");
+    require_once("classes/usuarios.php");
+    require_once("classes/alerta.php");
 ?>

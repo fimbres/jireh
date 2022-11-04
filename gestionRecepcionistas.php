@@ -3,6 +3,8 @@
     if(!comprobar_sesion_y_rol("Tb_Admin")){
         header('location: login.php');
     }
+    require_once('includes/includes.php');
+    $alertas = [];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -65,11 +67,42 @@
                             <?php
                                 include("includes/funciones_BD.php");
                                 $conexion = crear_conexion();
-                                $query = "SELECT Tb_Recepcionista.Nombre as Nombre, Tb_Recepcionista.APaterno as APaterno, Tb_Recepcionista.Email as Email, Tb_Status.Descripcion as Status FROM Tb_Recepcionista, Tb_Status WHERE Tb_Recepcionista.IdStatus = Tb_Status.IdStatus;";
+                                $query = "SELECT Tb_Recepcionista.Nombre as Nombre, Tb_Recepcionista.APaterno as APaterno, Tb_Recepcionista.Email as Email, Tb_Status.Descripcion as Status, Tb_Recepcionista.IdRecepcionista as IdRecepcionista FROM Tb_Recepcionista, Tb_Status WHERE Tb_Recepcionista.IdStatus = Tb_Status.IdStatus;";
                                 $res = mysqli_query($conexion,$query);
                                 $conexion->close();
                                 while($fila = mysqli_fetch_array($res))
                                 {
+                                    $al = new Alerta("¿Deseas eliminar a esta recepcionista?");
+                                    $al->setOpcion('icon',"'error'");
+                                    $al->setOpcion("confirmButtonColor","'#dc3545'");
+                                    $al->setOpcion("confirmButtonText","'Eliminar'");
+                                    $al->setOpcion('showCancelButton',"true");
+                                    $al->setOpcion('cancelButtonText',"'Cancelar'");
+                                    $al->setEscuchar("#sweet-eliminar-{$fila['IdRecepcionista']}");
+                                    $al->setThen("
+                                        if(res.isConfirmed){
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: 'includes/ajax/eliminar_recepcionista.php',
+                                                data: { id: '{$fila['IdRecepcionista']}' },
+                                                dataType: 'json',
+                                                success: function (data) {
+                                                  if (data.response === 'success') {
+                                                    Swal.fire(data.message, '', 'success')
+                                                    .then(e => {
+                                                        location.reload();
+                                                    })
+                                                  } else if (data.response === 'invalid') {
+                                                    Swal.fire(data.message, '', 'error')
+                                                  }
+                                                },
+                                                error: function (xhr, exception) {
+                                                  console.log('error', xhr);
+                                                },
+                                              });
+                                        }
+                                    ");
+                                    array_push($alertas, $al);
                             ?>
                                 <tr>
                                     <td><?php echo $fila['Nombre'];?></td>
@@ -78,14 +111,31 @@
                                     <td><?php echo $fila['Status'];?></td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <button class="btn btn-danger w-40 m-1 ">Eliminar</button>
-                                            <button class="btn btn-warning w-40 m-1">Modificar</button>
+                                            <button class="btn btn-danger w-40 m-1 btn-eliminar-recep" id='<?php echo "sweet-eliminar-{$fila['IdRecepcionista']}"?>'>Eliminar</button>
+                                            <a class="btn btn-warning w-40 m-1" href="ModificarRecepcionista.php?id=<?php echo $fila['IdRecepcionista'];?>">Modificar</a>
                                         </div>
                                     </td>
                                 </tr>
                             <?php
                                 }
                             ?>
+                            <!-- Modal -->
+                                <!-- <div class="modal fade" id="<?php //echo "modal-eliminar-{$fila['IdRecepcionista']}"?>" role="dialog" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                        <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Eliminar recepcionista</h5>
+                                            <button type="button" class="btn-close btn-close-white" aria-label="Close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div> -->
                         </tbody>
                     </table>
                 </div>
@@ -95,11 +145,29 @@
     <footer>
     </footer>
     <!-- <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script> -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="js/datatables.js"></script>
     <script src="js/systemFunctions.js"></script>
+
+    <?php
+        $imprimir =  "<script> 
+        document.addEventListener('DOMContentLoaded', function() {
+        ";
+        foreach ($alertas as $al) {
+            $imprimir .= "
+            {$al->activar_sweet_alert()}
+            ";
+        }
+        $imprimir .= "
+        })
+        </script>";
+        echo $imprimir;
+    ?>
 </body>
 </html>
