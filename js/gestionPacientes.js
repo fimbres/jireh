@@ -192,3 +192,9 @@ function bajaPaciente() {
     },
   });
 }
+
+function cancelarActualizarInfo(){
+  //MOSTRAR FORMULARIO LLENADO
+  $("#containerTableActions").addClass("visually-hidden");
+  $("#tablaPacientes").removeClass("visually-hidden");
+}
