@@ -3,57 +3,38 @@ require_once('utils/sessionCheck.php');
 if(!comprobar_sesion_y_rol("Tb_Admin")){
     header('location: login.php');
 }
-
+//"nombre" / "apellido_p" / "apellido_m" / "telefono" / "correo" 
 //Librerias
- include("includes/funciones_BD.php");
+ include("includes/includes.php");
 
- $exito = false;
  $intento_fallido = false;
- $mensaje_principañ =false;
  $mensaje=[];
+ $alerta = false;
  if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    $vacio = 0;
-    //Verificacion de los datos
-    !isset($_POST['nombre']) ? array_push($mensaje, 'Nombre') : $vacio ++;
-    !isset($_POST['apaterno']) ? array_push($mensaje, 'Apellido Paterno') : $vacio ++;
-    !isset($_POST['amaterno']) ? array_push($mensaje, 'Apellido Materno') : $vacio ++;
-    !isset($_POST['Telefono']) ? array_push($mensaje, 'Telefono') : $vacio ++;
-    !isset($_POST['correo']) ? array_push($mensaje, 'Correo Electronico') : $vacio ++;
-    !isset($_POST['correoConf']) ? array_push($mensaje, 'Confirmacion Correo Electronico') : $vacio ++;
-    !isset($_POST['usuario']) ? array_push($mensaje, 'Usuario') : $vacio ++;
-    !isset($_POST['contraseña']) ? array_push($mensaje, 'Contraseña') : $vacio ++;
-    !isset($_POST['contraseñaconf']) ? array_push($mensaje, 'Confirmacion Contraseña') : $vacio ++;
-    //Validacion de que concuerde la contraseña y el correo
-    strcmp($_POST['correo'], $_POST['correoConf']) != 0 ? array_push($mensaje, 'No coinciden los Correos Electrónicos') : false;
-    strcmp($_POST['contraseña'], $_POST['contraseñaconf']) != 0 ? array_push($mensaje, 'No coinciden las Contraseñas') : false;
+    $DB = new BaseDeDatos();
+    $mensaje = Doctor::verificar_datos_formulario($_POST, $DB);
     if(!$mensaje){
-            $nombre = $aPaterno = $aMaterno = $telefono = $correo = "";
-            $correoConfirmacion = $usuario = $contraseña = $contraseñaConfirmacion = "";
-            $nombre = $_POST['nombre'];
-            $aPaterno = $_POST['apaterno'];
-            $aMaterno = $_POST['amaterno'];
-            $telefono = $_POST['Telefono'];
-            $correo = $_POST['correo'];
-            $correoConfirmacion = $_POST['correoConf'];
-            $usuario = $_POST['usuario'];
-            $contraseña = $_POST['contraseña'];
-            $BD = crear_conexion();
-            $sql = "INSERT INTO Tb_Doctor
-            (Nombre, APaterno, AMaterno, Email, NumTelefono, Usuario, Contrasena, IdStatus)
-            VALUES('$nombre', '$aPaterno', '$aMaterno', '$correo', '$telefono', '$usuario', '$contraseña', 3)";
-            if($BD->query($sql)){
-                $exito = true;
-                $mensaje_principañ = "Se han guardado los datos correctamente";
-            }else {
-                $intento_fallido = true;
-                $mensaje_principañ = "Hubo un error al intentar guardar los datos, vuelve a intentarlo" . $BD->error;
-             }
-             $BD->close();
+        $doctor = new Doctor($_POST);
+        $res = $doctor->agregar_BD($DB);
+        $intento_fallido = !$res[0];
+        if($res[0]){
+            $alerta = new Alerta($res[1]);
+        }else{
+            $alerta = new Alerta("Error",[$res[1]]);
+            $alerta->setOptions('icon',"'error'");
+            $alerta->setOpcion("ConfirmButtonColor","'#dc3545'");
+        }
+        $DB->close();
     }else{
-            $intento_fallido = true;
-            $mensaje_principañ = "Se encontraron los siguientes problemas en el formulario";
+        $intento_fallido = true;
+        $alerta = new Alerta("Error",["Se encontraron los siguientes problemas en el formulario"],[$mensaje]);
+        $alerta->setOpcion('icon',"'error");
+        $alerta->setOpcion("confirmButtonColor","'#dc3545'");
     }
-}
+
+ }
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +43,7 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Doctor</title>
+    <title>Registrar Doctor</title>
     <!-- CSS Only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="css/index.css">
@@ -87,10 +68,10 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
                 <form method="POST" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar-recepcionista">
                         <div class="form-row row">
                         <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="tbNombre">Nombre(s)</label>
+                                <label for="tbNombre">*Nombre(s)</label>
                                 <input id="tbNombre"
                                     name="nombre" type="text"
-                                    class="form-control 
+                                    class="form-control text-capitalize 
                                     <?php if(isset($mensaje) && in_array("Nombre",$mensaje)) echo "is-invalid";
                                     else if($intento_fallido) echo "is-valid";?>"
                                     placeholder="Nombre(s)"
@@ -100,16 +81,16 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
                                 >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="tbAPaterno">Apeliido Paterno</label>
+                                <label for="tbAPaterno">*Apeliido Paterno</label>
                                 <input id="tbAPaterno"
-                                    name="apaterno" type="text"
-                                    class="form-control 
+                                    name="apellido_p" type="text"
+                                    class="form-control text-capitalize
                                     <?php if(isset($mensaje) && in_array("Apellido Paterno",$mensaje)) echo "is-invalid";
                                     else if($intento_fallido) echo "is-valid";?>"
                                     placeholder="Apellido Paterno"
                                     required
                                     maxlength="15"
-                                    <?php if($intento_fallido) echo "value='". $_POST['apaterno'] . "'"?>
+                                    <?php if($intento_fallido) echo "value='". $_POST['apellido_p'] . "'"?>
                                 >
                             </div>
                         </div>
@@ -117,28 +98,25 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="tbAMaterno">Apeliido Materno</label>
                                 <input id="tbAMaterno"
-                                    name="amaterno" type="text"
-                                    class="form-control 
-                                    <?php if(isset($mensaje) && in_array("Apellido Materno",$mensaje)) echo "is-invalid";
-                                    else if($intento_fallido) echo "is-valid";?>"
+                                    name="apellido_m" type="text"
+                                    class="form-control text-capitalize" 
                                     placeholder="Apellido Materno"
-                                    required
                                     maxlength="15"
-                                    <?php if($intento_fallido) echo "value='". $_POST['amaterno'] . "'"?>
+                                    <?php if($intento_fallido) echo "value='". $_POST['apellido_m'] . "'"?>
                                 >
                             </div>
                             <!-- Data-mask '(+00) 000-000-0000'-->
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="tbTelefono">Telefono</label>
                                 <input id="tbTelefono"
-                                name="Telefono" type="tel"
+                                name="telefono" type="tel"
                                 class="form-control 
                                     <?php if(isset($mensaje) && in_array("Telefono",$mensaje)) echo "is-invalid";
                                     else if($intento_fallido) echo "is-valid";?>"
                                     placeholder="(+52) 646-111-1234"
                                     required
                                     maxlength="13"
-                                    <?php if($intento_fallido) echo "value= '". $_POST['Telefono'] . "'"?>
+                                    <?php if($intento_fallido) echo "value= '". $_POST['telefono'] . "'"?>
                                 >
                             </div>
                         </div>
@@ -161,14 +139,14 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
                                 <label for="tbCorreoConf">Confirmar correo electrónico</label>
                                 <input 
                                     id="tbCorreoConf" 
-                                    name="correoConf" 
+                                    name="correo_conf" 
                                     type="email" 
                                     class="form-control 
                                     <?php if(isset($mensaje) && (in_array('No coinciden los Correos Electrónicos',$mensaje) || in_array("Confirmación Correo Electrónico",$mensaje))) echo "is-invalid"; else if($intento_fallido)  echo "is-valid"; ?>" 
                                     placeholder="ejemplo@jireh.com" 
                                     required 
                                     maxlength="50"
-                                    <?php if ($intento_fallido) echo "value='" . $_POST['correoConf']  . "'" ?>
+                                    <?php if ($intento_fallido) echo "value='" . $_POST['correo_conf']  . "'" ?>
                                     >
                             </div>
                         </div>
@@ -191,7 +169,7 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
                                     <label for="tbContra">Contraseña</label>
                                     <input 
                                         id="tbContra" 
-                                        name="contraseña" 
+                                        name="contra" 
                                         type="password" 
                                         class="form-control 
                                         <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Contraseña",$mensaje))) echo "is-invalid"; ?>" 
@@ -204,7 +182,7 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
                                     <label for="tbContraConfi">Confirmar Contraseña</label>
                                     <input 
                                         id="tbContraConfi" 
-                                        name="contraseñaconf" 
+                                        name="contra_conf" 
                                         type="password" 
                                         class="form-control 
                                         <?php if(isset($mensaje) && (in_array("No coinciden las Contraseñas",$mensaje) || in_array("Confirmación Contraseña",$mensaje))) echo "is-invalid"; ?>" 
@@ -234,36 +212,12 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/systemFunctions.js"></script>
     <!-- LLamada a la funcion de sweet alert en caso de haber ingresado algun dato -->
-    <?php if($intento_fallido) { ?>
-        <script>
-            let html_er = "<?php echo $mensaje_principañ?>"
-            html_er += '<ul></ul>' + `<?php foreach ($mensaje as $val) {
-                echo "<li>" . $val . "</li>";
-            }?> ` + "<ul></ul>"
-            swal.fire({
-                title: 'Hubo un error',
-                icon: 'error',
-                html: html_er,
-                showCloseButton: true,
-                showCancelButton: false,
-                showConfirmButton: true,
-                confirmButtonColor: "#dc3545",
-                confirmButtonText: "Aceptar",
-            })
-        </script>
-    <?php } ?>
-    <?php if ($exito) { ?>
-        <script>
-            Swal.fire({
-                title: '<?php echo $mensaje_principañ?>',
-                icon: 'success',
-                showCloseButton: true,
-                showCancelButton: false,
-                showConfirmButton: true,
-                confirmButtonColor: "#28a745",
-                confirmButtonText: "Aceptar",
-            })
-        </script>
-        <?php }?>
+ <?php 
+ if($alerta){
+    echo "<script>
+    {$alerta->activar_sweet_alert()}
+    </script>";
+ }
+ ?>
 </body>
 </html>
