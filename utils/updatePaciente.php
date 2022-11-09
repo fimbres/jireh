@@ -1,6 +1,7 @@
 <?php
     //API CLOUDINARY
-    require_once($_SERVER["DOCUMENT_ROOT"]."/jireh-php/utils/cloudinaryFunctions.php");
+    require_once("./cloudinaryFunctions.php");
+    //require_once($_SERVER["DOCUMENT_ROOT"]."/jireh-php/utils/cloudinaryFunctions.php");
 
     //OBTENER DATOS DEL FORMULARIO
     $idPaciente = $_POST['IdPaciente'];
