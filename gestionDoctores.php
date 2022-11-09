@@ -3,6 +3,8 @@
     if(!comprobar_sesion_y_rol("Tb_Admin")){
         header('location: login.php');
     }
+    require_once('includes/includes.php');
+    $alertas = [];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -65,11 +67,44 @@
                             <?php
                                 include("includes/funciones_BD.php");
                                 $conexion = crear_conexion();
-                                $query = "SELECT Tb_Doctor.Nombre as Nombre, Tb_Doctor.APaterno as APaterno, Tb_Doctor.Email as Email, Tb_Status.Descripcion as Status FROM Tb_Doctor, Tb_Status WHERE Tb_Doctor.IdStatus = Tb_Status.IdStatus;";
+                                $query = "SELECT Tb_Doctor.IdDoctor as IdDoctor,Tb_Doctor.Nombre as Nombre, Tb_Doctor.APaterno as APaterno, Tb_Doctor.Email as Email, Tb_Status.Descripcion as Status FROM Tb_Doctor, Tb_Status WHERE Tb_Doctor.IdStatus = Tb_Status.IdStatus;";
                                 $res = mysqli_query($conexion,$query);
                                 $conexion->close();
                                 while($fila = mysqli_fetch_array($res))
                                 {
+                                    $al = new Alerta("¿Deseas eliminar a este Doctor?");
+                                    $al->setOpcion('icon',"'error'");
+                                    $al->setOpcion("confirmButtonColor","'#dc3545'");
+                                    $al->setOpcion("confirmButtonText","'Eliminar'");
+                                    $al->setOpcion('showCancelButton',"true");
+                                    $al->setOpcion('cancelButtonText',"'Cancelar'");
+                                    $al->setEscuchar("#sweet-eliminar-{$fila['IdDoctor']}");
+                                    $al->setThen("
+                                        if(res.isConfirmed){
+                                            $.ajax({
+                                                type: 'POST',
+                                                url: 'includes/ajax/eliminarDoctor.php',
+                                                data: { id: '{$fila['IdDoctor']}' },
+                                                dataType: 'json',
+                                                success: function (data) {
+                                                  if (data.response === 'success') {
+                                                    Swal.fire(data.message, '', 'success')
+                                                    .then(e => {
+                                                        location.reload();
+                                                    })
+                                                  } else if (data.response === 'invalid') {
+                                                    Swal.fire(data.message, '', 'error')
+                                                  }
+                                                },
+                                                error: function (xhr, exception) {
+                                                  console.log('error', xhr);
+                                                },
+                                              });
+                                        }
+                                    ");
+                                    array_push($alertas, $al);
+
+
                             ?>
                                 <tr>
                                     <td><?php echo $fila['Nombre'];?></td>
@@ -78,8 +113,8 @@
                                     <td><?php echo $fila['Status'];?></td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <button class="btn btn-danger w-40 m-1 ">Eliminar</button>
-                                            <button class="btn btn-warning w-40 m-1">Modificar</button>
+                                            <button class="btn btn-danger w-40 m-1 btn-eliminar-recep" id='<?php echo "sweet-eliminar-{$fila['IdDoctor']}"?>'>Eliminar</button>
+                                            <a class="btn btn-warning w-40 m-1" href="modificarDoctor.php?id=<?php echo $fila['IdDoctor'];?>">Modificar</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -95,11 +130,25 @@
     <footer>
     </footer>
     <!-- <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script> -->
-    <script src="https://code.jquery.com/jquery-3.5.1.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js" crossorigin="anonymous"></script>
-    <script src="js/datatables.js"></script>
-    <script src="js/systemFunctions.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <?php
+        $imprimir =  "<script> 
+        document.addEventListener('DOMContentLoaded', function() {
+        ";
+        foreach ($alertas as $al) {
+            $imprimir .= "
+            {$al->activar_sweet_alert()}
+            ";
+        }
+        $imprimir .= "
+        })
+        </script>";
+        echo $imprimir;
+    ?>
 </body>
 </html>

@@ -389,4 +389,153 @@ class Recepcionista extends Usuario
         return $res;
     }
 }
+class Doctor extends Usuario
+{
+    private $id = false;
+    protected $usuario_nombre;
+    private $contra;
+    protected $id_status;
+
+    public function __construct($datos)
+    {
+        $this->usuario_nombre = $datos['usuario'];
+        $this->contra = $datos['contra'];
+
+        if(isset($datos['id']))
+            $this->id = $datos['id'];
+        if(isset($datos['id_status']))
+            $this->id_status = $datos['id_status'];
+        parent::__construct($datos);
+    }
+    //apaterno amaterno Telefono correo usuario contraseña
+    public function agregar_BD(BaseDeDatos $BD){
+        $BD->next_result();
+        $status = $BD->getTb_status('Activo');
+        if(gettype($status) != 'boolean'){
+            $status = $status->fetch_assoc();
+        }else{
+            return [false, "Hubo un error al hacer la conexion, vuelva a intentarlo"];
+        }
+        $sql = "INSERT INTO Tb_Doctor(Nombre, APaterno, AMaterno, Email, NumTelefono, Usuario, Contrasena, IdStatus) 
+        values('" .$this->nombre ."','". $this->apellido_p ."',";
+        empty($this->apellido_m) ? $sql .= "NULL," : $sql .= "'{$this->apellido_m}',";
+        $sql .= "'". $this->correo ."','". $this->telefono ."','" . $this->usuario_nombre ."','". $this->contra ."',". $status['IdStatus'] .")";
+
+        //$sql = "INSERT INTO Tb_Doctor(Nombre, APaterno, AMaterno, Email, NumTelefono, Usuario, Contrasena, IdStatus)
+        //VALUES('".$this->nombre ."','". $this->apaterno . "', '";
+        //empty($this->amaterno) ? $sql .= "NULL," : $sql .= "'{$this->amaterno}',";
+        //$sql .= "'". $this->correo ."','". $this->Telefono ."','" . $this->usuario ."','". $this->contraseña ."',". $status['IdStatus'] .")";
+        if($BD->query($sql)){
+            $this->id = $BD->insert_id;
+            $BD->next_result();
+            return [true,"Se han guardado los datos correctamente"];
+        }else{
+            $BD->next_result();
+            return [false,"Hubo un error al intentar guardar los datos, vuelva a intentarlo"];
+        }
+    }
+
+    public function modifica_BD($datos,BaseDeDatos $BD){
+        $this->nombre = $datos['nombre'];
+        $this->apellido_p = $datos['apellido_p'];
+        $this->apellido_m = (isset($datos['apellido_m']) ? $datos['apellido_m'] : false);
+        $this->telefono = $datos['telefono'];
+        $this->correo = $datos['correo'];
+        $this->usuario = $datos['usuario'];
+        $this->contra = $datos['contra'];
+        if(!$this->id)
+            return [false,"Hubo un error al cargar los datos, intentarlo de nuevo"];
+        $BD->next_result();
+        $sql = "UPDATE Tb_Doctor
+        SET Nombre='{$this->nombre}', APaterno='{$this->apellido_p}',"; 
+        $sql .= ($this->apellido_m ?  "AMaterno='{$this->apellido_m}', ": "AMaterno = NULL ,");
+        $sql .=" Email='{$this->correo}', NumTelefono='{$this->telefono}', Usuario='{$this->usuario}', Contrasena='{$this->contra}'
+        WHERE IdDoctor={$this->id}";
+        if($BD->query($sql))
+            return [true, "Se han hecho los cambio"];
+        else
+            return [false,"Hubo un error en la conexion, vuelve a intentarlo"];
+    }
+
+    private function setUsuarioNombre($valor){
+        $this->usuario_nombre = $valor;
+    }
+    private function setContra($valor){
+        $this->contra = $valor;
+    }
+
+    public function getUsuarioNombre(){
+        return $this->usuario_nombre;
+    }
+
+    public function getContra(){
+        return $this->contra;
+    }
+
+    public function getIdStatus(){
+        return $this->id_status;
+    }
+
+    public function getId(){
+        return $this->id;
+    }
+
+    static public function crear_Doctor($id, BaseDeDatos $BD){
+        $BD->next_result();
+        $sql = "SELECT * FROM Tb_Doctor WHERE IdDoctor = $id";
+        $res = $BD->query($sql);
+        $BD->next_result();
+        if($res){
+            if($res->num_rows > 0){
+                $res = $res->fetch_assoc();
+                $datos = [
+                    "nombre" => $res['Nombre'],
+                    "apellido_p" => $res['APaterno'],
+                    "apellido_m" => $res['AMaterno'],
+                    "correo" => $res['Email'],
+                    "telefono" => $res['NumTelefono'],
+                    "usuario" => $res['Usuario'],
+                    "contra" => $res['Contrasena'],
+                    "id" => $res['IdDoctor'],
+                    "Id_status" => $res['IdStatus'],
+                ];
+                $valor = new Doctor($datos);
+                return $valor;
+            }
+        }
+        return false;
+
+    }
+
+    static public function verificar_datos_formulario($datos,BaseDeDatos $BD,$tipo = 'agregar'){
+        $res =[];
+        !isset($datos['nombre']) ? array_push($res, 'Nombre') : false;
+        !isset($datos['apellido_p']) ? array_push($res, 'Apellido Paterno') : false;
+        !isset($datos['telefono']) ? array_push($res, 'Telfono') : false;
+        !isset($datos['correo']) ? array_push($res, 'Correo') : false;
+        !isset($datos['usuario']) ? array_push($res, 'Usuario') : false;
+        !isset($datos['contra']) ? array_push($res, 'Contraseña') : false;
+
+        if($tipo == 'agregar'){
+            !isset($datos['correo_conf']) ? array_push($res, 'Confirmacion Correo Electronico') : false;
+            !isset($datos['contra_conf']) ? array_push($res, 'Confirmacion Contraseña') : false;
+            strcmp($datos['correo'], $datos['correo_conf']) !=0 ? array_push($res , 'No coinciden los Correos Electronicos'): false;
+            strcmp($datos['contra'], $datos['contra_conf']) !=0 ? array_push($res , 'No coinciden las Contraseñas'): false;
+        }
+
+        if($tipo !="modificar_usuario_igual"){
+            $BD->next_result();
+            $sql = "SELECT * FROM Tb_Doctor WHERE Usuario = '{$datos['usuario']}'";
+            $res_query = $BD->query($sql);
+            if(gettype($res_query) != 'boolean'){
+                if($res_query->num_rows > 0)
+                    array_push($res, "El nombre de usuario ya esta ocupado");
+            }
+            $BD->next_result();
+        }
+        return $res;
+    }
+
+}
+
 ?>
