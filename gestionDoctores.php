@@ -67,7 +67,8 @@
                             <?php
                                 include("includes/funciones_BD.php");
                                 $conexion = crear_conexion();
-                                $query = "SELECT Tb_Doctor.IdDoctor as IdDoctor,Tb_Doctor.Nombre as Nombre, Tb_Doctor.APaterno as APaterno, Tb_Doctor.Email as Email, Tb_Status.Descripcion as Status FROM Tb_Doctor, Tb_Status WHERE Tb_Doctor.IdStatus = Tb_Status.IdStatus;";
+                                $query = "SELECT Tb_Doctor.IdDoctor as IdDoctor,Tb_Doctor.Nombre as Nombre, Tb_Doctor.APaterno as APaterno, Tb_Doctor.Email as Email, Tb_Status.Descripcion as Status FROM Tb_Doctor, Tb_Status 
+                                WHERE Tb_Doctor.IdStatus = Tb_Status.IdStatus AND Tb_Doctor.IdStatus = 3;";
                                 $res = mysqli_query($conexion,$query);
                                 $conexion->close();
                                 while($fila = mysqli_fetch_array($res))
