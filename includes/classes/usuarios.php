@@ -288,14 +288,13 @@ class Recepcionista extends Usuario
             return [false, "Hubo un error al intentar guardar los datos, vuelve a intentarlo"];
         }
     }
-
     public function modificar_BD($datos,BaseDeDatos $BD){
         $this->nombre = $datos['nombre'];
         $this->apellido_p = $datos['apellido_p'];
         $this->apellido_m = (isset($datos['apellido_m']) ? $datos['apellido_m'] : false);
         $this->telefono = $datos['telefono'];
         $this->correo = $datos['correo'];
-        $this->usuario = $datos['usuario'];
+        $this->usuario_nombre = $datos['usuario'];
         $this->contra = $datos['contra'];
         if(!$this->id)
             return [false,"Hubo un error al cargar los datos, inténtalo de nuevo"];
