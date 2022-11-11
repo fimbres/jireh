@@ -94,7 +94,7 @@
                                                         location.reload();
                                                     })
                                                   } else if (data.response === 'invalid') {
-                                                    Swal.fire(data.message, '', 'error')
+                                                    Swal.fire(data.message, '', 'error');
                                                   }
                                                 },
                                                 error: function (xhr, exception) {
@@ -104,8 +104,6 @@
                                         }
                                     ");
                                     array_push($alertas, $al);
-
-
                             ?>
                                 <tr>
                                     <td><?php echo $fila['Nombre'];?></td>

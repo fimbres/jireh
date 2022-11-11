@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $res = $doctor->modifica_BD($_POST,$BD);
         $intento_fallido = !$res[0];
         if($res[0]){
-            $alerta = new Alerta($res[1]);
+            $alerta = new Alerta($res[1],[],[],'./gestionDoctores.php');
             
         } else{
             $alerta = new Alerta("Error",[$res[1]]);
