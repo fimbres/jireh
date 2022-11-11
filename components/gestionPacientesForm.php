@@ -62,7 +62,7 @@
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="cp_inpt_paciente">Código Postal</label>
-            <input id="CodigoPostal" type="text" class="form-control formModificarInput">
+            <input id="CodigoPostal" type="text" class="form-control formModificarInput" maxlength="5">
         </div>
     </div>
     <div class="form-group col-12 pb-4">

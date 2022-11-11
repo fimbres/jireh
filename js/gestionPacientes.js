@@ -124,11 +124,13 @@ function actualizarInfoPaciente() {
             })
             .then((data) => {
               if (data.success) {
-                Swal.fire(
-                  'Correcto!',
-                  'Se ha guardado la informacion!',
-                  'success'
-                );
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Correcto!',
+                  text: 'Se ha guardado la informacion!',
+                }).then(() => {
+                  window.location.href = window.location.href;
+                });
               } else {
                 Swal.fire({
                   icon: 'error',
