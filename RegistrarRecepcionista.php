@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $res = $recep->agregar_BD($BD);
         $intento_fallido = !$res[0];
         if($res[0]){
-            $alerta = new Alerta($res[1]);
+            $alerta = new Alerta($res[1],[],[],'./gestionRecepcionistas.php');
         } else{
             $alerta = new Alerta("Error",[$res[1]]);
             $alerta->setOpcion('icon',"'error'");
