@@ -273,6 +273,7 @@ $BD->close();
                                     name="codigo_postal" 
                                     type="text" 
                                     class="form-control"
+                                    maxlength="5"
                                     <?php if ($intento_fallido) echo "value='" . $_POST['codigo_postal']  . "'" ?> 
                                     >
                             </div>
