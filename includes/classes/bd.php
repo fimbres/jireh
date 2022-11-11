@@ -31,6 +31,7 @@ class BaseDeDatos extends mysqli{
     public function __construct(){
         $this->upload_cloud = new UploadApi();
         parent::__construct($this->host,$this->usuario,$this->contra,$this->nom_bd);
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     }
 
     //Funcion para guardar archivos dentro de cloudinary
@@ -55,7 +56,7 @@ class BaseDeDatos extends mysqli{
         $this->next_result();
         $sql ="SELECT * FROM Tb_Sexo";
         if(!empty($nombre))
-            $sql .= " where Sexo = '$nombre'";
+            $sql .= " where Sexo = '$nombre';";
         $res = $this->query($sql);
         $this->next_result();
         return ($this->error ? false :  $res);
@@ -64,7 +65,7 @@ class BaseDeDatos extends mysqli{
         $this->next_result();
         $sql = "SELECT * FROM Tb_Status";
         if(!empty($nombre))
-            $sql .= " where Descripcion = '$nombre'";
+            $sql .= " where Descripcion = '$nombre';";
         $res = $this->query($sql);
         $this->next_result();
         return ($this->error ? false :  $res);
@@ -73,7 +74,7 @@ class BaseDeDatos extends mysqli{
         $this->next_result();
         $sql = "SELECT * FROM Tb_estadocivil";
         if(!empty($estado))
-            $sql .= " where EstadoCivil = '$estado'";
+            $sql .= " where EstadoCivil = '$estado';";
         $res = $this->query($sql);
         $this->next_result();
         return ($this->error ? false :  $res);

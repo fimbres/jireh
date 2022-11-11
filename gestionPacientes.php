@@ -111,6 +111,6 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/datatables.js"></script>
     <script src="js/systemFunctions.js"></script>
-    <script src="js/gestionPacientes.js"></script>
+    <script src="js/gestionPacientes.js"></script> 
 </body>
 </html>

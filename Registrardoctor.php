@@ -18,17 +18,17 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
         $res = $doctor->agregar_BD($DB);
         $intento_fallido = !$res[0];
         if($res[0]){
-            $alerta = new Alerta($res[1]);
+            $alerta = new Alerta($res[1],[],[],'./gestionDoctores.php');
         }else{
             $alerta = new Alerta("Error",[$res[1]]);
-            $alerta->setOptions('icon',"'error'");
+            $alerta->setOpcion('icon',"'error'");
             $alerta->setOpcion("ConfirmButtonColor","'#dc3545'");
         }
         $DB->close();
     }else{
         $intento_fallido = true;
         $alerta = new Alerta("Error",["Se encontraron los siguientes problemas en el formulario"],[$mensaje]);
-        $alerta->setOpcion('icon',"'error");
+        $alerta->setOpcion('icon',"'error'");
         $alerta->setOpcion("confirmButtonColor","'#dc3545'");
     }
 

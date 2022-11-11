@@ -17,19 +17,20 @@
         if($doct->getIdStatus() != $status['IdStatus']){
             $baja = $BD->query("UPDATE Tb_Doctor SET IdStatus={$status['IdStatus']} WHERE IdDoctor={$doct->getId()}");
             if($baja){
-                $response = array("response" => "success","message" => "Se ha dado de baja al recepcionista");
+                $response = array("response" => "success","message" => "Se ha dado de baja al Doctor");
+
             }else{
-                $response = array("response" => "invalid", "message" => "No se pudo dar de baja al recepcionista");
+                $response = array("response" => "invalid", "message" => "No se pudo dar de baja al Doctor");
             }
         }else{
-            $response = array("response" => "invalid", "message" => "No se encontró al recepcionista o ya se encuentra dado de baja");
+            $response = array("response" => "invalid", "message" => "No se encontró al Doctor o ya se encuentra dado de baja");
         }
 
         $BD->close();
     }else{
         //El usuario no ha iniciado session como recepcionista
         $response = array("response" => "invalid");
-        header("location:../login.php");
+
     }
 
     //respuesta

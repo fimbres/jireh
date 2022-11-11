@@ -279,13 +279,19 @@ class Recepcionista extends Usuario
                 values('" .$this->nombre ."','". $this->apellido_p ."',";
         empty($this->apellido_m) ? $sql .= "NULL," : $sql .= "'{$this->apellido_m}',";
         $sql .= "'". $this->telefono ."','". $this->correo ."','" . $this->usuario_nombre ."','". $this->contra ."',". $status['IdStatus'] .")";
-        if ($BD->query($sql)) {
+        try {
+            $BD->query($sql);
             $this->id = $BD->insert_id;
             $BD->next_result();
             return [true,"Se han guardado los datos correctamente"];
-        } else {
+        } catch (mysqli_sql_exception $e) {
             $BD->next_result();
-            return [false, "Hubo un error al intentar guardar los datos, vuelve a intentarlo"];
+            if (stripos($e->getMessage(), 'Duplicate entry') !== false) {
+                return [false, "Ya hay un usuario con el correo o nombre de usuario ingresados."];
+            }
+            else{
+                return [false, "Datos incorrectos: " . $e->getMessage()];
+            }
         }
     }
     public function modificar_BD($datos,BaseDeDatos $BD){
@@ -303,10 +309,18 @@ class Recepcionista extends Usuario
         $sql .= ($this->apellido_m ? " AMaterno = '{$this->apellido_m}', " : " AMaterno = NULL, ");
         $sql .=" Email = '{$this->correo}', NumTelefono = '{$this->telefono}', Usuario = '{$this->usuario_nombre}',
         Contrasena = '{$this->contra}'  WHERE IdRecepcionista = {$this->id}";
-        if($BD->query($sql))
+        try {
+            $BD->query($sql);
             return [true, "Se han hecho los cambios"];
-        else 
-            return [false,"Hubo un error en la conexión, vuelve a intentarlo"];
+        } catch (mysqli_sql_exception $e) {
+            $BD->next_result();
+            if (stripos($e->getMessage(), 'Duplicate entry') !== false) {
+                return [false, "Ya hay un usuario con el correo o nombre de usuario ingresados."];
+            }
+            else{
+                return [false, "Datos incorrectos: " . $e->getMessage()];
+            }
+        }
     }
 
     // *********************
@@ -430,14 +444,28 @@ class Doctor extends Usuario
         //VALUES('".$this->nombre ."','". $this->apaterno . "', '";
         //empty($this->amaterno) ? $sql .= "NULL," : $sql .= "'{$this->amaterno}',";
         //$sql .= "'". $this->correo ."','". $this->Telefono ."','" . $this->usuario ."','". $this->contraseña ."',". $status['IdStatus'] .")";
-        if($BD->query($sql)){
+        try {
+            $BD->query($sql);
             $this->id = $BD->insert_id;
             $BD->next_result();
-            return [true,"Se han guardado los datos correctamente"];
-        }else{
+            return [true, "Se han guardado los datos correctamente"];
+        } catch (mysqli_sql_exception $e) {
             $BD->next_result();
-            return [false,"Hubo un error al intentar guardar los datos, vuelva a intentarlo"];
+            if (stripos($e->getMessage(), 'Duplicate entry') !== false) {
+                return [false, "Ya hay un usuario con el correo o nombre de usuario ingresados."];
+            }
+            else{
+                return [false, "Datos incorrectos: " . $e->getMessage()];
+            }
         }
+        // if($BD->query($sql)){
+        //     $this->id = $BD->insert_id;
+        //     $BD->next_result();
+        //     return [true,"Se han guardado los datos correctamente"];
+        // }else{
+        //     $BD->next_result();
+        //     return [false,"Hubo un error al intentar guardar los datos, vuelva a intentarlo"];
+        // }
     }
 
     public function modifica_BD($datos,BaseDeDatos $BD){
@@ -456,10 +484,18 @@ class Doctor extends Usuario
         $sql .= ($this->apellido_m ?  "AMaterno='{$this->apellido_m}', ": "AMaterno = NULL ,");
         $sql .=" Email='{$this->correo}', NumTelefono='{$this->telefono}', Usuario='{$this->usuario}', Contrasena='{$this->contra}'
         WHERE IdDoctor={$this->id}";
-        if($BD->query($sql))
-            return [true, "Se han hecho los cambio"];
-        else
-            return [false,"Hubo un error en la conexion, vuelve a intentarlo"];
+        try {
+            $BD->query($sql);
+            return [true, "Se han hecho los cambios"];
+        } catch (mysqli_sql_exception $e) {
+            $BD->next_result();
+            if (stripos($e->getMessage(), 'Duplicate entry') !== false) {
+                return [false, "Ya hay un usuario con el correo o nombre de usuario ingresados."];
+            }
+            else{
+                return [false, "Datos incorrectos: " . $e->getMessage()];
+            }
+        }
     }
 
     private function setUsuarioNombre($valor){

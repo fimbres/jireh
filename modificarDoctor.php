@@ -26,11 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $res = $doctor->modifica_BD($_POST,$BD);
         $intento_fallido = !$res[0];
         if($res[0]){
-            $alerta = new Alerta($res[1]);
+            $alerta = new Alerta($res[1],[],[],'./gestionDoctores.php');
+            
         } else{
             $alerta = new Alerta("Error",[$res[1]]);
             $alerta->setOpcion('icon',"'error'");
             $alerta->setOpcion("confirmButtonColor","'#dc3545'");
+            
         }
         
     } else {
@@ -52,7 +54,7 @@ $BD->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modificar Doctor</title>
     <!-- CSS only -->
-
+ 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="css/index.css">
 
@@ -205,7 +207,9 @@ $BD->close();
     <!-- LLamada a la funcion de sweet alert en caso de haber ingresado algun dato -->
     <?php 
         if($alerta){
-            $alerta->activar_sweet_alert();
+            echo "<script>
+            {$alerta->activar_sweet_alert()}
+            </script>";
         }
     ?>
 </body> 

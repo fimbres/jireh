@@ -68,7 +68,7 @@
                                 include("includes/funciones_BD.php");
                                 $conexion = crear_conexion();
                                 $query = "SELECT Tb_Doctor.IdDoctor as IdDoctor,Tb_Doctor.Nombre as Nombre, Tb_Doctor.APaterno as APaterno, Tb_Doctor.Email as Email, Tb_Status.Descripcion as Status FROM Tb_Doctor, Tb_Status 
-                                WHERE Tb_Doctor.IdStatus = Tb_Status.IdStatus AND Tb_Doctor.IdStatus = 3;";
+                                WHERE Tb_Doctor.IdStatus = Tb_Status.IdStatus;";
                                 $res = mysqli_query($conexion,$query);
                                 $conexion->close();
                                 while($fila = mysqli_fetch_array($res))
@@ -94,7 +94,7 @@
                                                         location.reload();
                                                     })
                                                   } else if (data.response === 'invalid') {
-                                                    Swal.fire(data.message, '', 'error')
+                                                    Swal.fire(data.message, '', 'error');
                                                   }
                                                 },
                                                 error: function (xhr, exception) {
@@ -104,8 +104,6 @@
                                         }
                                     ");
                                     array_push($alertas, $al);
-
-
                             ?>
                                 <tr>
                                     <td><?php echo $fila['Nombre'];?></td>
@@ -114,7 +112,7 @@
                                     <td><?php echo $fila['Status'];?></td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <button class="btn btn-danger w-40 m-1 btn-eliminar-recep" id='<?php echo "sweet-eliminar-{$fila['IdDoctor']}"?>'>Eliminar</button>
+                                            <button class="btn btn-danger w-40 m-1 btn-eliminar-doct" id='<?php echo "sweet-eliminar-{$fila['IdDoctor']}"?>'>Eliminar</button>
                                             <a class="btn btn-warning w-40 m-1" href="modificarDoctor.php?id=<?php echo $fila['IdDoctor'];?>">Modificar</a>
                                         </div>
                                     </td>

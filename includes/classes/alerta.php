@@ -18,13 +18,17 @@
         // en un posible then
         protected $then = "";
 
-        public function __construct(string $men_princ,$descrip= [],$men = []){
+        protected $redireccion = "";
+
+        public function __construct(string $men_princ,$descrip= [],$men = [], $redireccion = ''){
             $this->mensaje_principal=  $men_princ;
             if(!empty($descrip))
                 $this->descripciones = $descrip;
             if(!empty($men))
                 $this->mensajes_listados = $men;
             $this->init_datos_sweet_alert();
+
+            $this->redireccion = $redireccion;
         }
         private function init_datos_sweet_alert(){
             $this->opciones_sweet['icon'] = "'success'";
@@ -34,7 +38,7 @@
             $this->opciones_sweet['confirmButtonColor'] = "'#28a745'";
             $this->opciones_sweet['confirmButtonText'] = "'Aceptar'";
         }
-        public function activar_sweet_alert($regresar = true,$tipo = 'click'){
+        public function activar_sweet_alert($regresar = true, $tipo = 'click'){
             //Verifcamos que los datos de descripcion y de listado de mensajes
             // tengan valores
             $html = '';
@@ -84,8 +88,13 @@
                             title: '{$this->mensaje_principal}',
                             {$ops}
                         })
-                        .then(res =>{
-                            {$this->then}
+                        .then(res => {
+                            if('$this->redireccion'){
+                                window.location = '$this->redireccion';
+                            }
+                            else{
+                                {$this->then}
+                            }
                         })
                     })
                 ";
@@ -96,7 +105,12 @@
                         {$ops}
                     })
                     .then(res =>{
-                        {$this->then}
+                        if('$this->redireccion'){
+                            window.location = '$this->redireccion';
+                        }
+                        else{
+                            {$this->then}
+                        }
                     })
                 ";
             }

@@ -23,7 +23,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         //Agregamos al paciente a la base de datos
         $res = $paciente->agregar_BD($BD,$_FILES);
         if($res[0]){
-            $alerta = new Alerta($res[1]);
+            $alerta = new Alerta($res[1],[],[],'./gestionPacientes.php');
         } else{
             $alerta = new Alerta("Error",[$res[1]]);
             $alerta->setOpcion('icon',"'error'");
