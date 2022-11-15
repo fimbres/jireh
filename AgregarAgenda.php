@@ -1,6 +1,6 @@
 <?php 
 require_once('utils/sessionCheck.php');
-if(!comprobar_sesion_y_rol("Tb_Admin")){
+if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
     header('location: login.php');
 }
 //"nombre" / "apellido_p" / "apellido_m" / "telefono" / "correo" 
