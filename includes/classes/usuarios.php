@@ -579,4 +579,78 @@ class Doctor extends Usuario
 
 }
 
+class Citas{
+    private $id = false;
+    protected $idPaciente;
+    private $idDoctor;
+    private $tratamiento;
+    private $fechaInicio;
+    private $fechaFinal;
+    private $idTratamiento;
+    private $MotivoCan;
+    private $costo;
+    protected $idStatus;
+
+    public function __construct($datos){
+
+        if(isset($datos['paciente'])){
+            $this->idPaciente = $datos['paciente'];
+        }
+        if(isset($datos['id'])){
+            $this->id = $datos['id'];
+        }
+        if(isset($datos['doctor'])){
+            $this->idDoctor = $datos['doctor'];
+        }
+        if(isset($datos['fecha'] )){
+            $this->fechaInicio = $datos['fecha']." ".$datos['horainicio'];
+        }
+        if(isset($datos['fecha'])){
+            $this->fechaFinal = $datos['fecha']." ".$datos['horafin'];
+        }
+        if(isset($datos['tratamiento'])){
+            $this->tratamiento = $datos['tratamiento'];
+        }
+        if(isset($datos['costo'])){
+            $this->costo = $datos['costo'];
+        }
+
+    }
+
+    public function agregar_BD(BaseDeDatos $BD){
+        $BD->next_result();
+
+
+
+        $status = $BD->getTb_Status('Vigente');
+
+        if(gettype($status) !='boolean'){
+            $status = $status->fetch_assoc();
+        }else{
+            return [false,"Hubo un error al hacer la conexion, vuelva a intentarlo"];
+        }
+        $sql = "INSERT INTO Tb_Cita(IdPaciente, FechaInicio, FechaFinal, IdDoctor, Descripcion, IdTratamiento, MotivoCancelacion, Costo, IdStatus)
+                values(".$this->idPaciente .",'". $this->fechaInicio ."','".$this->fechaFinal ."',".$this->idDoctor.",'".$this->tratamiento."',";
+                empty($this->idTratamiento) ? $sql .= "NULL," : $sql .= "{$this->idTratamiento},";
+                $sql .= "'prueba1234','". $this->costo ."',". $status['IdStatus'] .")";
+ 
+        if($BD->query($sql)){
+            $this->id = $BD->insert_id;
+            $BD->next_result();
+            return [true,"Se ha registrado la cita correctamente"];
+        }else{
+            $BD->next_result();
+            return[false,"Hubo un error al intentar guardar los datos, volver a intentarlo"];
+        }
+    }
+    static public function verificar_datos_formulario($datos,BaseDeDatos $BD, $tipo = 'agregar'){
+        $res = [];
+        !isset($datos['paciente']) ? array_push($res, 'Paciente') : false;
+        !isset($datos['doctor']) ? array_push($res,'Doctor') : false;
+        !isset($datos['tratamiento']) ? array_push($res, 'tratamiento') :false;
+        
+    }
+
+}
+
 ?>
