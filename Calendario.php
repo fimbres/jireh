@@ -54,6 +54,7 @@
                 </div>
             </div>
         </div>
+        <a class="row btn btn-primary mx-3 col-md-3 col-6 float-end" href="AgregarAgenda.php">Agendar Cita</a>
     </body>
 </main>
 <footer>
