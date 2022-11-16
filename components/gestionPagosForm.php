@@ -3,7 +3,7 @@
     <div class="form-row row">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="nombre_inpt_paciente"><b>*</b>Nombre del paciente</label>
-            <input id="Nombre" type="text" autocomplete="off" class="form-control text-capitalize formModificarInput" placeholder="Nombre del paciente">
+            <input id="Nombre" type="text" autocomplete="off" class="form-control text-capitalize formModificarInput" placeholder="Nombre del paciente" value="<?php print($infoPaciente["Nombre"]." ".$infoPaciente["APaterno"]." ".$infoPaciente["AMaterno"])?>">
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="fecha_inpt_paciente"><b>*</b>Fecha y Hora</label>
@@ -13,7 +13,12 @@
     <div class="form-row row">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="doctor_inpt_recepcionista"><b>*</b>Nombre del doctor</label>
-            <input id="NombreDoctor" type="text" autocomplete="off" class="form-control text-capitalize" placeholder="Nombre del doctor">
+            <input id="NombreDoctor" type="text" autocomplete="off" class="form-control text-capitalize" placeholder="Nombre del doctor" 
+            value="<?php 
+            $infoDoctor["Nombre"] ? print($infoDoctor["Nombre"]) : print("");
+            $infoDoctor["APaterno"] ? print(" ".$infoDoctor["APaterno"]) : print("");
+            $infoDoctor["AMaterno"] ? print(" ".$infoDoctor["AMaterno"]) : print("");
+            ?>"/>
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="costo_inpt_recepcionista"><b>*</b>Costo de la cita</label>
@@ -23,11 +28,11 @@
     <div class="form-row row justify-content-center">
         <div class="form-group col-xl-12 col-md-12 pb-4">
             <label for="descripcion_inpt">Descripción del servicio</label>
-            <textarea class="form-control" id="" rows="4" placeholder="Descripción"></textarea>
+            <textarea class="form-control" id="" rows="4" placeholder="Descripción"><?php print($infoCita["Descripcion"]);?></textarea>
         </div>
     </div>
     <div id="formPago" class="form-row row justify-content-center shadow">
-        <nav id="navbarPagos" class="float-start bg-custom-gray-light mb-3">
+        <nav id="navbarPagos" class="float-start bg-custom-gray-light mb-3 p-0 ms-0">
                 <ul class="list-unstyled">
                     <li class="float-start"><a id="Stripe" onclick="selectMenu(this.id)" class="active menuItem d-block bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark custom-border-top-left fw-bold" href="#formPago">Stripe</a></li>
                     <li class="float-start"><a id="Tarjeta" onclick="selectMenu(this.id)" class="d-block menuItem bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark" href="#formPago">Tarjeta</a></li>

@@ -79,5 +79,45 @@ class BaseDeDatos extends mysqli{
         $this->next_result();
         return ($this->error ? false :  $res);
     }
+
+    public function getTbCita_cita($idCita){
+        $this->next_result();
+        if(!empty($idCita))
+            $sql = "SELECT * FROM Tb_Cita WHERE IdCita='$idCita'";
+        
+        $res = $this->query($sql);
+        $row = $res->fetch_array(MYSQLI_ASSOC);
+
+        $this->next_result();
+        
+        return($this->error ? false : $row);
+    }
+
+    public function getTbPaciente_nombrePaciente($idPaciente){
+        $this->next_result();
+        if(!empty($idPaciente))
+            $sql = "SELECT Nombre,APaterno,AMaterno FROM Tb_Paciente WHERE IdPaciente='$idPaciente'";
+        
+        $res = $this->query($sql);
+        $row = $res->fetch_array(MYSQLI_ASSOC);
+
+        $this->next_result();
+        
+        return($this->error ? false : $row);
+    }
+
+    public function getTbDoctor_nombreDoctor($idDoctor){
+        $this->next_result();
+        if(!empty($idDoctor))
+            $sql = "SELECT Nombre,APaterno,AMaterno FROM Tb_Doctor WHERE IdDoctor='$idDoctor'";
+        
+        $res = $this->query($sql);
+        $row = $res->fetch_array(MYSQLI_ASSOC);
+
+        $this->next_result();
+        
+        return($this->error ? false : $row);
+    }
+
 }
 ?>

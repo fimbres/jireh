@@ -3,6 +3,15 @@
     if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
         header('location: login.php');
     }
+
+    require_once('./includes/classes/bd.php');
+    $idCita = $_GET['idCita'];
+
+    $BD = new BaseDeDatos();
+    $infoCita = $BD->getTbCita_cita($idCita);
+    $infoPaciente = $BD->getTbPaciente_nombrePaciente($infoCita["IdPaciente"]);
+    $infoDoctor = $BD->getTbDoctor_nombreDoctor($infoCita["IdDoctor"]);
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
