@@ -4,10 +4,10 @@
         header('location: login.php');
     }
 
-    require_once('./includes/classes/bd.php');
     $idCita = $_GET['idCita'];
 
     if(!empty($idCita)){
+        require_once('./includes/classes/bd.php');
         $BD = new BaseDeDatos();
         $infoCita = $BD->getTbCita_cita($idCita);
         $infoPaciente = $BD->getTbPaciente_nombrePaciente($infoCita["IdPaciente"]);
