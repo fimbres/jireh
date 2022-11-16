@@ -1,0 +1,29 @@
+.bg-custom-secondary{
+    background:#dadada;
+}
+
+.custom-border-top-left{
+    border-top-left-radius:10px;
+}
+
+.custom-border-top-right{
+    border-top-right-radius: 10px;
+}
+
+.bg-custom-gray-light{
+    background:#F8F8F8;
+}
+
+.bg-btn-gray-light{
+    background-color:#DEE2E6;
+}
+
+.active{
+    background-color:#0D6EFD !important;
+    color:white !important;
+}
+
+#navbarPagos ul li a:hover{
+    background-color:#0D6EFD !important;
+    color:white !important;
+}
