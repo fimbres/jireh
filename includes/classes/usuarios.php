@@ -617,10 +617,37 @@ class Citas{
 
     }
 
+     // *********************
+    // Funciones SET
+    // *********************
+
+    // *********************
+    // Funciones GET
+    // *********************
+    public function getIdPaciente(){
+        return $this->paciente;
+    }
+    private function getIdDoctor(){
+        return $this->doctor;
+    }
+    public function getIdStatus(){
+        return $this->id_status;
+    }
+    public function getId(){
+        return $this->id;
+    }
+    public function getFechaInicio(){
+        return $this->fechaInicio;
+    }
+    public function getFechaFinal(){
+        return $this->fechaFinal;
+    }
+    public function getTratamiento(){
+        return $this->tratamiento;
+    }
+
     public function agregar_BD(BaseDeDatos $BD){
         $BD->next_result();
-
-
 
         $status = $BD->getTb_Status('Vigente');
 
@@ -632,7 +659,9 @@ class Citas{
         $sql = "INSERT INTO Tb_Cita(IdPaciente, FechaInicio, FechaFinal, IdDoctor, Descripcion, IdTratamiento, MotivoCancelacion, Costo, IdStatus)
                 values(".$this->idPaciente .",'". $this->fechaInicio ."','".$this->fechaFinal ."',".$this->idDoctor.",'".$this->tratamiento."',";
                 empty($this->idTratamiento) ? $sql .= "NULL," : $sql .= "{$this->idTratamiento},";
-                $sql .= "'prueba1234','". $this->costo ."',". $status['IdStatus'] .")";
+                $sql .= "'prueba1234','";
+                empty($this->costo) ? $sql .= "NULL," : $sql .="{$this->costo},";
+                $sql .= $status['IdStatus'] .")";
  
         if($BD->query($sql)){
             $this->id = $BD->insert_id;
@@ -643,11 +672,78 @@ class Citas{
             return[false,"Hubo un error al intentar guardar los datos, volver a intentarlo"];
         }
     }
+    
+    static public function crear_Cita($id, BaseDeDatos $BD){
+        $BD->next_result();
+        $sql = "SELECT * FROM Tb_Cita WHERE IdCita = $id";
+        $res = $BD->query($sql);
+        $BD->next_result();
+        if($res){
+            if($res->num_rows > 0){
+                $res = $res->fetch_assoc();
+                $datos = [
+                    "paciente" => $res['IdPaciente'],
+                    "doctor" => $res['IdDoctor'],
+                    "horainicio" => $res['FechaInicio'],
+                    "horafin" => $res['FechaFinal'],
+                    "tratamiento" => $res['Descripcion'],
+                    "costo" => $res['Costo'],
+                    "Id_status" => $res['IdStatus'],
+                ];
+                $valor = new Doctor($datos);
+                return $valor;
+            }
+        }
+        return false;
+
+    }
+    
     static public function verificar_datos_formulario($datos,BaseDeDatos $BD, $tipo = 'agregar'){
         $res = [];
         !isset($datos['paciente']) ? array_push($res, 'Paciente') : false;
         !isset($datos['doctor']) ? array_push($res,'Doctor') : false;
-        !isset($datos['tratamiento']) ? array_push($res, 'tratamiento') :false;
+        !isset($datos['tratamiento']) ? array_push($res, 'Tratamiento') :false;
+        //!isset($datos['costo']) ? array_push($res, 'Costo') :false;
+        if(isset($datos['fecha'] )){
+            $fechaInicio = $datos['fecha']." ".$datos['horainicio'];
+        }
+        if(isset($datos['fecha'])){
+            $fechaFinal = $datos['fecha']." ".$datos['horafin'];
+        }
+        $status = $BD->getTb_Status('Vigente');
+
+        if(gettype($status) !='boolean'){
+            $status = $status->fetch_assoc();
+        }else{
+            return [false,"Hubo un error al hacer la conexion, vuelva a intentarlo"];
+        }
+
+        if($tipo == 'agregar'){
+            $BD->next_result();
+            $sql = "SELECT * FROM Tb_Cita WHERE '{$fechaInicio}' BETWEEN FechaInicio AND FechaFinal AND IdPaciente = {$datos['paciente']} AND IdStatus = {$status['IdStatus']}";
+            $res_query = $BD->query($sql);
+            if(gettype($res_query) != 'boolean'){
+                if($res_query->num_rows > 0)
+                    array_push($res, "La Hora y fecha para este paciente ya esta ocupado");
+            }
+            $BD->next_result();
+            $sql = " SELECT * FROM Tb_Cita WHERE '{$fechaInicio}' BETWEEN FechaInicio AND FechaFinal AND IdDoctor  = {$datos['doctor']} AND IdStatus = 1;";
+            $res_query = $BD->query($sql);
+            if(gettype($res_query) != 'boolean'){
+                if($res_query->num_rows > 0)
+                    array_push($res, "La Hora y fecha para este doctor ya esta ocupado");
+            }
+            $BD->next_result();
+           
+            $sql = " SELECT CAST('{$fechaInicio}' as TIME) < CAST('{$fechaFinal}' as TIME);";
+            $res_query = $BD->query($sql);
+            if(gettype($res_query) != 'boolean'){
+                if($res_query->num_rows > 0)
+                    array_push($res, "Favor de verficar la hora de la cita");
+            }
+            $BD->next_result();
+        }
+        return $res;
         
     }
 

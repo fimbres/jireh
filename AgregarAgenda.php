@@ -69,7 +69,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                 <form method="POST" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar-recepcionista">
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
-                                <label for="tbNombre">*Nombre del paciente</label><br>
+                                <label for="tbNombre">*Elige un paciente</label><br>
                                 <select id="tbNombre" name="paciente" class="form-select form-select-lg mb-3
                                 <?php if(isset($mensaje) &&in_array("Nombre",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" aria-label=".form-select-lg example"
                                 <?php if($intento_fallido) echo "value'".$_POST['paciente'] ."'"?>>
@@ -98,7 +98,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                 <textarea 
                                     id="taTratamiento" 
                                     name="tratamiento"  
-                                    class="form-control
+                                    class="form-control 
                                     <?php if(isset($mensaje) &&in_array("Tratamiento",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
                                     aria-label="With textarea"
                                     placeholder="Describa el tratamiento" 
@@ -109,7 +109,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                         </div>
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
-                                <label for="sDoctor">*Nombre del doctor</label><br>
+                                <label for="sDoctor">*Elige un doctor</label><br>
                                 <select id="sDoctor" name="doctor" class="form-select form-select-lg mb-3
                                 <?php if(isset($mensaje) &&in_array("Doctor",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
                                 require
@@ -181,7 +181,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                         name="horafin" 
                                         type="time" 
                                         class="form-control
-                                        <?php if(isset($mensaje) &&in_array("HoraFinal",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" " 
+                                        <?php if(isset($mensaje) &&in_array("HoraFinal",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>"  
                                         placeholder="--:--" 
                                         required 
                                         <?php if($intento_fallido) echo "value'".$_POST['horafin'] ."'"?>
