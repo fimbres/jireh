@@ -5,18 +5,24 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
 }
 //"nombre" / "apellido_p" / "apellido_m" / "telefono" / "correo" 
 //Librerias
- include("includes/includes.php");
+if(empty($_GET['id'])){
+    include("includes/includes.php");
+}
+$BD = new BaseDeDatos();
+$cita = Citas::crear_Cita($_GET['id'],$BD);
+if(!$cita){
+    $BD->close();
+    header('location: login.php');
+}
 
  $intento_fallido = false;
  $mensaje=[];
  $alerta = false;
  if($_SERVER['REQUEST_METHOD'] == 'POST'){
-    //echo $_POST['paciente'];
-    $BD = new BaseDeDatos();
+    //$mod = ($cita->)
     $mensaje = Citas::verificar_datos_formulario($_POST,$BD);
     if(!$mensaje){
-        $cita = new Citas($_POST);
-        $res = $cita->agregar_BD($BD);
+        $res = $cita->modificar_BD($_POST.$BD);
         $intento_fallido = !$res[0];
         if($res[0]){
             $alerta = new Alerta($res[1],[],[],'./index.php');
@@ -34,7 +40,6 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
     }
 
  }
-
     
 ?>
 
@@ -63,7 +68,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
         <div id="displayActions" class="d-block bg-white p-4">
             <div class="row d-flex">
                 <div class="col-12">
-                    <h1 class="text-center">Agendar Cita</h1>
+                    <h1 class="text-center">Modificar Cita</h1>
                 </div>
                 <div class="col-12 d-flex justify-content-center pt-5">
                 <form method="POST" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar-recepcionista">
@@ -98,12 +103,13 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                 <textarea 
                                     id="taTratamiento" 
                                     name="tratamiento"  
-                                    class="form-control 
+                                    class="form-control
                                     <?php if(isset($mensaje) &&in_array("Tratamiento",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
                                     aria-label="With textarea"
                                     placeholder="Describa el tratamiento" 
                                     required 
-                                    <?php if($intento_fallido) echo "value'".$_POST['tratamiento'] ."'"?>>
+                                    <?php echo "value='{$doctor->getTratamiento()}'"?>
+                                    >
                                 </textarea>
                                 
                         </div>
@@ -143,7 +149,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                     placeholder="mm/dd/yy" 
                                     required 
                                     maxlength="50"
-                                    <?php if($intento_fallido) echo "value'".$_POST['fecha'] ."'"?>
+                                    <?php echo "value='{$doctor->getFechaInicio()}'"?>
                                     >
                             </div>
                             <div class="input-group col-xl-6 col-md-6 pb-4 w-50">
@@ -155,7 +161,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                             class="form-control
                                             <?php if(isset($mensaje) &&in_array("Costo",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?> " 
                                             onkeypress="return /[0-9.]/i.test(event.key)" aria-label="Amount (to the nearest dollar)"
-                                            <?php if($intento_fallido) echo "value'".$_POST['costo'] ."'"?>
+                                            <?php echo "value='{$doctor->getFechaFinal()}'"?>
                                         >
                                     </div>
                             </div>
@@ -190,7 +196,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                             </div>
                         </div>
                         <div class="form-row row justify-content-center pt-3">
-                            <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Agregar</button>
+                            <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Actualizar</button>
                             <a class="row btn btn-danger mx-3 col-md-3 col-5" href="index.php">Cancelar</a>
                         </div>
 
