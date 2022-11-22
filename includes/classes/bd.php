@@ -86,11 +86,16 @@ class BaseDeDatos extends mysqli{
             $sql = "SELECT * FROM Tb_Cita WHERE IdCita='$idCita'";
         
         $res = $this->query($sql);
-        $row = $res->fetch_array(MYSQLI_ASSOC);
+        $found = $res->num_rows;
 
-        $this->next_result();
+        if($found > 0){
+            $row = $res->fetch_array(MYSQLI_ASSOC);
+            $this->next_result();
+            return($this->error ? false : $row);
+        }else{
+            return false;
+        }
         
-        return($this->error ? false : $row);
     }
 
     public function getTbPaciente_nombrePaciente($idPaciente){

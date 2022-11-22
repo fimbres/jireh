@@ -7,7 +7,7 @@
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="fecha_inpt_paciente"><b>*</b>Fecha y Hora</label>
-            <input id="FechaNacimiento" type="date" class="form-control formModificarInput">
+            <input id="FechaNacimiento" type="datetime-local" class="form-control formModificarInput" value="<?php print("$fecha");?>">
         </div>
     </div>
     <div class="form-row row">

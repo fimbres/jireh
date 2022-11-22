@@ -10,11 +10,20 @@
         require_once('./includes/classes/bd.php');
         $BD = new BaseDeDatos();
         $infoCita = $BD->getTbCita_cita($idCita);
-        $infoPaciente = $BD->getTbPaciente_nombrePaciente($infoCita["IdPaciente"]);
-        $infoDoctor = $BD->getTbDoctor_nombreDoctor($infoCita["IdDoctor"]);
+
+        if($infoCita){
+            $infoPaciente = $BD->getTbPaciente_nombrePaciente($infoCita["IdPaciente"]);
+            $infoDoctor = $BD->getTbDoctor_nombreDoctor($infoCita["IdDoctor"]);            
+        }else{
+            header('location: index.php');
+        }
+
     }else{
         header('location: index.php');
     }
+
+    date_default_timezone_set('America/Tijuana');
+    $fecha = date("Y-m-d H:i:s");
 
 ?>
 <!DOCTYPE html>
