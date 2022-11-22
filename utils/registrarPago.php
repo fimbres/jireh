@@ -3,6 +3,21 @@ $data = ["success" => false];
 $idCita = $_POST['idCita'];
 $error = false;
 $metodoPago = 0;
+$authToken = "";
+$numOperacion = 0;
+
+if($_POST['authToken'] == ""){
+    $authToken = "NULL";
+}else{
+    $authToken = $_POST['authToken'];
+}
+
+if($_POST['numOperacion'] == ""){
+    $numOperacion = null;
+}else{
+    $numOperacion = $_POST['numOperacion'];
+}
+
 
 //LISTA DE CARACTERES PERMITIDOS
 $caracteres_especiales = array("'", '"', "+", "?", "¿", "[", "]", "{", "}", "&", "%", "=", "(", ")");
@@ -33,8 +48,8 @@ switch ($_POST['metodoPago']) {
 array_push($datos, $idCita);
 array_push($datos, $metodoPago);
 array_push($datos, $_POST['fechaPago']);
-array_push($datos, $_POST['numOperacion']);
-array_push($datos, $_POST['authToken']);
+array_push($datos, $numOperacion);
+array_push($datos, $authToken);
 
 //VALIDAR CARACTERES INGRESADOS POR LA RECEPCIONISTA
 foreach ($datos as &$valor) {
@@ -45,6 +60,7 @@ foreach ($datos as &$valor) {
 //VERIFICAMOS QUE EL ARREGLO TENGA LOS DATOS NECESARIOS
 empty($datosValidados[4]) && $_POST['metodoPago'] === "Stripe" ? $error = true : "";
 empty($datosValidados[3]) && $_POST['metodoPago'] === "Transferencia" ? $error = true : "";
+empty($datosValidados[3]) && $_POST['metodoPago'] === "Tarjeta" ? $error = true : "";
 
 if ($error == false) {
     require_once("../includes/funciones_BD.php");
@@ -60,11 +76,15 @@ if ($error == false) {
                 die(json_encode($data));
                 exit();
             }
+
+            $datosValidados[3] = "";
         }
 
-        $registrar = $conexion->query("INSERT INTO Tb_Pago (IdCita,IdMetodoPago,FechaPago,NumeroOperacion,AuthToken) VALUES ('{$datosValidados[0]}','{$datosValidados[1]}','{$datosValidados[2]}','$datosValidados[3]','$datosValidados[4]')");
+        $registrar = $conexion->query("INSERT INTO Tb_Pago (IdCita,IdMetodoPago,FechaPago,NumeroOperacion,AuthToken) VALUES ('{$datosValidados[0]}','{$datosValidados[1]}','{$datosValidados[2]}','{$datosValidados[3]}','{$datosValidados[4]}');");
         if ($registrar) {
             $data = ["success" => true, "message" => "Se ha registrado el pago"];
+        }else{
+            $data = ["success" => false, "message" => "No fue posible registrar el pago"];
         }
     }else{
         $data = ["success" => false, "message" => "La cita ya se encuentra pagada"];
