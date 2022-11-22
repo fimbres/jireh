@@ -7,7 +7,7 @@ $authToken = "";
 $numOperacion = 0;
 
 if($_POST['authToken'] == ""){
-    $authToken = "NULL";
+    $authToken = null;
 }else{
     $authToken = $_POST['authToken'];
 }
@@ -89,6 +89,8 @@ if ($error == false) {
     }else{
         $data = ["success" => false, "message" => "La cita ya se encuentra pagada"];
     }
+
+    $conexion->close();
 } else {
     $data = ["success" => false, "message" => "No has ingresado los datos necesarios"];
 }
