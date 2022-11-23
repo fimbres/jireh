@@ -1,8 +1,6 @@
 // This is your test publishable API key.
 const stripe = Stripe("pk_test_51M6YdrDAwqSpvGj6WfjgstQzI6wHmEjTdhSLHMTfXCEjE00Irdutlv9jXopA9DjKWJSnkcLcSveijV0mUemHs1c200292dGRs3");
-
-// The items the customer wants to buy
-const items = [{ id: "xl-tshirt" }];
+const token_stripe = $('#Token-Stripe').val()
 
 let elements;
 
@@ -15,11 +13,18 @@ document
 
 // Fetches a payment intent and captures the client secret
 async function initialize() {
+  const valor = parseFloat($('#Cita-Pago-Stripe').val())
+  console.log(token_stripe)
   const { clientSecret } = await fetch("utils/stripe.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ items }),
-  }).then((r) => r.json());
+    body: JSON.stringify({ 
+      dinero: valor,
+      token: token_stripe,
+    }),
+  })
+  .then((res) => res.json())
+  ;
 
   elements = stripe.elements({ clientSecret });
 
@@ -34,14 +39,36 @@ async function initialize() {
 async function handleSubmit(e) {
   e.preventDefault();
   setLoading(true);
-
+  await Swal.fire({
+    title: '¿Estas seguro de hacer los pagos con los datos dados?',
+    icon: 'info',
+    showCloseButton: true,
+    showCancelButton: false,
+    showConfirmButton: true,
+    // confirmButtonColor: '#28a745',
+    confirmButtonText: 'Aceptar',
+  })
   const { error } = await stripe.confirmPayment({
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: "http://localhost/ProyectosWeb/jireh-php/PagoPaciente.php",
+      return_url: `http://localhost/ProyectosWeb/jireh-php/PagoPaciente.php?token=${token_stripe}`,
     },
-  });
+  })
+  .then((res) => {
+    console.log(res)
+    Swal.fire({
+      title: 'Se ha hecho el cobro correctamente',
+      icon: 'success',
+      showCloseButton: true,
+      showCancelButton: false,
+      showConfirmButton: true,
+      confirmButtonColor: '#28a745',
+      confirmButtonText: 'Aceptar',
+    })
+  })
+  
+  ;
 
   // This point will only be reached if there is an immediate error when
   // confirming the payment. Otherwise, your customer will be redirected to

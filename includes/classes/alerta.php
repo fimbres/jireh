@@ -89,8 +89,8 @@
                             {$ops}
                         })
                         .then(res => {
-                            if('$this->redireccion'){
-                                window.location = '$this->redireccion';
+                            if('{$this->redireccion}'){
+                                window.location = '{$this->redireccion}';
                             }
                             else{
                                 {$this->then}
@@ -105,8 +105,8 @@
                         {$ops}
                     })
                     .then(res =>{
-                        if('$this->redireccion'){
-                            window.location = '$this->redireccion';
+                        if('{$this->redireccion}'){
+                            window.location = '{$this->redireccion}';
                         }
                         else{
                             {$this->then}
@@ -130,6 +130,9 @@
         }
         public function setEscuchar($valor){
             $this->escuchar = $valor;
+        }
+        public function setRedireccion($valor){
+            $this->redireccion = $valor;
         }
         // *********************
         // Funciones GET

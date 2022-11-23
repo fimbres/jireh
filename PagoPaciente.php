@@ -4,6 +4,8 @@
     $formulario_token = true;
     $alerta = false;
     $token = false;
+    $dinero_pagar_stripe = '';
+    $resultado_pago = '';
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         //Si entramos aqui, significa que el usuario ya dio un posible token
         // asi que necesitamos verificar que el token exista
@@ -18,19 +20,25 @@
         if($res){
             if($res->num_rows > 0){
                 $res = $res->fetch_assoc();
+                if(!empty($res['NumeroOperacion'])){
+                    $alerta = new Alerta('El token que ingresaste ya ha sido pagadao');
+                }
             } else {
                 $alerta = new Alerta('El token que ingresaste no existe');
             }
         } else{
             $alerta = new Alerta('El token que ingresaste no existe');
         }
+        $BD->next_result();
         if(!$alerta){
             //Comprobamos de que el token no haya sido pagado
             $cita = $res['IdCita'];
             $query = "SELECT * FROM Tb_Cita WHERE IdCita = $cita";
             $res_cita = $BD->query($query);
+            $BD->next_result();
             if($res_cita && $res_cita->num_rows > 0){
                 $cita = $res_cita->fetch_assoc();
+                $dinero_pagar_stripe = $cita['Costo'];
                 //Comprobamos de que no este en el estatus pagado
                 $res_status = $BD->getTb_Status('Pagado');
                 if($res_status){
@@ -54,6 +62,20 @@
             $alerta->setOpcion('icon',"'error'");
             $alerta->setOpcion("confirmButtonColor","'#dc3545'");
         }
+        $BD->close();
+    } 
+    if($_SERVER['REQUEST_METHOD'] == 'GET'){
+        //Agarramos el numero de operacion
+        if(!empty($_GET['payment_intent'])){
+            $operacion = limpiar_string($_GET['payment_intent']);
+            $token = limpiar_string($_GET['token']);
+            $BD = new BaseDeDatos();
+            $query = "UPDATE Tb_Pago SET NumeroOperacion = '{$operacion}' WHERE AuthToken = '{$token}'";
+            $BD->query($query);
+            $BD->close();
+            $alerta = new Alerta('Se ha hecho el pago correctamente');
+            $alerta->setRedireccion('PagoPaciente.php');
+        }
     }
 ?>
 
@@ -63,7 +85,12 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <?php  if($formulario_token){?>
         <title>Ingresar token</title>
+        <?php } else {?>
+        <title>Hacer pagos</title>
+        <?php } ?>
+        
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
         
         <link rel="stylesheet" href="css/index.css">
