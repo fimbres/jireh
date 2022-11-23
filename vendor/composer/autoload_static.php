@@ -19,6 +19,10 @@ class ComposerStaticInit3c61201a91d1cb625036d6f27a4843b3
             'Teapot\\StatusCode\\' => 18,
             'Teapot\\' => 7,
         ),
+        'S' => 
+        array (
+            'Stripe\\' => 7,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -47,14 +51,18 @@ class ComposerStaticInit3c61201a91d1cb625036d6f27a4843b3
         array (
             0 => __DIR__ . '/..' . '/shrikeh/teapot/src',
         ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (

@@ -1,3 +1,11 @@
+<?php
+    require_once('utils/sessionCheck.php');
+    //Si ya ha iniciado sesion, no lo dejamos volver a iniciar sesion hasta
+    // que cierre la otra sesion
+    if(comprobar_sesion()){
+        header('location: index.php');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
