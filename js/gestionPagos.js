@@ -65,22 +65,34 @@ btnPagar.addEventListener("click", function () {
     })
     .then((data) => {
       if (data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Correcto!",
-          text: "Se ha registrado el pago\n¿Quieres solicitar una factura?",
-          showCancelButton: true,
-          confirmButtonText: 'Solicitar Factura',
-          denyButtonText: `Cancelar`,
-        }).then((result) => {
-          if(result.isConfirmed){
-            window.location = "facturacion.php?idCita=" + data.idCita;
-          }
-          else{
-            window.location = "index.php";
-          }
-        });
-      } else {
+        if (data.showFacturacion !== "Stripe") {
+          Swal.fire({
+            icon: "success",
+            title: "Correcto!",
+            text: "Se ha registrado el pago\n¿Quieres solicitar una factura?",
+            showCancelButton: true,
+            confirmButtonText: 'Solicitar Factura',
+            denyButtonText: `Cancelar`,
+          }).then((result) => {
+            if(result.isConfirmed){
+              window.location = "facturacion.php?idCita=" + data.idCita;
+            }
+            else{
+              window.location = "index.php";
+            }
+          });
+        }
+        else{
+          Swal.fire({
+            icon: "success",
+            title: "Correcto!",
+            text: "El registro se realizó exitosamente",
+          }).then(() => {
+              window.location = "index.php";
+          });
+        }
+      }
+      else {
         $("#errorMessage").removeClass("visually-hidden");
         $("#errorMessage").text(data.message);
       }

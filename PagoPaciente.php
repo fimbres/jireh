@@ -81,6 +81,16 @@
             $BD->query($query);
             $BD->close();
             $alerta = new Alerta('Se ha hecho el pago correctamente');
+            $alerta->setOpcion('showCancelButton', "true");
+            $alerta->setOpcion('confirmButtonText', "Solicitar Factura");
+            $alerta->setOpcion('cancelButtonText', "Cancelar");
+            $alerta->setThen('
+            if(res.isConfirmed){
+                window.location = "facturacion.php?idCita=" +  ' . '$res["IdCita"]' . ';
+            }
+            else{
+                window.location = "index.php";
+            }');
             $alerta->setRedireccion('login.php');
         }
     }
