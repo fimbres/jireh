@@ -41,22 +41,6 @@ const mostrarInfoEvento = (info) => {
       $("#horaInicio").val(fechaInicioDividida[1]);
       $("#horaFinal").val(fechaFinalDividida[1]);
 
-      //$("#costoCita").val(cita.Costo);
-      /* $('.modal-body').append(`
-        <br>
-        <p>Fecha inicio: ${cita.FechaInicio}</p>
-        <br>
-        <br>
-        <p>Fecha final: ${cita.FechaFinal}</p>
-        <br>
-        <br>
-        <p>id_doctor: ${cita.IdDoctor}</p>
-        <br>
-        <br>
-        <p>id_paciente: ${cita.IdPaciente}</p>
-        <br>
-      `)
-      $('#infoCita').modal('show'); */
       $('#infoCita').modal('show');
     }
   })
