@@ -659,9 +659,9 @@ class Citas{
         $sql = "INSERT INTO Tb_Cita(IdPaciente, FechaInicio, FechaFinal, IdDoctor, Descripcion, IdTratamiento, MotivoCancelacion, Costo, IdStatus)
                 values(".$this->idPaciente .",'". $this->fechaInicio ."','".$this->fechaFinal ."',".$this->idDoctor.",'".$this->tratamiento."',";
                 empty($this->idTratamiento) ? $sql .= "NULL," : $sql .= "{$this->idTratamiento},";
-                $sql .= "'prueba1234','";
-                empty($this->costo) ? $sql .= "NULL," : $sql .="{$this->costo},";
-                $sql .= $status['IdStatus'] .")";
+                $sql .= "'prueba1234',";
+                $sql .="{$this->costo},";
+                $sql .= $status['IdStatus'] .");";
  
         if($BD->query($sql)){
             $this->id = $BD->insert_id;
@@ -735,10 +735,9 @@ class Citas{
             }
             $BD->next_result();
            
-            $sql = " SELECT CAST('{$fechaInicio}' as TIME) < CAST('{$fechaFinal}' as TIME);";
+            $sql = "SELECT CAST('{$fechaInicio}' as TIME) < CAST('{$fechaFinal}' as TIME);";
             $res_query = $BD->query($sql);
-            if(gettype($res_query) != 'boolean'){
-                if($res_query->num_rows > 0)
+            if(mysqli_fetch_array($res_query)[0] == '0'){
                     array_push($res, "Favor de verficar la hora de la cita");
             }
             $BD->next_result();

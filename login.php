@@ -53,7 +53,7 @@
                                         </form>
                                     </div>
                                     <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="#">Sistema de Pagos</a></div>
+                                        <div class="small"><a href="PagoPaciente.php">Sistema de Pagos</a></div>
                                     </div>
                                 </div>
                             </div>
