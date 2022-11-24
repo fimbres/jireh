@@ -7,7 +7,7 @@ const mostrarInfoEvento = (info) => {
     
     if(tipo == 'Exito'){
       const cita = res.resultados[0];
-      $('#editar-modal').attr('href', 'ModificarAgenda.php?id='+info.event.id)
+      $('#editar-modal').attr('href', 'ModificarAgenda.php?id=' + cita.IdCita);
       $('.modal-body').text('')
       $('.modal-body').append(`
         <br>

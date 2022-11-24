@@ -48,7 +48,7 @@
                         </div>
                         <div class="col-9 justify-content-end m-0 d-flex"> 
                             <a class="btn btn-danger mx-2">Borrar</a>
-                            <a class="btn btn-warning mx-2" id="editar-modal" class="btn btn-primary" href="ModificarAgenda.php">Editar</a>
+                            <a class="btn btn-warning mx-2" id="editar-modal" href="ModificarAgenda.php">Editar</a>
                         </div>
                     </div>
                 </div>
