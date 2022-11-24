@@ -30,7 +30,7 @@ const mostrarInfoEvento = (info) => {
       $("#nombreDoctor").val(NombreCompletoD);
 
       $("#costoCita").val(cita.Costo);
-
+$('#editar-modal').attr('href', 'ModificarAgenda.php?id=' + cita.IdCita);
 
       let fechaCompletaInicio = ""+cita.FechaInicio;
       let fechaCompletaFinal = ""+cita.FechaFinal;
