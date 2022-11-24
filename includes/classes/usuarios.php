@@ -625,15 +625,16 @@ class Citas{
     // Funciones GET
     // *********************
     public function getIdPaciente(){
-        return $this->paciente;
+        return $this->idPaciente;
     }
-    private function getIdDoctor(){
-        return $this->doctor;
+    public function getIdDoctor(){
+        return $this->idDoctor;
     }
     public function getIdStatus(){
         return $this->id_status;
     }
-    public function getId(){
+    
+    public function getIdCita(){
         return $this->id;
     }
     public function getFechaInicio(){
@@ -644,6 +645,9 @@ class Citas{
     }
     public function getTratamiento(){
         return $this->tratamiento;
+    }
+    public function getCosto(){
+        return $this->costo;
     }
 
     public function agregar_BD(BaseDeDatos $BD){
@@ -662,7 +666,7 @@ class Citas{
                 $sql .= "'prueba1234',";
                 $sql .="{$this->costo},";
                 $sql .= $status['IdStatus'] .");";
- 
+
         if($BD->query($sql)){
             $this->id = $BD->insert_id;
             $BD->next_result();
@@ -682,15 +686,16 @@ class Citas{
             if($res->num_rows > 0){
                 $res = $res->fetch_assoc();
                 $datos = [
-                    "paciente" => $res['IdPaciente'],
-                    "doctor" => $res['IdDoctor'],
-                    "horainicio" => $res['FechaInicio'],
-                    "horafin" => $res['FechaFinal'],
+                    "id" => $res['IdCita'],
+                    "idPaciente" => $res['IdPaciente'],
+                    "idDoctor" => $res['IdDoctor'],
+                    "fechaInicio" => $res['FechaInicio'],
+                    "fechaFinal" => $res['FechaFinal'],
                     "tratamiento" => $res['Descripcion'],
                     "costo" => $res['Costo'],
-                    "Id_status" => $res['IdStatus'],
+                    "idStatus" => $res['IdStatus'],
                 ];
-                $valor = new Doctor($datos);
+                $valor = new Citas($datos);
                 return $valor;
             }
         }
@@ -744,6 +749,89 @@ class Citas{
         }
         return $res;
         
+    }
+    static public function verificar_datos_formulario2($datos,BaseDeDatos $BD, $tipo = 'agregar'){
+        $res = [];
+        !isset($datos['paciente']) ? array_push($res, 'Paciente') : false;
+        !isset($datos['doctor']) ? array_push($res,'Doctor') : false;
+        !isset($datos['tratamiento']) ? array_push($res, 'Tratamiento') :false;
+        //!isset($datos['costo']) ? array_push($res, 'Costo') :false;
+        if(isset($datos['fecha'] )){
+            $fechaInicio = $datos['fecha']." ".$datos['horainicio'];
+        }
+        if(isset($datos['fecha'])){
+            $fechaFinal = $datos['fecha']." ".$datos['horafin'];
+        }
+        $status = $BD->getTb_Status('Vigente');
+
+        if(gettype($status) !='boolean'){
+            $status = $status->fetch_assoc();
+        }else{
+            return [false,"Hubo un error al hacer la conexion, vuelva a intentarlo"];
+        }
+        if($tipo == "agregar"){
+            $BD->next_result();
+            // $sql = "SELECT * FROM Tb_Cita WHERE '{$fechaInicio}' BETWEEN FechaInicio AND FechaFinal AND IdPaciente = {$datos['paciente']} AND IdStatus = {$status['IdStatus']}";
+            // $res_query = $BD->query($sql);
+            // if(gettype($res_query) != 'boolean'){
+            //     if($res_query->num_rows > 0)
+            //         array_push($res, "La Hora y fecha para este paciente ya esta ocupado");
+            // }
+            // $BD->next_result();
+            // $sql = " SELECT * FROM Tb_Cita WHERE '{$fechaInicio}' BETWEEN FechaInicio AND FechaFinal AND IdDoctor  = {$datos['doctor']} AND IdStatus = 1;";
+            // $res_query = $BD->query($sql);
+            // if(gettype($res_query) != 'boolean'){
+            //     if($res_query->num_rows > 0)
+            //         array_push($res, "La Hora y fecha para este doctor ya esta ocupado");
+            // }
+            // $BD->next_result();
+           
+            $sql = " SELECT CAST('{$fechaInicio}' as TIME) < CAST('{$fechaFinal}' as TIME);";
+            $res_query = $BD->query($sql);
+            if(gettype($res_query) != 'boolean'){
+                if($res_query->num_rows == 0)
+                    array_push($res, "Favor de verficar la hora de la cita");
+            }
+            $BD->next_result();
+        }
+        return $res;
+        
+    }
+
+
+    public function modificar_BD($datos, BaseDeDatos $BD){
+        $this->idPaciente = $datos['paciente'];
+        $this-> idDoctor = $datos['doctor'];
+        $this-> tratamiento = $datos['tratamiento'];
+        if(isset($datos['fecha'] )){
+            $fechaInicio = $datos['fecha']." ".$datos['horainicio'];
+        }
+        if(isset($datos['fecha'])){
+            $fechaFinal = $datos['fecha']." ".$datos['horafin'];
+        }
+        $this-> idTratamiento;
+        $this-> MotivoCan;
+        $this-> costo = $datos['costo'];
+        if(!$this->id)
+            return [false, "Hubo un error al cargar los datos, inténtalo de nuevo"];
+        $BD->next_result();
+        $sql = "UPDATE Tb_Cita SET IdPaciente= {$this->idPaciente}, FechaInicio='{$fechaInicio}', FechaFinal='{$fechaFinal}', IdDoctor={$this->idDoctor},
+        Descripcion='{$this->tratamiento}',";
+        $sql .= ($this->idTratamiento ?"IdTratamiento={$this->idTratamiento},":" IdTratamiento= NULL,");
+        $sql .= ($this->MotivoCan ? "MotivoCancelacion='{$this->MotivoCan}',":"MotivoCancelacion=NULL,");
+        $sql .= "Costo='{$this->costo}' WHERE IdCita={$this->id}" ;
+        try{
+            $BD->query($sql);
+            return [true,"Se han hecho los cambios"];
+        } catch(mysqli_sql_exception $e){
+            $BD->next_result();
+            if(stripos($e->getMessage(), 'Duplicate entry' !== false)){
+                return [false,"Ya hay una fecha ocupada"];
+            }
+            else{
+                return [false,"Datos Incorrectos". $e->getMessage()];
+            } 
+        }
     }
 
 }

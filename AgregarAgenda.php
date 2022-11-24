@@ -88,11 +88,11 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
                                 <label for="taTratamiento">Tratamiento</label>
-                                <textarea 
+                                <input 
                                     id="taTratamiento" 
                                     name="tratamiento"  
                                     class="form-control 
-                                    <?php if(isset($mensaje) &&in_array("Tratamiento",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
+                                    <?php if(isset($mensaje) && in_array("Tratamiento",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
                                     aria-label="With textarea"
                                     placeholder="Describa el tratamiento" 
                                     required 
@@ -197,6 +197,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
  if($alerta){
     echo "<script>
     {$alerta->activar_sweet_alert()}
+
     </script>";
  }
  ?>
