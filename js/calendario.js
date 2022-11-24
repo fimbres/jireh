@@ -6,23 +6,42 @@ const mostrarInfoEvento = (info) => {
     const tipo = res.respuesta;
     
     if(tipo == 'Exito'){
-      const cita = res.resultados[0];
-      $('#editar-modal').attr('href', 'ModificarAgenda.php?id=' + cita.IdCita);
-      $('.modal-body').text('')
-      $('.modal-body').append(`
-        <br>
-        <p>Fecha inicio: ${cita.FechaInicio}</p>
-        <br>
-        <br>
-        <p>Fecha final: ${cita.FechaFinal}</p>
-        <br>
-        <br>
-        <p>id_doctor: ${cita.IdDoctor}</p>
-        <br>
-        <br>
-        <p>id_paciente: ${cita.IdPaciente}</p>
-        <br>
-      `)
+      const cita = res.cita[0];
+      const paciente = res.paciente[0];
+      const doctor = res.doctor[0];
+      console.log(res.cita[0]);
+      console.log(res.paciente[0]);
+      console.log(res.doctor[0]);
+
+      var NombreCompletoP = "";//PACIENTE
+      var NombreCompletoD = "";//DOCTOR
+
+      paciente.Nombre ? NombreCompletoP += paciente.Nombre : "";
+      paciente.APaterno ? NombreCompletoP += " "+paciente.APaterno : "";
+      paciente.AMaterno ? NombreCompletoP += " "+paciente.AMaterno : "";
+
+      $("#nombrePaciente").val(NombreCompletoP);
+      $("#tratamiento").val(cita.Descripcion);
+
+      doctor.Nombre ? NombreCompletoD += doctor.Nombre : "";
+      doctor.APaterno ? NombreCompletoD += " "+doctor.APaterno : "";
+      doctor.AMaterno ? NombreCompletoD += " "+doctor.AMaterno : "";
+
+      $("#nombreDoctor").val(NombreCompletoD);
+
+      $("#costoCita").val(cita.Costo);
+$('#editar-modal').attr('href', 'ModificarAgenda.php?id=' + cita.IdCita);
+
+      let fechaCompletaInicio = ""+cita.FechaInicio;
+      let fechaCompletaFinal = ""+cita.FechaFinal;
+
+      let fechaInicioDividida = fechaCompletaInicio.split(" ");
+      let fechaFinalDividida = fechaCompletaFinal.split(" ");
+
+      $("#fechaCita").val(fechaInicioDividida[0]);
+      $("#horaInicio").val(fechaInicioDividida[1]);
+      $("#horaFinal").val(fechaFinalDividida[1]);
+
       $('#infoCita').modal('show');
     }
   })

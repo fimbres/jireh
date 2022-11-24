@@ -13,3 +13,7 @@
 .fc-event:hover{
     cursor: pointer;
 }
+
+.bg-custom-primary{
+    background-color:#1E3B7E;
+}
