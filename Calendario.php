@@ -100,7 +100,7 @@
                         <div class="col-9 justify-content-end m-0 d-flex"> 
                             <?php if(comprobar_sesion_y_rol("Tb_Recepcionista")): ?>
                                 <a class="btn btn-danger mx-2">Eliminar</a>
-                                <a class="btn btn-primary mx-2" class="btn btn-primary" href="ModificarAgenda.php">Actualizar</a>
+                                <a class="btn btn-primary mx-2" class="btn btn-primary" id="editar-modal" href="ModificarAgenda.php">Actualizar</a>
                             <?php endif;?>
                         </div>
                     </div>
