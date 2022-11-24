@@ -13,7 +13,7 @@
     use PHPMailer\PHPMailer\Exception;
     use PHPMailer\PHPMailer\SMTP;
 
-    function enviarMail($destino,$mensaje){
+    function enviarMail($destino, $mensaje, $asunto = "Recordatorio Clinica dental Jireh"){
         $body = <<< HTML
             <h1>Clinica dental Jireh</h1>
             <p>Estimado $destino</p>
@@ -37,7 +37,7 @@
         $mailer->AddAddress($destino);
         $mailer -> setFrom($destino, "Clinica dental Jireh");
     
-        $mailer->Subject = "Recordatorio Clinica dental Jireh";
+        $mailer->Subject = $asunto;
         $mailer->msgHTML($body);
         $mailer->AltBody = strip_tags($body);
         $res = $mailer->send();

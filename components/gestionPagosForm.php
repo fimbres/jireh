@@ -43,7 +43,7 @@
         <div class="form-group col-xl-12 col-md-12 pb-4 mt-4">
             <div id="pagoStripe" class="containerMethod d-flex justify-content-center align-items-center flex-wrap">
                 <label class="pt-2 pb-2">Token</label>
-                <input id="txtToken" type="text" maxlength="20" autocomplete="off" class="form-control text-center" placeholder="Vacio por el momento...">
+                <input id="txtToken" type="text" maxlength="20" autocomplete="off" class="form-control text-center" placeholder="Vacio por el momento..." readonly>
                 <button id="btnGenerateToken" class="btn btn-primary text-white fw-bold mt-4">Generar Token</button>
             </div>
             <div id="pagoTarjeta" class="containerMethod visually-hidden">

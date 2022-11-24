@@ -32,12 +32,8 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
         $alerta->setOpcion('icon',"'error'");
         $alerta->setOpcion("confirmButtonColor","'#dc3545'");
     }
-
  }
-
-    
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -70,10 +66,10 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
                                 <label for="tbNombre">*Elige un paciente</label><br>
-                                <select id="tbNombre" name="paciente" class="form-select form-select-lg mb-3
+                                <select id="tbNombre" name="paciente" class="form-select 
                                 <?php if(isset($mensaje) &&in_array("Nombre",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" aria-label=".form-select-lg example"
-                                <?php if($intento_fallido) echo "value'".$_POST['paciente'] ."'"?> required>
-                                <option value="">Eliga un paciente</option>
+                                required>
+                                    <option value="">Eliga un paciente</option>
                                     <?php
                                         include("includes/funciones_BD.php");
                                         $conexion = crear_conexion();
@@ -82,33 +78,32 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                         while($datos = mysqli_fetch_array($res))
                                         {
                                     ?>
-                                        <option value="<?php echo $datos['IdPaciente']?>"><?php echo $datos['NombreP']?></options>
+                                        <option <?php if($intento_fallido && $_POST['paciente'] == $datos['IdPaciente']) echo "selected"?> value="<?php echo $datos['IdPaciente'];?>"><?php echo $datos['NombreP']?></options>
                                     <?php
                                         }
-                                        
                                     ?>
-
                                 </select>
                             </div>
                         </div>
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
                                 <label for="taTratamiento">Tratamiento</label>
-                                <textarea 
+                                <input 
                                     id="taTratamiento" 
                                     name="tratamiento"  
                                     class="form-control 
-                                    <?php if(isset($mensaje) &&in_array("Tratamiento",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
+                                    <?php if(isset($mensaje) && in_array("Tratamiento",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
                                     aria-label="With textarea"
                                     placeholder="Describa el tratamiento" 
                                     required 
-                                    <?php if($intento_fallido) echo "value'".$_POST['tratamiento'] ."'"?>></textarea>
+                                    <?php if($intento_fallido) echo "value='" . $_POST['tratamiento'] . "'"; ?>
+                                >
+                            </div>
                         </div>
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
                                 <label for="sDoctor">*Elige un doctor</label><br>
-                                <select id="sDoctor" name="doctor" class="form-select form-select-lg mb-3 <?php if(isset($mensaje) &&in_array("Doctor",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>"
-                                <?php if($intento_fallido) echo "value'".$_POST['doctor'] ."'"?> required>
+                                <select id="sDoctor" name="doctor" class="form-select <?php if(isset($mensaje) &&in_array("Doctor",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" required>
                                     <option value="">Eliga un doctor</option>
                                     <?php
                                         $query = "SELECT IdDoctor, CONCAT(Nombre,' ',APaterno) AS NombreD FROM Tb_Doctor WHERE IdStatus = 3;";
@@ -116,15 +111,14 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                         while($datos = mysqli_fetch_array($res))
                                         {
                                     ?>
-                                        <option value="<?php echo $datos['IdDoctor']?>"><?php echo $datos['NombreD']?></options>
+                                        <option <?php if($intento_fallido && $_POST['doctor'] == $datos['IdDoctor']) echo "selected"?> value="<?php echo $datos['IdDoctor']?>"><?php echo $datos['NombreD']?></options>
                                     <?php
                                         }
-                                        
                                     ?>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-row row justify-content-center">
+                        <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="tbfecha">Fecha</label>
                                 <input 
@@ -136,7 +130,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                     placeholder="mm/dd/yy" 
                                     required 
                                     maxlength="50"
-                                    <?php if($intento_fallido) echo "value'".$_POST['fecha'] ."'"?>
+                                    <?php if($intento_fallido) echo "value='".$_POST['fecha'] ."'"?>
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
@@ -150,11 +144,11 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                         class="form-control
                                         <?php if(isset($mensaje) &&in_array("Costo",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?> " 
                                         onkeypress="return /[0-9.]/i.test(event.key)" aria-label="Amount (to the nearest dollar)"
-                                        <?php if($intento_fallido) echo "value'".$_POST['costo'] ."'"?>
+                                        <?php if($intento_fallido) echo "value='".$_POST['costo'] ."'"?>
                                     />
                                 </div>
                         </div>
-                        <div class="form-row row justify-content-center">
+                        <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                     <label for="tbHorainicio">Hora Inicio</label>
                                     <input 
@@ -165,7 +159,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                         <?php if(isset($mensaje) &&in_array("Hora",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
                                         placeholder="--:--" 
                                         required 
-                                        <?php if($intento_fallido) echo "value'".$_POST['horainicio'] ."'"?>
+                                        <?php if($intento_fallido) echo "value='".$_POST['horainicio'] ."'"?>
                                         />
                                 </div>
                                 <div class="form-group col-xl-6 col-md-12 pb-4">
@@ -178,7 +172,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                         <?php if(isset($mensaje) &&in_array("HoraFinal",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>"  
                                         placeholder="--:--" 
                                         required 
-                                        <?php if($intento_fallido) echo "value'".$_POST['horafin'] ."'"?>
+                                        <?php if($intento_fallido) echo "value='".$_POST['horafin'] ."'"?>
                                         >
                                 </div>
                             </div>
@@ -187,11 +181,8 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                             <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Agregar</button>
                             <a class="row btn btn-danger mx-3 col-md-3 col-5" href="index.php">Cancelar</a>
                         </div>
-
                     </form>
-
                 </div>
-
             </div>
         </div>
     </main>
@@ -206,6 +197,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
  if($alerta){
     echo "<script>
     {$alerta->activar_sweet_alert()}
+
     </script>";
  }
  ?>

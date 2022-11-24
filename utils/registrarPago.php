@@ -82,17 +82,17 @@ if ($error == false) {
 
         $registrar = $conexion->query("INSERT INTO Tb_Pago (IdCita,IdMetodoPago,FechaPago,NumeroOperacion,AuthToken) VALUES ('{$datosValidados[0]}','{$datosValidados[1]}','{$datosValidados[2]}','{$datosValidados[3]}','{$datosValidados[4]}');");
         if ($registrar) {
-            $data = ["success" => true, "message" => "Se ha registrado el pago"];
+            $data = ["success" => true, "message" => "Se ha registrado el pago", "idCita" => $idCita, "showFacturacion" => $_POST['metodoPago'] ];
         }else{
-            $data = ["success" => false, "message" => "No fue posible registrar el pago"];
+            $data = ["success" => false, "message" => "No fue posible registrar el pago", "idCita" => $idCita];
         }
     }else{
-        $data = ["success" => false, "message" => "La cita ya se encuentra pagada"];
+        $data = ["success" => false, "message" => "La cita ya se encuentra pagada", "idCita" => $idCita];
     }
 
     $conexion->close();
 } else {
-    $data = ["success" => false, "message" => "No has ingresado los datos necesarios"];
+    $data = ["success" => false, "message" => "No has ingresado los datos necesarios", "idCita" => $idCita];
 }
 
 die(json_encode($data));

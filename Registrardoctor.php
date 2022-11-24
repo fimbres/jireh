@@ -31,12 +31,8 @@ if(!comprobar_sesion_y_rol("Tb_Admin")){
         $alerta->setOpcion('icon',"'error'");
         $alerta->setOpcion("confirmButtonColor","'#dc3545'");
     }
-
- }
-
-    
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

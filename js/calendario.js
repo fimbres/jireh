@@ -4,6 +4,7 @@ const mostrarInfoEvento = (info) => {
   .then(res => res.json())
   .then(res => {
     const tipo = res.respuesta;
+    
     if(tipo == 'Exito'){
       const cita = res.cita[0];
       const paciente = res.paciente[0];
