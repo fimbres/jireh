@@ -3,6 +3,8 @@
     if(false){
         $id_doctor = 1;
     }
+
+    require_once('utils/sessionCheck.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,49 +46,49 @@
                         <div class="col-12">
                             <h6 class="text-dark">Nombre del paciente</h6>
                             <div class="input-group mb-3">
-                                <input id="nombrePaciente" type="text" class="form-control" placeholder="">
+                                <input id="nombrePaciente" type="text" class="form-control" placeholder="" disabled>
                                 <span class="input-group-text" id="basic-addon2">Paciente</span>
                             </div>
                         </div>
                         <div class="col-12 mt-2">
                             <h6 class="text-dark">Tratamiento a realizar</h6>
                             <div class="form-floating">
-                                <textarea id="tratamiento" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                                <textarea id="tratamiento" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" disabled></textarea>
                                 <label for="floatingTextarea2">Comentarios</label>
                             </div>
                         </div>
                         <div class="col-12 mt-3">
                             <h6 class="text-dark">Nombre del doctor</h6>
                             <div class="input-group mb-3">
-                                <input id="nombreDoctor" type="text" class="form-control" placeholder="">
+                                <input id="nombreDoctor" type="text" class="form-control" placeholder="" disabled>
                                 <span class="input-group-text" id="basic-addon2">Doctor</span>
                             </div>
                         </div>
                         <div class="col-6 mt-2">
                             <h6 class="text-dark">Fecha</h6>
                             <div class="input-group mb-3">
-                                <input id="fechaCita" type="date" class="form-control" placeholder="">
+                                <input id="fechaCita" type="date" class="form-control" placeholder="" disabled>
                                 <span class="input-group-text" id="basic-addon2">Fecha</span>
                             </div>
                         </div>
                         <div class="col-6 mt-2">
                             <h6 class="text-dark">Costo de la cita</h6>
                             <div class="input-group mb-3">
-                                <input id="costoCita" type="number" class="form-control" placeholder="Costo en MXN">
+                                <input id="costoCita" type="number" class="form-control" placeholder="Costo en MXN" disabled>
                                 <span class="input-group-text" id="basic-addon2">.00</span>
                             </div>
                         </div>
                         <div class="col-6 mt-2">
                             <h6 class="text-dark">Hora inicio</h6>
                             <div class="input-group mb-3">
-                                <input type="time" class="form-control" placeholder="">
+                                <input id="horaInicio" type="time" class="form-control" disabled/>
                                 <span class="input-group-text" id="basic-addon2">Hora</span>
                             </div>
                         </div>
                         <div class="col-6 mt-2">
                             <h6 class="text-dark">Hora final</h6>
                             <div class="input-group mb-3">
-                                <input type="time" class="form-control" placeholder="">
+                                <input id="horaFinal" type="time" class="form-control" placeholder="" disabled/>
                                 <span class="input-group-text" id="basic-addon2">Hora</span>
                             </div>
                         </div>
@@ -96,8 +98,10 @@
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                         </div>
                         <div class="col-9 justify-content-end m-0 d-flex"> 
-                            <a class="btn btn-danger mx-2">Borrar</a>
-                            <a class="btn btn-warning mx-2" class="btn btn-primary" href="ModificarAgenda.php">Editar</a>
+                            <?php if(comprobar_sesion_y_rol("Tb_Recepcionista")): ?>
+                                <a class="btn btn-danger mx-2">Eliminar</a>
+                                <a class="btn btn-primary mx-2" class="btn btn-primary" href="ModificarAgenda.php">Actualizar</a>
+                            <?php endif;?>
                         </div>
                     </div>
                 </div>

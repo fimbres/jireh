@@ -31,6 +31,16 @@ const mostrarInfoEvento = (info) => {
       $("#costoCita").val(cita.Costo);
 
 
+      let fechaCompletaInicio = ""+cita.FechaInicio;
+      let fechaCompletaFinal = ""+cita.FechaFinal;
+
+      let fechaInicioDividida = fechaCompletaInicio.split(" ");
+      let fechaFinalDividida = fechaCompletaFinal.split(" ");
+
+      $("#fechaCita").val(fechaInicioDividida[0]);
+      $("#horaInicio").val(fechaInicioDividida[1]);
+      $("#horaFinal").val(fechaFinalDividida[1]);
+
       //$("#costoCita").val(cita.Costo);
       /* $('.modal-body').append(`
         <br>
