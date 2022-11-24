@@ -96,7 +96,8 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                     aria-label="With textarea"
                                     placeholder="Describa el tratamiento" 
                                     required 
-                                    ><?php if($intento_fallido) echo $_POST['tratamiento']?></textarea>
+                                    <?php if($intento_fallido) echo "value='" . $_POST['tratamiento'] . "'"; ?>
+                                >
                             </div>
                         </div>
                         <div class="form-row row">
@@ -113,7 +114,6 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                         <option <?php if($intento_fallido && $_POST['doctor'] == $datos['IdDoctor']) echo "selected"?> value="<?php echo $datos['IdDoctor']?>"><?php echo $datos['NombreD']?></options>
                                     <?php
                                         }
-                                        
                                     ?>
                                 </select>
                             </div>
