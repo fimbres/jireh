@@ -9,7 +9,7 @@ if (isset($_SESSION['user_id'])) {
         require_once("../funciones_BD.php");
         $conexion = crear_conexion();
 
-        $query = "SELECT IdPaciente,FechaInicio,FechaFinal,IdDoctor,Descripcion,Costo FROM Tb_Cita WHERE IdCita = '{$id_cita}';";
+        $query = "SELECT IdCita,IdPaciente,FechaInicio,FechaFinal,IdDoctor,Descripcion,Costo FROM Tb_Cita WHERE IdCita = '{$id_cita}';";
         $res = $conexion->query($query);
 
         if ($res) {
