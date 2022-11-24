@@ -4,8 +4,10 @@ const mostrarInfoEvento = (info) => {
   .then(res => res.json())
   .then(res => {
     const tipo = res.respuesta;
+    
     if(tipo == 'Exito'){
       const cita = res.resultados[0];
+      $('#editar-modal').attr('href', 'ModificarAgenda.php?id='+info.event.id)
       $('.modal-body').text('')
       $('.modal-body').append(`
         <br>
