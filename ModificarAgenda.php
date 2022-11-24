@@ -78,7 +78,7 @@ if(!$cita ){
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
                                 <label for="tbNombre">*Elige un paciente</label><br>
-                                <select id="tbNombre" name="paciente" class="form-select form-select-lg mb-3
+                                <select id="tbNombre" name="paciente" required class="form-select form-select-lg mb-3
                                 <?php if(isset($mensaje) &&in_array("Nombre",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" aria-label=".form-select-lg example">
                                 <?php
                                         include("includes/funciones_BD.php");
