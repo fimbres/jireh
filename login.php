@@ -1,3 +1,11 @@
+<?php
+    require_once('utils/sessionCheck.php');
+    //Si ya ha iniciado sesion, no lo dejamos volver a iniciar sesion hasta
+    // que cierre la otra sesion
+    if(comprobar_sesion()){
+        header('location: index.php');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -45,7 +53,7 @@
                                         </form>
                                     </div>
                                     <div class="card-footer text-center py-3">
-                                        <div class="small"><a href="#">Sistema de Pagos</a></div>
+                                        <div class="small"><a href="PagoPaciente.php">Sistema de Pagos</a></div>
                                     </div>
                                 </div>
                             </div>
