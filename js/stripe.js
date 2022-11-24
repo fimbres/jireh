@@ -52,7 +52,7 @@ async function handleSubmit(e) {
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: `http://localhost/ProyectosWeb/jireh-php/PagoPaciente.php?token=${token_stripe}`,
+      return_url: `../PagoPaciente.php?token=${token_stripe}`,
     },
   })
   .then((res) => {
@@ -65,6 +65,8 @@ async function handleSubmit(e) {
       showConfirmButton: true,
       confirmButtonColor: '#28a745',
       confirmButtonText: 'Aceptar',
+    }).then(() => {
+      window.location = "login.php";
     })
   })
   

@@ -33,7 +33,7 @@
         if(!$alerta){
             //Comprobamos de que el token no haya sido pagado
             $cita = $res['IdCita'];
-            $query = "SELECT * FROM Tb_Cita WHERE IdCita = $cita";
+            $query = "SELECT * FROM Tb_Cita WHERE IdCita = $cita;";
             $res_cita = $BD->query($query);
             $BD->next_result();
             if($res_cita && $res_cita->num_rows > 0){
@@ -47,6 +47,13 @@
                         //Si entramos aqui significa que la cita ya ha sido
                         // pagada
                         $alerta = new Alerta('La cita ya ha sido pagada');
+                    }
+                    else{
+                        $pacienteId = $cita['IdPaciente'];
+                        $queryPaciente = "SELECT * FROM Tb_Paciente WHERE IdPaciente = $pacienteId;";
+                        $res_paciente = $BD->query($queryPaciente);
+                        $infoPaciente = $res_paciente->fetch_assoc();
+                        $pacienteNombre = $infoPaciente['Nombre'];
                     }
                 } else{
                     $alerta = new Alerta('Error al consultar los datos, inténtalo de nuevo');
@@ -74,7 +81,7 @@
             $BD->query($query);
             $BD->close();
             $alerta = new Alerta('Se ha hecho el pago correctamente');
-            $alerta->setRedireccion('PagoPaciente.php');
+            $alerta->setRedireccion('login.php');
         }
     }
 ?>

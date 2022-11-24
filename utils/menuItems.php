@@ -29,7 +29,7 @@
             case 'Tb_Doctor': array_push($list,$item5 = new menuItem("Agenda","index.php")); break;
             case 'Tb_Recepcionista':  array_push($list,$item5 = new menuItem("Agenda","index.php")); 
                 array_push($list,$item2 = new menuItem("Gestión de Pacientes","gestionPacientes.php"));
-                array_push($list,$item2 = new menuItem("Gestión de Pagos","gestionPagos.php"));
+                array_push($list,$item2 = new menuItem("Gestión de Pagos","gestionPagos.php?idCita=11"));
                 break;
             case 'Tb_Admin': array_push($list,$item1 = new menuItem("Gestion de Doctores","gestionDoctores.php"));
                 array_push($list,$item2 = new menuItem("Gestion de Recepcionistas","gestionRecepcionistas.php"));
