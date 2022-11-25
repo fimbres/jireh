@@ -42,5 +42,10 @@
         $mailer->AltBody = strip_tags($body);
         $res = $mailer->send();
 
-        var_dump($res); //regresa true si el email se envio correctamente de lo contrario retorna false
+        if($res){
+            return true;
+        }else{
+            return false;
+        }
+        //var_dump($res); //regresa true si el email se envio correctamente de lo contrario retorna false
     }
