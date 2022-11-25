@@ -58,15 +58,21 @@ async function handleSubmit(e) {
   .then((res) => {
     console.log(res)
     Swal.fire({
-      title: 'Se ha hecho el cobro correctamente',
+      title: 'Se ha hecho el pago correctamente',
+      text: '¿Desea solicitar factura?',
       icon: 'success',
       showCloseButton: true,
-      showCancelButton: false,
+      showCancelButton: true,
       showConfirmButton: true,
       confirmButtonColor: '#28a745',
       confirmButtonText: 'Aceptar',
-    }).then(() => {
-      window.location = "login.php";
+    }).then((res) => {
+      if(res.isConfirmed){
+          window.location = "facturacion.php?idCita=" +  ' . $res["IdCita"] . ';
+      }
+      else{
+          window.location = "index.php";
+      }
     })
   })
   

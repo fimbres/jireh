@@ -21,7 +21,7 @@
             if($res->num_rows > 0){
                 $res = $res->fetch_assoc();
                 if(!empty($res['NumeroOperacion'])){
-                    $alerta = new Alerta('El token que ingresaste ya ha sido pagadao');
+                    $alerta = new Alerta('El token que ingresaste ya ha sido pagado');
                 }
             } else {
                 $alerta = new Alerta('El token que ingresaste no existe');
@@ -86,7 +86,7 @@
             $alerta->setOpcion('cancelButtonText', "Cancelar");
             $alerta->setThen('
             if(res.isConfirmed){
-                window.location = "facturacion.php?idCita=" +  ' . '$res["IdCita"]' . ';
+                window.location = "facturacion.php?idCita=" +  ' . $res["IdCita"] . ';
             }
             else{
                 window.location = "index.php";

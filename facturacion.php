@@ -4,10 +4,10 @@
     require_once('utils/sendMail.php');
     
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-        $message = '<h2>Solicitud de Factura, Jireh</h2><br /><br />';
+        $message = 'Solicitud de Factura, Jireh ';
         foreach($_POST as $nombre_campo => $valor)
         {
-            $message .= $nombre_campo . ' = ' . $valor . '<br />'; 
+            $message .= $nombre_campo . ' = ' . $valor . ', '; 
         }
         $destinatario = 'isaachalo33@gmail.com';
 
