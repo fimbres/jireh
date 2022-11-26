@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
             center: 'title',
             right: 'prev,next',
         },
-        initialDate: '2022-08-01',
+        initialDate: new Date(Date.now()),
         locale: 'es',
         height: 800,
         navLinks: true, // can click day/week names to navigate views

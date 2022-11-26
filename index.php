@@ -26,9 +26,9 @@
 
         <!--CONTENEDOR ALMACENAR CONTENIDO OTRAS PAGINAS-->
         <div id="displayActions" class="d-flex bg-white p-4">
-            <?php
-            require_once('Calendario.php');
-            ?>
+            <div class="container bg-danger">
+
+            </div>
         </div>
     </main>
     <footer>
