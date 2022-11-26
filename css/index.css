@@ -96,6 +96,11 @@ main{
     }
  }
 
+ .image-home {
+    width: 388px;
+    height: 255px;
+ }
+
  @media all and (orientation:landscape) and (min-width:1070px){
     #sideBar ul{
         display:block;
@@ -105,4 +110,9 @@ main{
         display:none;
      }
 
+     .responsive-row {
+        flex-direction: column;
+     }
+
  }
+

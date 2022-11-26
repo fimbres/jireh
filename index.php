@@ -3,6 +3,13 @@
     if(!comprobar_sesion()){
         header('location: login.php');
     }
+
+    switch($_SESSION['rol']) {
+        case 'Tb_Doctor': $bienvenida = "Bienvenido, Doctor"; break;
+        case 'Tb_Recepcionista': $bienvenida = "Bienvenido, Recepcionista"; break;
+        case 'Tb_Administrador': $bienvenida = "Bienvenido, Administrador"; break;
+        default: $bienvenida = "Bienvenido";
+    }
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,14 +33,43 @@
 
         <!--CONTENEDOR ALMACENAR CONTENIDO OTRAS PAGINAS-->
         <div id="displayActions" class="d-flex bg-white p-4">
-            <div class="container bg-danger">
-
+            <div class="container">
+                <div class="mt-3 mb-5">
+                    <h1 class="text-center display-4"><?php echo $bienvenida; ?></h1>
+                    <h3 class="text-center mt-3 lead">"Cuidado dental de alta calidad, de manera fácil y segura."</h3>
+                </div>
+                <section>
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 order-lg-2">
+                                <img class="img-fluid" src="./files/home1.jpg" alt="first image" style="max-height: 380px; border-radius: 20px;"/>
+                            </div>
+                            <div class="col-lg-6 order-lg-1">
+                                <h2 class="display-4">Nuestra Visión</h2>
+                                <p>Somos una clínica dental comprometida con brindar el mejor servicio posible a nuestros clientes, con los mayores estándares de higiene y salubridad, además de los mejores productos para su cuidado dental.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Content section 2-->
+                <section>
+                    <div class="container mt-5 mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6">
+                                <img class="img-fluid" src="./files/home2.jpg" alt="second image" style="max-height: 380px; border-radius: 20px;"/>
+                            </div>
+                            <div class="col-lg-6">
+                                    <h2 class="display-4">Nuestro Compromiso</h2>
+                                    <p>Calidad dental al alcance de todos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </main>
     <footer>
     </footer>
-    
     <script src="js/systemFunctions.js"></script>
 </body>
 </html>
