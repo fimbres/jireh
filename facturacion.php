@@ -3,6 +3,10 @@
     require_once('includes/includes.php');
     require_once('./utils/sendMail.php');
     
+    if(!isset($_GET['idCita'])){
+        header('location: index.php');
+    }
+
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         $message = 'Solicitud de Factura, Jireh ';
         foreach($_POST as $nombre_campo => $valor)
@@ -70,39 +74,39 @@
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="name">Nombre</label>
-                                                <input name="nombre" type="text" class="form-control mb-2" id="name" <?php echo "value='" . $pacienteFetch['Nombre'] . " " . $pacienteFetch['APaterno']  . " " . $pacienteFetch['AMaterno'] . "'"; ?>>
+                                                <input name="nombre" type="text" class="form-control mb-2" required id="name" <?php echo "value='" . $pacienteFetch['Nombre'] . " " . $pacienteFetch['APaterno']  . " " . $pacienteFetch['AMaterno'] . "'"; ?>>
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Correo Electrónico</label>
-                                                <input name="correo" type="email" class="form-control mb-2" id="email" <?php echo "value='" . $pacienteFetch['Email'] . "'"; ?>>
+                                                <input name="correo" type="email" class="form-control mb-2" required id="email" <?php echo "value='" . $pacienteFetch['Email'] . "'"; ?>>
                                             </div>
                                             <div class="form-group">
                                                 <label for="cellphone">Número De Celular</label>
-                                                <input name="celular" type="text" class="form-control mb-2" id="cellphone" <?php echo "value='" . $pacienteFetch['NumTelefono'] . "'"; ?>>
+                                                <input name="celular" type="text" class="form-control mb-2" required id="cellphone" <?php echo "value='" . $pacienteFetch['NumTelefono'] . "'"; ?>>
                                             </div>
                                             <div class="form-group">
                                                 <label for="codigo-postal">Codigo Postal</label>
-                                                <input name="cp" type="text" class="form-control mb-2" id="codigo-postal" <?php echo "value='" . $pacienteFetch['CodigoPostal'] . "'"; ?>>
+                                                <input name="cp" type="text" class="form-control mb-2" required id="codigo-postal" <?php echo "value='" . $pacienteFetch['CodigoPostal'] . "'"; ?>>
                                             </div>
                                             <div class="form-group">
                                                 <label for="rfc">RFC</label>
-                                                <input name="rfc" type="text" class="form-control mb-2" id="rfc" <?php echo "value='" . $pacienteFetch['RFC'] . "'"; ?>>
+                                                <input name="rfc" type="text" class="form-control mb-2" required id="rfc" <?php echo "value='" . $pacienteFetch['RFC'] . "'"; ?>>
                                             </div>
                                             <div class="form-group">
                                                 <label for="regimen">Regimen</label>
-                                                <input name="regimen" type="text" class="form-control mb-2" id="regimen" placeholder="Ingresa tu regimen fiscal">
+                                                <input name="regimen" type="text" class="form-control mb-2" required id="regimen" placeholder="Ingresa tu regimen fiscal">
                                             </div>
                                             <div class="form-group">
                                                 <label for="concepto">Concepto</label>
-                                                <input name="concepto" type="text" class="form-control mb-2" id="concepto" readonly <?php echo "value='Cita dental: " . $fetch[1] . "'"; ?>>
+                                                <input name="concepto" type="text" class="form-control mb-2" required id="concepto" readonly <?php echo "value='Cita dental: " . $fetch[1] . "'"; ?>>
                                             </div>
                                             <div class="form-group">
                                                 <label for="importe">Importe</label>
-                                                <input name="importe" type="text" class="form-control mb-2" id="importe" readonly <?php echo "value='" . $fetch[2] . "'"; ?>>
+                                                <input name="importe" type="text" class="form-control mb-2" required id="importe" readonly <?php echo "value='" . $fetch[2] . "'"; ?>>
                                             </div>
                                             <div class="form-group">
                                                 <label for="metodo-pago">Metodo de pago</label>
-                                                <input name="metodo" type="text" class="form-control mb-2" id="metodo-pago" readonly <?php echo "value='" . $fetchFactura['MetodoPago'] . "'"; ?>>
+                                                <input name="metodo" type="text" class="form-control mb-2" required id="metodo-pago" readonly <?php echo "value='" . $fetchFactura['MetodoPago'] . "'"; ?>>
                                             </div>
                                             <!-- <div class="form-check">
                                                 <input type="checkbox" class="form-check-input mb-2" id="guardar-datos">

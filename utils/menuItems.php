@@ -25,6 +25,7 @@
     //OPCIONES DEL MENU
     
     if(comprobar_sesion()){
+        array_push($list,$item5 = new menuItem("Inicio","index.php"));
         switch($_SESSION['rol']){
             case 'Tb_Doctor': array_push($list,$item5 = new menuItem("Agenda","agenda.php?IdDoctor=" . $_SESSION['user_id'])); break;
             case 'Tb_Recepcionista':  array_push($list,$item5 = new menuItem("Agenda","agenda.php")); 
