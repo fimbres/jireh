@@ -1,6 +1,8 @@
 // This is your test publishable API key.
 const stripe = Stripe("pk_test_51M6YdrDAwqSpvGj6WfjgstQzI6wHmEjTdhSLHMTfXCEjE00Irdutlv9jXopA9DjKWJSnkcLcSveijV0mUemHs1c200292dGRs3");
 const token_stripe = $('#Token-Stripe').val()
+const citaFacturar = $('#citaFacturar').val()
+
 
 let elements;
 
@@ -68,7 +70,7 @@ async function handleSubmit(e) {
       confirmButtonText: 'Aceptar',
     }).then((res) => {
       if(res.isConfirmed){
-          window.location = "facturacion.php?idCita=" +  ' . $res["IdCita"] . ';
+          window.location = "facturacion.php?idCita=" +  citaFacturar;
       }
       else{
           window.location = "index.php";

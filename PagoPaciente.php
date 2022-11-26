@@ -33,6 +33,7 @@
         if(!$alerta){
             //Comprobamos de que el token no haya sido pagado
             $cita = $res['IdCita'];
+            $citaFacturar = $cita;
             $query = "SELECT * FROM Tb_Cita WHERE IdCita = $cita;";
             $res_cita = $BD->query($query);
             $BD->next_result();

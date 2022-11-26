@@ -11,4 +11,5 @@
       <input type="hidden" id="Cita-Pago-Stripe" value="<?php echo $dinero_pagar_stripe?>">
       <input type="hidden" id="Token-Stripe" value="<?php echo $token?>">
       <div id="payment-message" class="hidden"></div>
+      <input id="citaFacturar" class="hidden" <?php echo "value='" . $citaFacturar . "'" ?>/>
 </form>
