@@ -69,7 +69,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                 <select id="tbNombre" name="paciente" class="form-select 
                                 <?php if(isset($mensaje) &&in_array("Nombre",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" aria-label=".form-select-lg example"
                                 required>
-                                    <option value="">Eliga un paciente</option>
+                                    <option value="">Elige un paciente</option>
                                     <?php
                                         include("includes/funciones_BD.php");
                                         $conexion = crear_conexion();
@@ -104,7 +104,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                             <div class="form-group col-xl-12 col-md-12 pb-4">
                                 <label for="sDoctor">*Elige un doctor</label><br>
                                 <select id="sDoctor" name="doctor" class="form-select <?php if(isset($mensaje) &&in_array("Doctor",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" required>
-                                    <option value="">Eliga un doctor</option>
+                                    <option value="">Elige un doctor</option>
                                     <?php
                                         $query = "SELECT IdDoctor, CONCAT(Nombre,' ',APaterno) AS NombreD FROM Tb_Doctor WHERE IdStatus = 3;";
                                         $res = mysqli_query($conexion,$query);
@@ -142,7 +142,7 @@ if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
                                         placeholder="$0.00"
                                         required
                                         class="form-control
-                                        <?php if(isset($mensaje) &&in_array("Costo",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?> " 
+                                        <?php if(isset($mensaje) && in_array("Costo",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?> " 
                                         onkeypress="return /[0-9.]/i.test(event.key)" aria-label="Amount (to the nearest dollar)"
                                         <?php if($intento_fallido) echo "value='".$_POST['costo'] ."'"?>
                                     />

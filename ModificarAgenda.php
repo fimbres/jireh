@@ -76,26 +76,25 @@ if(!$cita ){
                 <div class="col-12 d-flex justify-content-center pt-5">
                 <form method="POST" class="form d-flex row col-xl-8 col-md-12 justify-content-center formulario-registrar-recepcionista">
                         <div class="form-row row">
-                            <div class="form-group col-xl-12 col-md-12 pb-4">
+                            <div class="form-group col-xl-12 col-md-12">
                                 <label for="tbNombre">*Elige un paciente</label><br>
-                                <select id="tbNombre" name="paciente" required class="form-select form-select-lg mb-3
-                                <?php if(isset($mensaje) &&in_array("Nombre",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" aria-label=".form-select-lg example">
+                                <select id="tbNombre" name="paciente" required class="form-select mb-3
+                                <?php if(isset($mensaje) && in_array("Nombre",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" aria-label=".form-select-lg example">
+                                <option value="">Elige un paciente</option>
                                 <?php
                                         include("includes/funciones_BD.php");
                                         $conexion = crear_conexion();
-                                        $query = "SELECT tc.IdPaciente, CONCAT(tp.Nombre,' ',tp.APaterno,' ',tp.AMaterno) AS NombreP, tp.IdStatus FROM (Tb_Cita tc
-                                        INNER JOIN Tb_Paciente tp ON tc.IdPaciente = tp.IdPaciente) WHERE tp.IdStatus = 3 AND tc.IdCita=".$id_cita;
-                                        $res = mysqli_query($conexion,$query);
-                                        $datos = mysqli_fetch_array($res)
-                                    ?>
-                                <option value="<?php echo $datos['IdPaciente']?>"><?php echo $datos['NombreP']?></option>
-                                    <?php
                                         $query = "SELECT IdPaciente, CONCAT(Nombre,' ',APaterno,' ',AMaterno) AS NombreP FROM Tb_Paciente WHERE IdStatus = 3;";
+                                        $query2 = "SELECT IdDoctor as DoctorSeleccionado, IdPaciente as PacienteSeleccionado FROM Tb_Cita WHERE IdCita = " . $id_cita . ";";
                                         $res = mysqli_query($conexion,$query);
+                                        $res2 = mysqli_query($conexion,$query2);
+
+                                        $selecciones = mysqli_fetch_array($res2);
+                                        $datos = mysqli_fetch_array($res);
                                         while($datos = mysqli_fetch_array($res))
                                         {
                                     ?>
-                                        <option value="<?php echo $datos['IdPaciente']?>"><?php echo $datos['NombreP']?></options>
+                                        <option <?php if($selecciones['PacienteSeleccionado'] == $datos['IdPaciente']) echo "selected"?> value="<?php echo $datos['IdPaciente']?>"><?php echo $datos['NombreP']?></options>
                                     <?php
                                         }
                                     ?>
@@ -107,11 +106,6 @@ if(!$cita ){
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
                                 <label for="taTratamiento">Tratamiento</label>
-                                <!--<?php
-                                        //$query = "SELECT * FROM Tb_Cita WHERE IdCita =". $id_cita;
-                                        //$res = mysqli_query($conexion,$query);
-                                        //$datos = mysqli_fetch_array($res)
-                                    ?> -->
                                 <input 
                                     id="taTratamiento" 
                                     name="tratamiento"  
@@ -121,40 +115,33 @@ if(!$cita ){
                                     placeholder="Describa el tratamiento" 
                                     required 
                                     <?php echo "value='{$cita->getTratamiento()}'"?>>
-                                    </input>
+                                </input>
+                            </div>
                         </div>
                         <div class="form-row row">
-                            <div class="form-group col-xl-12 col-md-12 pb-4">
+                            <div class="form-group col-xl-12 col-md-12">
                                 <label for="sDoctor">*Elige un doctor</label><br>
-                                <select id="sDoctor" name="doctor" class="form-select form-select-lg mb-3
-                                <?php if(isset($mensaje) &&in_array("Doctor",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
-                                require
-                                <?php if($intento_fallido) echo "value'".$_POST['doctor'] ."'"?>>
+                                <select id="sDoctor" name="doctor" class="form-select mb-3
+                                <?php if(isset($mensaje) &&in_array("Doctor",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" required>
+                                <option value="">Elige un doctor</option>
                                 <?php
-                                        $query = "SELECT tc.IdDoctor, CONCAT(td.Nombre,' ',td.APaterno) AS NombreD, td.IdStatus FROM (Tb_Cita tc
-                                        INNER JOIN Tb_Doctor td ON tc.IdDoctor = td.IdDoctor) WHERE td.IdStatus = 3 AND tc.IdCita=".$id_cita;
-                                        $res = mysqli_query($conexion,$query);
-                                        $datos = mysqli_fetch_array($res)
-                                    ?>
-                                <option value="<?php echo $datos['IdDoctor']?>"><?php echo $datos['NombreD']?></option>
-                                    <?php
                                         $query = "SELECT IdDoctor, CONCAT(Nombre,' ',APaterno) AS NombreD FROM Tb_Doctor WHERE IdStatus = 3;";
                                         $res = mysqli_query($conexion,$query);
+
+                                        $datos = mysqli_fetch_array($res);
                                         while($datos = mysqli_fetch_array($res))
                                         {
                                     ?>
-                                        <option value="<?php echo $datos['IdDoctor']?>"><?php echo $datos['NombreD']?></options>
+                                        <option <?php if($selecciones['DoctorSeleccionado'] == $datos['IdDoctor']) echo "selected"?> value="<?php echo $datos['IdDoctor']?>"><?php echo $datos['NombreD']?></options>
                                     <?php
                                         }
-                                        
                                     ?>
-
                                 </select>
                                 
                             </div>
                         </div>
                         <div class="form-row row">
-                            <div class="form-group col-xl-6 col-md-12 pb-4">
+                            <div class="form-group col-xl-6 col-md-12">
                                 <label for="tbfecha">Fecha</label>
                                 <?php
                                         $query = "SELECT CAST(FechaInicio as DATE) as Fecha, Costo FROM Tb_Cita WHERE IdCita =". $id_cita;
@@ -173,18 +160,16 @@ if(!$cita ){
                                     <?php echo "value='{$datos['Fecha']}'"?>
                                     >
                             </div>
-                            <div class="input-group col-xl-6 col-md-6 pb-4 w-50">
+                            <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="tbCosto">Costo de la cita</label>&nbsp;
-                                    <div id="tbCosto" class="input-group col-xl-6 col-md-6 pb-4 w-75">
-                                        <div class="input-group col-xl-6 col-md-6 pb-4 w-50"><span class="input-group-text">$</span>
-                                        <input  name="costo" 
-                                            type="text" 
-                                            class="form-control
-                                            <?php if(isset($mensaje) &&in_array("Costo",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?> " 
-                                            onkeypress="return /[0-9.]/i.test(event.key)" aria-label="Amount (to the nearest dollar)"
-                                            <?php echo "value='{$datos['Costo']}'"?>
-                                        >
-                                    </div>
+                                <input 
+                                    name="costo" 
+                                    type="text" 
+                                    class="form-control
+                                    <?php if(isset($mensaje) && in_array("Costo",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?> " 
+                                    onkeypress="return /[0-9.]/i.test(event.key)" aria-label="Amount (to the nearest dollar)"
+                                    <?php echo "value='{$datos['Costo']}'"?>
+                                >
                             </div>
                         </div>
                         <div class="form-row row justify-content-center">
