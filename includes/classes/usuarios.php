@@ -770,7 +770,13 @@ class Citas{
             return [false,"Hubo un error al hacer la conexion, vuelva a intentarlo"];
         }
         if($tipo == "agregar"){
-            $BD->next_result();
+            $sql = " SELECT CAST('{$fechaInicio}' as TIME) < CAST('{$fechaFinal}' as TIME);";
+            $res_query = $BD->query($sql);
+            $result = mysqli_fetch_array($res_query);
+            if($result[0] == '0') {
+                array_push($res, "Favor de verficar la hora de la cita");
+            }
+            // $BD->next_result();
             // $sql = "SELECT * FROM Tb_Cita WHERE '{$fechaInicio}' BETWEEN FechaInicio AND FechaFinal AND IdPaciente = {$datos['paciente']} AND IdStatus = {$status['IdStatus']}";
             // $res_query = $BD->query($sql);
             // if(gettype($res_query) != 'boolean'){
@@ -784,14 +790,6 @@ class Citas{
             //     if($res_query->num_rows > 0)
             //         array_push($res, "La Hora y fecha para este doctor ya esta ocupado");
             // }
-            // $BD->next_result();
-           
-            $sql = " SELECT CAST('{$fechaInicio}' as TIME) < CAST('{$fechaFinal}' as TIME);";
-            $res_query = $BD->query($sql);
-            if(gettype($res_query) != 'boolean'){
-                if($res_query->num_rows == 0)
-                    array_push($res, "Favor de verficar la hora de la cita");
-            }
             $BD->next_result();
         }
         return $res;
