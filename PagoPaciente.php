@@ -137,7 +137,6 @@
                                         require('components/formularioToken.php')
                                         :
                                         require('components/formularioTarjeta.php');
-                                        
                                         ?>
                                     </div>
                                 </div>
