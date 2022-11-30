@@ -1,19 +1,23 @@
+<!-- 
+    Este formulario cambiara basado en la variable
+    de php llamada "tipo_formulario".
+-->
 <form id="formModificarPaciente" method="POST" class="">
     <h3 class="pt-2 pb-2">Pago de cita</h3>
     <div class="form-row row">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="nombre_inpt_paciente"><b>*</b>Nombre del paciente</label>
-            <input id="nombrePaciente" type="text" autocomplete="off" class="form-control text-capitalize formModificarInput" placeholder="Nombre del paciente" value="<?php print($infoPaciente["Nombre"]." ".$infoPaciente["APaterno"]." ".$infoPaciente["AMaterno"])?>">
+            <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> id="nombrePaciente" type="text" autocomplete="off" class="form-control text-capitalize formModificarInput" placeholder="Nombre del paciente" value="<?php print($infoPaciente["Nombre"]." ".$infoPaciente["APaterno"]." ".$infoPaciente["AMaterno"])?>">
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="fecha_inpt_paciente"><b>*</b>Fecha y Hora</label>
-            <input id="fechaHora" type="datetime-local" class="form-control formModificarInput" value="<?php print("$fecha");?>">
+            <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> id="fechaHora" type="datetime-local" class="form-control formModificarInput" value="<?php print("$fecha");?>">
         </div>
     </div>
     <div class="form-row row">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="doctor_inpt_recepcionista"><b>*</b>Nombre del doctor</label>
-            <input id="nombreDoctor" type="text" autocomplete="off" class="form-control text-capitalize" placeholder="Nombre del doctor" 
+            <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> id="nombreDoctor" type="text" autocomplete="off" class="form-control text-capitalize" placeholder="Nombre del doctor" 
             value="<?php 
             $infoDoctor["Nombre"] ? print($infoDoctor["Nombre"]) : print("");
             $infoDoctor["APaterno"] ? print(" ".$infoDoctor["APaterno"]) : print("");
@@ -28,7 +32,7 @@
     <div class="form-row row justify-content-center">
         <div class="form-group col-xl-12 col-md-12 pb-4">
             <label for="descripcion_inpt">Descripción del servicio</label>
-            <textarea class="form-control" id="" rows="4" placeholder="Descripción"><?php print($infoCita["Descripcion"]);?></textarea>
+            <textarea <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> class="form-control" id="" rows="4" placeholder="Descripción"><?php print($infoCita["Descripcion"]);?></textarea>
         </div>
     </div>
     <div id="formPago" class="form-row row justify-content-center shadow">
@@ -43,8 +47,12 @@
         <div class="form-group col-xl-12 col-md-12 pb-4 mt-4">
             <div id="pagoStripe" class="containerMethod d-flex justify-content-center align-items-center flex-wrap">
                 <label class="pt-2 pb-2">Token</label>
-                <input id="txtToken" type="text" maxlength="20" autocomplete="off" class="form-control text-center" placeholder="Vacio por el momento..." readonly>
+                <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> id="txtToken" type="text" maxlength="20" autocomplete="off" class="form-control text-center" placeholder="Vacio por el momento..." readonly>
+                <?php 
+                 if($tipo_formulario == "modificar"){
+                ?>
                 <button id="btnGenerateToken" class="btn btn-primary text-white fw-bold mt-4">Generar Token</button>
+                <?php }?>
             </div>
             <div id="pagoTarjeta" class="containerMethod visually-hidden">
                 <label class="pt-2 pb-2">Número de Voucher</label>

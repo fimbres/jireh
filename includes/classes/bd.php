@@ -79,7 +79,15 @@ class BaseDeDatos extends mysqli{
         $this->next_result();
         return ($this->error ? false :  $res);
     }
-
+    public function getTb_Pagos($id = ''){
+        $this->next_result();
+        $sql = "SELECT * FROM Tb_Pagos";
+        if(!empty($estado))
+            $sql .= " where EstadoCivil = '$estado';";
+        $res = $this->query($sql);
+        $this->next_result();
+        return ($this->error ? false :  $res);
+    }
     public function getTbCita_cita($idCita){
         $this->next_result();
         if(!empty($idCita))
