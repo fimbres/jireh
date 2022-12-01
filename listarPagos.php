@@ -66,8 +66,7 @@
                             <?php
                                 include("includes/funciones_BD.php");
                                 $conexion = crear_conexion();
-                                $query = $conexion->query("SELECT Tb_Pago.IdPago, Tb_Pago.IdMetodoPago, Tb_Pago.FechaPago, Tb_Cita.Costo, Tb_Paciente.Nombre, Tb_Paciente.APaterno FROM Tb_Pago, Tb_Cita, Tb_Paciente WHERE Tb_Pago.IdCita = Tb_Cita.IdCita AND Tb_Paciente.IdPaciente = Tb_Cita.IdPaciente;");
-                                $encontrados = $query->num_rows;
+                                $query = $conexion->query("SELECT Tb_Pago.IdPago, Tb_Pago.IdMetodoPago, Tb_Pago.FechaPago, Tb_Cita.Costo, Tb_Paciente.Nombre, Tb_Paciente.APaterno, Tb_MetodoPago.MetodoPago FROM Tb_Pago, Tb_Cita, Tb_Paciente, Tb_MetodoPago WHERE Tb_Pago.IdCita = Tb_Cita.IdCita AND Tb_Paciente.IdPaciente = Tb_Cita.IdPaciente AND Tb_MetodoPago.IdMetodo = Tb_Pago.IdMetodoPago;");
                                 while($fila = mysqli_fetch_array($query))
                                 {
                             ?>
@@ -75,27 +74,7 @@
                                     <td class="td-nombrePaciente"><?php print($fila['Nombre']);?></td>
                                     <td class="td-apaterno"><?php print($fila['APaterno']);?></td>
                                     <td class="td-fechaPago"><?php print($fila['FechaPago']);?></td>
-                                    <td class="td-metodoPago">
-                                        <?php 
-                                            switch($fila['IdMetodoPago']){
-                                                case '1':
-                                                    print("Stripe");
-                                                    break;
-                                                case '2':
-                                                    print("Paypal");
-                                                    break;
-                                                case '3':
-                                                    print("Efectivo");
-                                                    break;
-                                                case '4':
-                                                    print("Tarjeta");
-                                                    break;
-                                                case '5':
-                                                    print("Transferencia");
-                                                    break;
-                                            }
-                                        ?>
-                                    </td>
+                                    <td class="td-metodoPago"><?php print($fila['MetodoPago']);?></td>
                                     <td class="td-costoCita"><?php print("$".$fila['Costo']);?></td>
                                     <td>
                                         <div class="d-flex justify-content-center">

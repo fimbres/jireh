@@ -67,7 +67,6 @@
                                 include("includes/funciones_BD.php");
                                 $conexion = crear_conexion();
                                 $query = $conexion->query("SELECT Tb_Pago.IdCita AS pagoIdCita, Tb_Cita.IdCita AS citaIdCita, Tb_Paciente.Nombre as nombrePaciente, Tb_Paciente.APaterno as pacienteAPaterno, Tb_Paciente.AMaterno as pacienteAMaterno, Tb_Doctor.Nombre as doctorNombre, Tb_Doctor.APaterno as doctorAPaterno, Tb_Doctor.AMaterno as DoctorAMaterno, Tb_Cita.FechaInicio, Tb_Cita.IdStatus, Tb_Status.Descripcion as statusDescripcion FROM Tb_Doctor,Tb_Paciente,Tb_Status,Tb_Pago RIGHT JOIN Tb_Cita ON Tb_Cita.IdCita = Tb_Pago.IdCita WHERE Tb_Pago.IdCita IS NULL AND Tb_Doctor.IdDoctor = Tb_Cita.IdDoctor AND Tb_Paciente.IdPaciente = Tb_Cita.IdPaciente AND Tb_Status.IdStatus = Tb_Cita.IdStatus;");
-                                $encontrados = $query->num_rows;
                                 while($fila = mysqli_fetch_array($query))
                                 {
                             ?>
