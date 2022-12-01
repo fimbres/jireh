@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar Pagos</title>
+    <title>Registrar Pagos</title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="css/index.css">
@@ -29,12 +29,12 @@
         <!--CONTENEDOR ALMACENAR CONTENIDO OTRAS PAGINAS-->
         <div id="displayActions" class="d-flex bg-white p-4 flex-column">
             <div class="d-flex flex-row justify-content-between" style="margin-bottom: 60px; margin-top: 30px;">
-                <h1 class="text-center">Listar Pagos</h1>
-                <a href="./registrarPago.php"><button class="btn btn-primary w-40 m-1">Registrar Pago</button></a>
+                <h1 class="text-center">Registrar Pagos</h1>
+                <a href="./RegistrarPaciente.php"><button class="btn btn-primary w-40 m-1">Registrar Pago</button></a>
             </div>
             <div id="tablaPacientes" class="card mb-4 w-100">
                 <div class="card-header">
-                    Pagos
+                    Registrar Pagos
                 </div>
                 <div class="card-body">
                     <table 
@@ -46,9 +46,9 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Apellido Paterno</th>
+                                <th>Doctor</th>
                                 <th>Fecha</th>
-                                <th>Metodo</th>
-                                <th>Costo</th>
+                                <th>Status</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -56,9 +56,9 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Apellido Paterno</th>
+                                <th>Doctor</th>
                                 <th>Fecha</th>
-                                <th>Metodo</th>
-                                <th>Costo</th>
+                                <th>Status</th>
                                 <th>Acciones</th>
                             </tr>
                         </tfoot>
@@ -66,40 +66,20 @@
                             <?php
                                 include("includes/funciones_BD.php");
                                 $conexion = crear_conexion();
-                                $query = $conexion->query("SELECT Tb_Pago.IdPago, Tb_Pago.IdMetodoPago, Tb_Pago.FechaPago, Tb_Cita.Costo, Tb_Paciente.Nombre, Tb_Paciente.APaterno FROM Tb_Pago, Tb_Cita, Tb_Paciente WHERE Tb_Pago.IdCita = Tb_Cita.IdCita AND Tb_Paciente.IdPaciente = Tb_Cita.IdPaciente;");
+                                $query = $conexion->query("SELECT Tb_Pago.IdCita AS pagoIdCita, Tb_Cita.IdCita AS citaIdCita, Tb_Paciente.Nombre as nombrePaciente, Tb_Paciente.APaterno as pacienteAPaterno, Tb_Paciente.AMaterno as pacienteAMaterno, Tb_Doctor.Nombre as doctorNombre, Tb_Doctor.APaterno as doctorAPaterno, Tb_Doctor.AMaterno as DoctorAMaterno, Tb_Cita.FechaInicio, Tb_Cita.IdStatus, Tb_Status.Descripcion as statusDescripcion FROM Tb_Doctor,Tb_Paciente,Tb_Status,Tb_Pago RIGHT JOIN Tb_Cita ON Tb_Cita.IdCita = Tb_Pago.IdCita WHERE Tb_Pago.IdCita IS NULL AND Tb_Doctor.IdDoctor = Tb_Cita.IdDoctor AND Tb_Paciente.IdPaciente = Tb_Cita.IdPaciente AND Tb_Status.IdStatus = Tb_Cita.IdStatus;");
                                 $encontrados = $query->num_rows;
                                 while($fila = mysqli_fetch_array($query))
                                 {
                             ?>
-                                <tr id="<?php print($fila['IdPago']);?>">
-                                    <td class="td-nombrePaciente"><?php print($fila['Nombre']);?></td>
-                                    <td class="td-apaterno"><?php print($fila['APaterno']);?></td>
-                                    <td class="td-fechaPago"><?php print($fila['FechaPago']);?></td>
-                                    <td class="td-metodoPago">
-                                        <?php 
-                                            switch($fila['IdMetodoPago']){
-                                                case '1':
-                                                    print("Stripe");
-                                                    break;
-                                                case '2':
-                                                    print("Paypal");
-                                                    break;
-                                                case '3':
-                                                    print("Efectivo");
-                                                    break;
-                                                case '4':
-                                                    print("Tarjeta");
-                                                    break;
-                                                case '5':
-                                                    print("Transferencia");
-                                                    break;
-                                            }
-                                        ?>
-                                    </td>
-                                    <td class="td-costoCita"><?php print("$".$fila['Costo']);?></td>
+                                <tr>
+                                    <td class="td-nombrePaciente"><?php print($fila['nombrePaciente']);?></td>
+                                    <td class="td-apaterno"><?php print($fila['pacienteAPaterno']);?></td>
+                                    <td class="td-nombreDoctor"><?php print($fila['doctorNombre']." ".$fila['doctorAPaterno']);?></td>
+                                    <td class="td-fechaCita"><?php print($fila['FechaInicio'])?></td>
+                                    <td class="td-status"><?php print($fila['statusDescripcion']);?></td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <input type="button" class="btn btn-warning w-40 m-1" value="Modificar"/>
+                                            <input type="button" class="btn btn-secondary w-40 m-1" onclick="pagarCita(<?php print($fila['citaIdCita']);?>)" value="Pagar"/>
                                         </div>
                                     </td>
                                 </tr>
@@ -129,6 +109,6 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/datatables.js"></script>
     <script src="js/systemFunctions.js"></script>
-    <script src="js/gestionPacientes.js"></script> 
+    <script src="./js/registrarPago.js"></script> 
 </body>
 </html>
