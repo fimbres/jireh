@@ -1,3 +1,7 @@
+$('#motivo1').on('click',function(){
+  $('#motivo').modal('show');
+})
+
 const mostrarInfoEvento = (info) => {
   const cita = info.event;
   fetch('includes/ajax/cita.php?id=' + cita.id)
@@ -30,7 +34,8 @@ const mostrarInfoEvento = (info) => {
       $("#nombreDoctor").val(NombreCompletoD);
 
       $("#costoCita").val(cita.Costo);
-$('#editar-modal').attr('href', 'ModificarAgenda.php?id=' + cita.IdCita);
+      $("#id-cita").val(cita.IdCita);
+      $('#editar-modal').attr('href', 'ModificarAgenda.php?id=' + cita.IdCita);
 
       let fechaCompletaInicio = ""+cita.FechaInicio;
       let fechaCompletaFinal = ""+cita.FechaFinal;
@@ -43,10 +48,14 @@ $('#editar-modal').attr('href', 'ModificarAgenda.php?id=' + cita.IdCita);
       $("#horaFinal").val(fechaFinalDividida[1]);
 
       $('#infoCita').modal('show');
+
     }
+
   })
   
 }
+
+
 const coloresDoctores = (citas) => {
   let doc = [...new Set(citas.map(item => parseInt(item.IdDoctor)))];
   let doc_ordenado = doc.sort()
@@ -65,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendario');
     var calendar;
     const doctor = $('#calendario').attr('data-doctor') 
+    console.log(doctor);
     calendar = new FullCalendar.Calendar(calendarEl, {
         timeZone: 'UTC',
         themeSystem: 'bootstrap5',
@@ -123,4 +133,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     $('#titulo-calendario').text($('.fc-toolbar-title').text())
+
 });

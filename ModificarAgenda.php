@@ -27,7 +27,7 @@ if(!$cita ){
         $res = $cita->modificar_BD($_POST,$BD);
         $intento_fallido = !$res[0];
         if($res[0]){
-            $alerta = new Alerta($res[1],[],[],'./index.php');
+            $alerta = new Alerta($res[1],[],[],'./agenda.php');
         } else{
             $alerta = new Alerta("Error",[$res[1]]);
             $alerta->setOpcion('icon',"'error'");
@@ -209,7 +209,7 @@ if(!$cita ){
                         </div>
                         <div class="form-row row justify-content-center pt-3">
                             <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Actualizar</button>
-                            <a class="row btn btn-danger mx-3 col-md-3 col-5" href="index.php">Cancelar</a>
+                            <a class="row btn btn-danger mx-3 col-md-3 col-5" href="agenda.php">Cancelar</a>
                         </div>
 
                     </form>
