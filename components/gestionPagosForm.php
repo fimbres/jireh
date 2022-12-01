@@ -26,7 +26,7 @@
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="costo_inpt_recepcionista"><b>*</b>Costo de la cita (MXN)</label>
-            <input id="CostoCita" type="number" class="form-control formModificarInput" placeholder="$00.00" value="<?php print($infoCita["Costo"]);?>">
+            <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?>  id="CostoCita" type="number" class="form-control formModificarInput" placeholder="$00.00" value="<?php print($infoCita["Costo"]);?>">
         </div>
     </div>
     <div class="form-row row justify-content-center">
@@ -38,16 +38,16 @@
     <div id="formPago" class="form-row row justify-content-center shadow">
         <nav id="navbarPagos" class="float-start bg-custom-gray-light mb-3 p-0 ms-0">
                 <ul class="list-unstyled">
-                    <li class="float-start"><a id="Stripe" onclick="selectMenu(this.id)" class="active menuItem d-block bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark custom-border-top-left fw-bold" href="#formPago">Stripe</a></li>
-                    <li class="float-start"><a id="Tarjeta" onclick="selectMenu(this.id)" class="d-block menuItem bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark" href="#formPago">Tarjeta</a></li>
-                    <li class="float-start"><a id="Efectivo" onclick="selectMenu(this.id)" class="d-block menuItem bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark" href="#formPago">Efectivo</a></li>
-                    <li class="float-start"><a id="Transferencia" onclick="selectMenu(this.id)" class="d-block menuItem bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark custom-border-top-right" href="#formPago">Transferencia</a></li>
+                    <li class="float-start"><a  <?php echo ($tipo_formulario == "modificar" ? "style='pointer-events: none'" : "")?> id="Stripe" onclick="selectMenu(this.id)" class="<?php echo ($tipo_formulario == "modificar" ? ($pagos_id['Stripe'] == $infoPago['IdMetodoPago'] ? "active fw-bold" : "") : "active fw-bold")?> menuItem d-block bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark custom-border-top-left " href="#formPago">Stripe</a></li>
+                    <li class="float-start"><a  <?php echo ($tipo_formulario == "modificar" ? "style='pointer-events: none'" : "")?> id="Tarjeta" onclick="selectMenu(this.id)" class="<?php echo ($tipo_formulario == "modificar" && $pagos_id['Tarjeta'] == $infoPago['IdMetodoPago'] ? "active fw-bold" : "")?> d-block menuItem bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark" href="#formPago">Tarjeta</a></li>
+                    <li class="float-start"><a  <?php echo ($tipo_formulario == "modificar" ? "style='pointer-events: none'" : "")?> id="Efectivo" onclick="selectMenu(this.id)" class="<?php echo ($tipo_formulario == "modificar" && $pagos_id['Efectivo'] == $infoPago['IdMetodoPago'] ? "active fw-bold" : "dd")?> d-block menuItem bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark" href="#formPago">Efectivo</a></li>
+                    <li class="float-start"><a  <?php echo ($tipo_formulario == "modificar" ? "style='pointer-events: none'" : "")?> id="Transferencia" onclick="selectMenu(this.id)" class="<?php echo ($tipo_formulario == "modificar" && $pagos_id['Transferencia'] == $infoPago['IdMetodoPago'] ? "active fw-bold" : "") ?> d-block menuItem bg-btn-gray-light ps-4 pe-4 pt-2 pb-2 text-decoration-none link-dark custom-border-top-right" href="#formPago">Transferencia</a></li>
                 </ul>
         </nav>
         <div class="form-group col-xl-12 col-md-12 pb-4 mt-4">
             <div id="pagoStripe" class="containerMethod d-flex justify-content-center align-items-center flex-wrap">
                 <label class="pt-2 pb-2">Token</label>
-                <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> id="txtToken" type="text" maxlength="20" autocomplete="off" class="form-control text-center" placeholder="Vacio por el momento..." readonly>
+                <input <?php echo ($tipo_formulario == "modificar" ? "disabled value='{$infoPago['AuthToken']}'" : "")?> id="txtToken" type="text" maxlength="20" autocomplete="off" class="form-control text-center" placeholder="Vacio por el momento..." readonly>
                 <?php 
                  if($tipo_formulario == "modificar"){
                 ?>

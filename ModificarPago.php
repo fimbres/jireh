@@ -10,12 +10,23 @@
         require_once('./includes/classes/bd.php');
         $BD = new BaseDeDatos();
         $infoCita = $BD->getTbCita_cita($idCita);
-
+        $infoPago = $BD->getTb_Pagos_cita($idCita);
+        if(!$infoPago)
+            header('location: index.php');
+        $infoPago = $infoPago->fetch_assoc();
         if($infoCita){
             $infoPaciente = $BD->getTbPaciente_nombrePaciente($infoCita["IdPaciente"]);
             $infoDoctor = $BD->getTbDoctor_nombreDoctor($infoCita["IdDoctor"]);            
         }else{
             header('location: index.php');
+        }
+        //Guardamos los valores de los 4 id de pagos
+        $temp= $BD->getTb_MetodoPago();
+        if(!$temp)
+            header('location: index.php');
+        $pagos_id = [];
+        while($p = mysqli_fetch_array($temp)){
+            $pagos_id[$p['MetodoPago']] = $p['IdMetodo'];
         }
 
     }else{

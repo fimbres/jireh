@@ -10,7 +10,6 @@
         require_once('./includes/classes/bd.php');
         $BD = new BaseDeDatos();
         $infoCita = $BD->getTbCita_cita($idCita);
-
         if($infoCita){
             $infoPaciente = $BD->getTbPaciente_nombrePaciente($infoCita["IdPaciente"]);
             $infoDoctor = $BD->getTbDoctor_nombreDoctor($infoCita["IdDoctor"]);            
