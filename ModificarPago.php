@@ -5,10 +5,10 @@
     }
     $tipo_formulario = 'modificar';
     $idCita = $_GET['idCita'];
-
+    $BD = new BaseDeDatos();
     if(!empty($idCita)){
         require_once('./includes/classes/bd.php');
-        $BD = new BaseDeDatos();
+        
         $infoCita = $BD->getTbCita_cita($idCita);
         $infoPago = $BD->getTb_Pagos_cita($idCita);
         if(!$infoPago)
@@ -30,9 +30,13 @@
         }
 
     }else{
+        $BD->close();
         header('location: index.php');
     }
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    }
+    $BD->close();
     date_default_timezone_set('America/Tijuana');
     $fecha = date("Y-m-d H:i:s");
 

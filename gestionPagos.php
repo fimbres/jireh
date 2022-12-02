@@ -3,13 +3,14 @@
     if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
         header('location: login.php');
     }
-    $tipo_formulario = 'modificar';
+    $tipo_formulario = 'registrar';
     $idCita = $_GET['idCita'];
 
     if(!empty($idCita)){
         require_once('./includes/classes/bd.php');
         $BD = new BaseDeDatos();
         $infoCita = $BD->getTbCita_cita($idCita);
+        $infoPago = $pagos_id = [];
         if($infoCita){
             $infoPaciente = $BD->getTbPaciente_nombrePaciente($infoCita["IdPaciente"]);
             $infoDoctor = $BD->getTbDoctor_nombreDoctor($infoCita["IdDoctor"]);            
