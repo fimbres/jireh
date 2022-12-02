@@ -88,6 +88,13 @@ class BaseDeDatos extends mysqli{
         $this->next_result();
         return ($this->error ? false :  $res);
     }
+    public function getTb_MetodoPago_id($id = 0){
+        $this->next_result();
+        $sql = "SELECT * FROM Tb_MetodoPago WHERE IdMetodo = $id";
+        $res = $this->query($sql);
+        $this->next_result();
+        return ($this->error ? false :  $res);
+    }
     public function getTb_Pagos_cita($id_cita = ''){
         $this->next_result();
         $sql = "SELECT * FROM Tb_Pago";

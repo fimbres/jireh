@@ -11,7 +11,7 @@
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="fecha_inpt_paciente"><b>*</b>Fecha y Hora</label>
-            <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> id="fechaHora" type="datetime-local" class="form-control formModificarInput" value="<?php print("$fecha");?>">
+            <input id="fechaHora" name="fechaHora" type="datetime-local" class="form-control formModificarInput" value="<?php $tipo_formulario == "modificar" ? print($infoPago['FechaPago']) : print("$fecha");?>">
         </div>
     </div>
     <div class="form-row row">
@@ -26,7 +26,7 @@
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="costo_inpt_recepcionista"><b>*</b>Costo de la cita (MXN)</label>
-            <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?>  id="CostoCita" type="number" class="form-control formModificarInput" placeholder="$00.00" value="<?php print($infoCita["Costo"]);?>">
+            <input <?php echo ($tipo_formulario == "modificar" && $pagos_id['Efectivo'] != $infoPago['IdMetodoPago'] ? "disabled" : "")?>  id="CostoCita" name="CostoCita" type="number" class="form-control formModificarInput" placeholder="$00.00" value="<?php print($infoCita["Costo"]);?>">
         </div>
     </div>
     <div class="form-row row justify-content-center">
@@ -65,35 +65,43 @@
                 <label class="pt-2 pb-2">Token</label>
                 <input <?php echo ($tipo_formulario == "modificar" ? "disabled value='{$infoPago['AuthToken']}'" : "")?> id="txtToken" type="text" maxlength="20" autocomplete="off" class="form-control text-center" placeholder="Vacio por el momento..." readonly>
                 <?php 
-                 if($tipo_formulario == "modificar"){
+                 if($tipo_formulario != "modificar"){
                 ?>
                 <button id="btnGenerateToken" class="btn btn-primary text-white fw-bold mt-4">Generar Token</button>
                 <?php }?>
             </div>
             <div id="pagoTarjeta" class="containerMethod <?php echo ($tipo_formulario == "modificar" ?( $pagos_id['Tarjeta'] != $infoPago['IdMetodoPago'] ? "visually-hidden" : "")  : "visually-hidden")?>">
                 <label class="pt-2 pb-2">Número de Voucher</label>
-                <input id="txtVoucher" type="text" autocomplete="off" class="form-control" placeholder="Num. de Voucher">
+                <input id="txtVoucher" name="txtVoucher" type="text" autocomplete="off" class="form-control" placeholder="Num. de Voucher" value="<?php echo $tipo_formulario == "modificar" ? $infoPago['NumeroOperacion'] : ""?>">
             </div>
             <div id="pagoEfectivo" class="containerMethod <?php echo ($tipo_formulario == "modificar" ?( $pagos_id['Efectivo'] != $infoPago['IdMetodoPago'] ? "visually-hidden" : "")  : "visually-hidden")?>">
                 <label class="pt-2 pb-2">Total pagado</label>
-                <input id="txtEfectivo" type="number" value="<?php print($infoCita["Costo"]);?>" autocomplete="off" class="form-control" placeholder="$00.00">
+                <input id="txtEfectivo" type="number" <?php echo ($tipo_formulario == "modificar" ? "disabled" : "" )?>  value="<?php print($infoCita["Costo"]);?>" autocomplete="off" class="form-control" placeholder="$00.00">
             </div>
             <div id="pagoTransferencia" class="containerMethod <?php echo ($tipo_formulario == "modificar" ?( $pagos_id['Transferencia'] != $infoPago['IdMetodoPago'] ? "visually-hidden" : "")  : "visually-hidden")?>">
                 <label class="pt-2 pb-2">Número de referencia</label>
-                <input id="txtTransferencia" type="text" autocomplete="off" class="form-control" placeholder="Num. de referencia">
+                <input id="txtTransferencia" name="txtTransferencia" type="text" autocomplete="off" class="form-control" placeholder="Num. de referencia" value="<?php echo $tipo_formulario == "modificar" ? $infoPago['NumeroOperacion'] : ""?>">
             </div>
             <label id="errorMessage" class="mt-4 text-danger fw-bold fs-6 visually-hidden">Etiqueta para notificaciones/errores</label>
         </div>
         <div class="form-group col-12 pb-4 d-flex justify-content-end align-items-center">
-            <input id="btnPagar" type="button" 
+            <input  
             <?php if($tipo_formulario == "modificar"){?>
+                type="submit" 
                 value="Modificar"
             <?php } else{?>
+                type="button" 
+                id="btnPagar"
                 value="Pagar"
                 disabled
             <?php }?>
             class="btn btn-primary ms-3 me-3 ps-4 pe-4">
-            <input id="btnCancelar" type="button" value="Cancelar" class="btn btn-danger ms-3 me-3">
+            <?php if($tipo_formulario == "modificar"){?>
+                <a id="btnCancelar" class="btn btn-danger ms-3 me-3" href="listarPagos.php">Cancelar</a>
+
+            <?php } else {?>
+                <input id="btnCancelar" type="button" value="Cancelar" class="btn btn-danger ms-3 me-3">
+            <?php }?>
         </div>
     </div>
 </form>

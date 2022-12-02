@@ -1,14 +1,14 @@
 <?php
     require_once('utils/sessionCheck.php');
+    require_once('includes/includes.php');
     if(!comprobar_sesion_y_rol("Tb_Recepcionista")){
         header('location: login.php');
     }
     $tipo_formulario = 'modificar';
     $idCita = $_GET['idCita'];
+    $alerta = false;
     $BD = new BaseDeDatos();
     if(!empty($idCita)){
-        require_once('./includes/classes/bd.php');
-        
         $infoCita = $BD->getTbCita_cita($idCita);
         $infoPago = $BD->getTb_Pagos_cita($idCita);
         if(!$infoPago)
@@ -34,7 +34,56 @@
         header('location: index.php');
     }
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
+        //Modificacion si es stripe
+        $tipo_pago = $BD->getTb_MetodoPago_id($infoPago['IdMetodoPago']);
+        if(!$tipo_pago)
+            header('location: index.php');
+        $tipo_pago = $tipo_pago->fetch_assoc();
+        $fecha_post = explode('T',$_POST['fechaHora']);
+        $sql = "UPDATE Tb_Pago SET FechaPago = '{$fecha_post[0]} {$fecha_post[1]}' ";
+        switch ($tipo_pago['MetodoPago']) {
+            case 'Tarjeta':
+                $num_operacion = limpiar_string($_POST['txtVoucher']);
+                $sql .= ", NumeroOperacion = '$num_operacion' ";
+                break;
+            case 'Transferencia':
+                $num_operacion = limpiar_string($_POST['txtTransferencia']);
+                $sql .= ", NumeroOperacion = '$num_operacion' ";
+                break;
+            default:
+                # code...
+                break;
+        }
+        $sql .= " WHERE IdPago = {$infoPago['IdPago']}";
+        $res_update = $BD->query($sql);
+        if($res_update){
+            //Verificamos el metodo de pago haya sidop efectivo
+            if($tipo_pago['MetodoPago'] == "Efectivo"){
+                $nuevo_costo = $_POST['CostoCita'];
+                $sql = "UPDATE Tb_Cita SET Costo = $nuevo_costo WHERE IdCita = $idCita";
+                if($BD->query($sql)){
+                    $infoCita = $BD->getTbCita_cita($idCita);
+                    $alerta = $infoCita ? new Alerta('Se modificaron los datos con exito') : false;
+                }
+            } else{
+                $alerta = $infoCita ? new Alerta('Se modificaron los datos con exito') : false;
+            }
+        }
+        if(!$alerta){
+            $alerta = new Alerta("Error",["No se pudo modificar los datos"]);
+            $alerta->setOpcion('icon',"'error'");
+            $alerta->setOpcion("confirmButtonColor","'#dc3545'");
+        } else{
+            $infoPago = $BD->getTb_Pagos_cita($idCita);
+            if(!$infoPago){
+                $alerta = new Alerta("Error",["Hubo un error para mostrar los datos actualizados"]);
+                $alerta->setOpcion('icon',"'error'");
+                $alerta->setOpcion("confirmButtonColor","'#dc3545'");
+            }
+            else
+                $infoPago = $infoPago->fetch_assoc();
+        }
+        
     }
     $BD->close();
     date_default_timezone_set('America/Tijuana');
@@ -88,6 +137,12 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="./js/datatables.js"></script>
     <script src="./js/systemFunctions.js"></script>
-    <script src="./js/gestionPagos.js" type="text/javascript"></script> 
+    <?php 
+        if($alerta){
+            echo "<script type='text/javascript'>
+            {$alerta->activar_sweet_alert()}
+            </script>";
+        }
+    ?>
 </body>
 </html>
