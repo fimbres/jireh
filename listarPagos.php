@@ -66,7 +66,7 @@
                             <?php
                                 include("includes/funciones_BD.php");
                                 $conexion = crear_conexion();
-                                $query = $conexion->query("SELECT Tb_Pago.IdPago, Tb_Pago.IdMetodoPago, Tb_Pago.FechaPago, Tb_Cita.Costo, Tb_Paciente.Nombre, Tb_Paciente.APaterno, Tb_MetodoPago.MetodoPago FROM Tb_Pago, Tb_Cita, Tb_Paciente, Tb_MetodoPago WHERE Tb_Pago.IdCita = Tb_Cita.IdCita AND Tb_Paciente.IdPaciente = Tb_Cita.IdPaciente AND Tb_MetodoPago.IdMetodo = Tb_Pago.IdMetodoPago;");
+                                $query = $conexion->query("SELECT Tb_Pago.IdPago, Tb_Pago.IdMetodoPago, Tb_Pago.FechaPago, Tb_Cita.Costo, Tb_Paciente.Nombre, Tb_Paciente.APaterno, Tb_MetodoPago.MetodoPago, Tb_Cita.IdCita FROM Tb_Pago, Tb_Cita, Tb_Paciente, Tb_MetodoPago WHERE Tb_Pago.IdCita = Tb_Cita.IdCita AND Tb_Paciente.IdPaciente = Tb_Cita.IdPaciente AND Tb_MetodoPago.IdMetodo = Tb_Pago.IdMetodoPago;");
                                 while($fila = mysqli_fetch_array($query))
                                 {
                             ?>
@@ -78,7 +78,8 @@
                                     <td class="td-costoCita"><?php print("$".$fila['Costo']);?></td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <input type="button" class="btn btn-warning w-40 m-1" value="Modificar"/>
+                                            <a class="btn btn-warning w-40 m-1" href="<?php echo "ModificarPago.php?idCita=".$fila['IdCita']?>">Modificar</a>
+                                            <!-- <input type="button" class="btn btn-warning w-40 m-1" value="Modificar"/> -->
                                         </div>
                                     </td>
                                 </tr>
