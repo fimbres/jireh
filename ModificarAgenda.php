@@ -88,13 +88,12 @@ if(!$cita ){
                                         $query2 = "SELECT IdDoctor as DoctorSeleccionado, IdPaciente as PacienteSeleccionado FROM Tb_Cita WHERE IdCita = " . $id_cita . ";";
                                         $res = mysqli_query($conexion,$query);
                                         $res2 = mysqli_query($conexion,$query2);
-
+                                        
                                         $selecciones = mysqli_fetch_array($res2);
-                                        $datos = mysqli_fetch_array($res);
-                                        while($datos = mysqli_fetch_array($res))
+                                        while($datosPacientes = mysqli_fetch_array($res))
                                         {
                                     ?>
-                                        <option <?php if($selecciones['PacienteSeleccionado'] == $datos['IdPaciente']) echo "selected"?> value="<?php echo $datos['IdPaciente']?>"><?php echo $datos['NombreP']?></options>
+                                        <option <?php if($selecciones['PacienteSeleccionado'] == $datosPacientes['IdPaciente']) echo "selected"?> value="<?php echo $datosPacientes['IdPaciente']?>"><?php echo $datosPacientes['NombreP']?></options>
                                     <?php
                                         }
                                     ?>
@@ -128,11 +127,10 @@ if(!$cita ){
                                         $query = "SELECT IdDoctor, CONCAT(Nombre,' ',APaterno) AS NombreD FROM Tb_Doctor WHERE IdStatus = 3;";
                                         $res = mysqli_query($conexion,$query);
 
-                                        $datos = mysqli_fetch_array($res);
-                                        while($datos = mysqli_fetch_array($res))
+                                        while($datosDoctores = mysqli_fetch_array($res))
                                         {
                                     ?>
-                                        <option <?php if($selecciones['DoctorSeleccionado'] == $datos['IdDoctor']) echo "selected"?> value="<?php echo $datos['IdDoctor']?>"><?php echo $datos['NombreD']?></options>
+                                        <option <?php if($selecciones['DoctorSeleccionado'] == $datosDoctores['IdDoctor']) echo "selected"?> value="<?php echo $datosDoctores['IdDoctor']?>"><?php echo $datosDoctores['NombreD']?></options>
                                     <?php
                                         }
                                     ?>
