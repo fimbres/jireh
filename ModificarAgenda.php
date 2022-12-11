@@ -29,7 +29,7 @@ if(!$cita ){
         if($res[0]){
             $alerta = new Alerta($res[1],[],[],'./agenda.php');
         } else{
-            $alerta = new Alerta("Error",[$res[1]]);
+            $alerta = new Alerta("Error",$res[1]);
             $alerta->setOpcion('icon',"'error'");
             $alerta->setOpcion("confirmButtonColor","'#dc3545'");
         }
@@ -104,7 +104,7 @@ if(!$cita ){
                         </div>
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12 pb-4">
-                                <label for="taTratamiento">Tratamiento</label>
+                                <label for="taTratamiento">*Tratamiento</label>
                                 <input 
                                     id="taTratamiento" 
                                     name="tratamiento"  
@@ -120,7 +120,7 @@ if(!$cita ){
                         <div class="form-row row">
                             <div class="form-group col-xl-12 col-md-12">
                                 <label for="sDoctor">*Elige un doctor</label><br>
-                                <select id="sDoctor" name="doctor" class="form-select mb-3
+                                <select id="sDoctor" name="doctor" required class="form-select mb-3
                                 <?php if(isset($mensaje) &&in_array("Doctor",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" required>
                                 <option value="">Elige un doctor</option>
                                 <?php
@@ -140,7 +140,7 @@ if(!$cita ){
                         </div>
                         <div class="form-row row">
                             <div class="form-group col-xl-6 col-md-12">
-                                <label for="tbfecha">Fecha</label>
+                                <label for="tbfecha">*Fecha</label>
                                 <?php
                                         $query = "SELECT CAST(FechaInicio as DATE) as Fecha, Costo FROM Tb_Cita WHERE IdCita =". $id_cita;
                                         $res = mysqli_query($conexion,$query);
@@ -159,20 +159,21 @@ if(!$cita ){
                                     >
                             </div>
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                <label for="tbCosto">Costo de la cita</label>&nbsp;
+                                <label for="tbCosto">*Costo de la cita</label>&nbsp;
                                 <input 
                                     name="costo" 
                                     type="text" 
                                     class="form-control
                                     <?php if(isset($mensaje) && in_array("Costo",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?> " 
                                     onkeypress="return /[0-9.]/i.test(event.key)" aria-label="Amount (to the nearest dollar)"
+                                    required
                                     <?php echo "value='{$datos['Costo']}'"?>
                                 >
                             </div>
                         </div>
                         <div class="form-row row justify-content-center">
                             <div class="form-group col-xl-6 col-md-12 pb-4">
-                                    <label for="tbHorainicio">Hora Inicio</label>
+                                    <label for="tbHorainicio">*Hora Inicio</label>
                                     <?php
                                         $query = "SELECT CAST(FechaInicio as TIME) as horaI, CAST(FechaFinal as TIME) as horaIF FROM Tb_Cita WHERE IdCita =". $id_cita;
                                         $res = mysqli_query($conexion,$query);
@@ -185,12 +186,12 @@ if(!$cita ){
                                         class="form-control
                                         <?php if(isset($mensaje) &&in_array("Hora",$mensaje)) echo "is-invalid";else if($intento_fallido) echo "is-valid";?>" 
                                         placeholder="--:--" 
-                                        required 
+                                        required
                                         <?php echo "value='{$datos['horaI']}'"?>
                                         >
                                 </div>
                                 <div class="form-group col-xl-6 col-md-12 pb-4">
-                                    <label for="tbHorafin">Hora Fin</label>
+                                    <label for="tbHorafin">*Hora Fin</label>
 
                                     <input 
                                         id="tbHorafin"
@@ -206,7 +207,7 @@ if(!$cita ){
                             </div>
                         </div>
                         <div class="form-row row justify-content-center pt-3">
-                            <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Actualizar</button>
+                            <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Modificar</button>
                             <a class="row btn btn-danger mx-3 col-md-3 col-5" href="agenda.php">Cancelar</a>
                         </div>
 
