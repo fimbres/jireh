@@ -114,7 +114,7 @@
                             <div class="col-9 justify-content-end m-0 d-flex"> 
                                 <?php if(comprobar_sesion_y_rol("Tb_Recepcionista")): ?>
                                     <a class="btn btn-danger mx-2" id="motivo1">Eliminar</a>
-                                    <a class="btn btn-warning mx-2" id="editar-modal" href="ModificarAgenda.php">Cancelar</a>
+                                    <a class="btn btn-warning mx-2" id="editar-modal" href="ModificarAgenda.php">Modificar</a>
                                 <?php endif;?>
                             </div>
                         </div>
