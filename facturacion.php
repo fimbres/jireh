@@ -2,6 +2,8 @@
     require_once('vendor/autoload.php');
     require_once('includes/includes.php');
     require_once('./utils/sendMail.php');
+
+    $alerta = false;
     
     if(!isset($_GET['idCita'])){
         header('location: index.php');
@@ -14,7 +16,7 @@
             $message .= $nombre_campo . ' = ' . $valor . ', '; 
         }
         
-        $destinatario = 'arielg.incgarcia@gmail.com';
+        $destinatario = 'metafusion.contaduria@gmail.com';
 
         $resultado = enviarMail($destinatario, $message, 'Solicitud de factura');
 

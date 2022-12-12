@@ -41,32 +41,52 @@
         $tipo_pago = $tipo_pago->fetch_assoc();
         $fecha_post = explode('T',$_POST['fechaHora']);
         $sql = "UPDATE Tb_Pago SET FechaPago = '{$fecha_post[0]} {$fecha_post[1]}' ";
+        $bien = true;
         switch ($tipo_pago['MetodoPago']) {
             case 'Tarjeta':
                 $num_operacion = limpiar_string($_POST['txtVoucher']);
-                $sql .= ", NumeroOperacion = '$num_operacion' ";
+                if($num_operacion == ''){
+                    $alerta = new Alerta('Llena los datos', ['El número de Voucher es requerido']);
+                    $alerta->setOpcion('icon',"'error'");
+                    $alerta->setOpcion("confirmButtonColor","'#dc3545'");
+                    $bien = false;
+                }
+                else{
+                    $sql .= ", NumeroOperacion = '$num_operacion' ";
+                }
                 break;
             case 'Transferencia':
                 $num_operacion = limpiar_string($_POST['txtTransferencia']);
-                $sql .= ", NumeroOperacion = '$num_operacion' ";
+                if($num_operacion == ''){
+                    $alerta = new Alerta('Llena los datos', ['El número de transferencia es requerido']);
+                    $alerta->setOpcion('icon',"'error'");
+                    $alerta->setOpcion("confirmButtonColor","'#dc3545'");
+                    $bien = false;
+                }
+                else{
+                    $sql .= ", NumeroOperacion = '$num_operacion' ";
+                }
                 break;
             default:
                 # code...
                 break;
         }
-        $sql .= " WHERE IdPago = {$infoPago['IdPago']}";
-        $res_update = $BD->query($sql);
-        if($res_update){
-            //Verificamos el metodo de pago haya sidop efectivo
-            if($tipo_pago['MetodoPago'] == "Efectivo"){
-                $nuevo_costo = $_POST['CostoCita'];
-                $sql = "UPDATE Tb_Cita SET Costo = $nuevo_costo WHERE IdCita = $idCita";
-                if($BD->query($sql)){
-                    $infoCita = $BD->getTbCita_cita($idCita);
-                    $alerta = $infoCita ? new Alerta('Se modificaron los datos con exito') : false;
+        if($bien){
+            $sql .= " WHERE IdPago = {$infoPago['IdPago']}";
+            $res_update = $BD->query($sql);
+            
+            if($res_update){
+                //Verificamos el metodo de pago haya sidop efectivo
+                if($tipo_pago['MetodoPago'] == "Efectivo"){
+                    $nuevo_costo = $_POST['CostoCita'];
+                    $sql = "UPDATE Tb_Cita SET Costo = $nuevo_costo WHERE IdCita = $idCita";
+                    if($BD->query($sql)){
+                        $infoCita = $BD->getTbCita_cita($idCita);
+                        $alerta = $infoCita ? new Alerta('Se modificaron los datos con exito',[],[],'./listarPagos.php') : false;
+                    }
+                } else{
+                    $alerta = $infoCita ? new Alerta('Se modificaron los datos con exito',[],[],'./listarPagos.php') : false;
                 }
-            } else{
-                $alerta = $infoCita ? new Alerta('Se modificaron los datos con exito') : false;
             }
         }
         if(!$alerta){

@@ -45,7 +45,6 @@ function selectMenu(idItem) {
 
   //OBTENIENDO EL METODO DE PAGO SEGUN LA SELECCION DEL USUARIO
   metodoPago = ""+idItem;
-  console.log(metodoPago);
 }
 
 formulario.addEventListener("submit", function (e) {
