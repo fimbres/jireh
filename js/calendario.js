@@ -71,6 +71,10 @@ const mostrarInfoEvento = (info) => {
       cita.IdStatus == 2 ? $("#cancelar-modal").addClass("visually-hidden") : $("#cancelar-modal").removeClass("visually-hidden");
       cita.IdStatus == 2 ? $("#editar-modal").addClass("visually-hidden") : $("#editar-modal").removeClass("visually-hidden");
 
+      res.comentarios ? $("#observaciones").val(res.comentarios) : $("#observaciones").val('');
+      res.comentarios ? $("#registrar-comentarios").addClass('visually-hidden') : $("#registrar-comentarios").removeClass('visually-hidden');
+      res.comentarios ? $("#observaciones").attr('readonly', true) : $("#observaciones").attr('readonly', false);
+
       $("#nombrePaciente").val(NombreCompletoP);
       $("#tratamiento").val(cita.Descripcion);
 

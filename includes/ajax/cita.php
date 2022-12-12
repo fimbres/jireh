@@ -34,7 +34,16 @@ if (isset($_SESSION['user_id'])) {
                         array_push($rowsDoctor,$temp);
                     }
 
-                    $response = array("respuesta" => "Exito", "cita" => $rows,"paciente" => $rowsPaciente,"doctor" => $rowsDoctor);
+                    $consComentario = $conexion->query("SELECT Comentario FROM Tb_Comentario WHERE IdCita = '{$id_cita}';");
+                    $comenFetch = mysqli_fetch_array($consComentario);
+
+                    if(isset($comenFetch[0])){
+                        $response = array("respuesta" => "Exito", "cita" => $rows,"paciente" => $rowsPaciente,"doctor" => $rowsDoctor, "comentarios" => $comenFetch[0]);
+                    }
+                    else{
+                        $response = array("respuesta" => "Exito", "cita" => $rows,"paciente" => $rowsPaciente,"doctor" => $rowsDoctor);
+                    }
+
                 }
             }
         } else {

@@ -2,8 +2,7 @@
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $comentarios = $_POST['observaciones'];
         $IdCita = $_POST['IdCita'];
-
-        $query = "INSERT INTO Tb_Comentario VALUES (1, '" . $comentarios . "', " . $IdCita . ");";
+        $query = "INSERT INTO Tb_Comentario (Comentario, IdCita) VALUES ('" . $comentarios . "', " . $IdCita . ");";
         include("includes/funciones_BD.php");
         $conexion = crear_conexion();
         $res = mysqli_query($conexion,$query);
@@ -95,7 +94,7 @@
         <div class="col-12 mt-2">
             <h6 class="text-dark">Observaciones de la cita</h6>
             <div class="form-floating">
-                <textarea required name="observaciones" id="observaciones" class="form-control" placeholder="Recomendaciones para el paciente, medicamentos, etc." style="height: 100px"></textarea>
+                <input required name="observaciones" id="observaciones" class="form-control" placeholder="Recomendaciones para el paciente, medicamentos, etc." style="height: 100px" />
             </div>
         </div>
     </div>
