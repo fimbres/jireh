@@ -52,6 +52,10 @@ formulario.addEventListener("submit", function (e) {
   e.preventDefault();
 });
 
+btnCancelar.addEventListener("click", () => {
+  window.location = "listarPagos.php";
+});
+
 //INTENTO DE REGISTRAR EL PAGO
 btnPagar.addEventListener("click", function () {
   obtenerData(metodoPago);
@@ -78,7 +82,7 @@ btnPagar.addEventListener("click", function () {
               window.location = "facturacion.php?idCita=" + data.idCita;
             }
             else{
-              window.location = "index.php";
+              window.location = "listarPagos.php";
             }
           });
         }
@@ -88,7 +92,7 @@ btnPagar.addEventListener("click", function () {
             title: "Correcto!",
             text: "El registro se realizó exitosamente",
           }).then(() => {
-              window.location = "index.php";
+              window.location = "listarPagos.php";
           });
         }
       }
