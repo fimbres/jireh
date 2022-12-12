@@ -68,6 +68,8 @@ const mostrarInfoEvento = (info) => {
         });
 
       $("#IdCita").val(cita.IdCita);
+      cita.IdStatus == 2 ? $("#cancelar-modal").addClass("visually-hidden") : $("#cancelar-modal").removeClass("visually-hidden");
+      cita.IdStatus == 2 ? $("#editar-modal").addClass("visually-hidden") : $("#editar-modal").removeClass("visually-hidden");
 
       $("#nombrePaciente").val(NombreCompletoP);
       $("#tratamiento").val(cita.Descripcion);
