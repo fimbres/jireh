@@ -7,7 +7,7 @@
     <div class="form-row row">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="nombre_inpt_paciente"><b>*</b>Nombre del paciente</label>
-            <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> id="nombrePaciente" type="text" autocomplete="off" class="form-control text-capitalize formModificarInput" placeholder="Nombre del paciente" value="<?php print($infoPaciente["Nombre"]." ".$infoPaciente["APaterno"]." ".$infoPaciente["AMaterno"])?>">
+            <input readonly id="nombrePaciente" type="text" autocomplete="off" class="form-control text-capitalize formModificarInput" placeholder="Nombre del paciente" value="<?php print($infoPaciente["Nombre"]." ".$infoPaciente["APaterno"]." ".$infoPaciente["AMaterno"])?>">
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="fecha_inpt_paciente"><b>*</b>Fecha y Hora</label>
@@ -17,7 +17,7 @@
     <div class="form-row row">
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="doctor_inpt_recepcionista"><b>*</b>Nombre del doctor</label>
-            <input <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> id="nombreDoctor" type="text" autocomplete="off" class="form-control text-capitalize" placeholder="Nombre del doctor" 
+            <input readonly id="nombreDoctor" type="text" autocomplete="off" class="form-control text-capitalize" placeholder="Nombre del doctor" 
             value="<?php 
             $infoDoctor["Nombre"] ? print($infoDoctor["Nombre"]) : print("");
             $infoDoctor["APaterno"] ? print(" ".$infoDoctor["APaterno"]) : print("");
@@ -26,13 +26,13 @@
         </div>
         <div class="form-group col-xl-6 col-md-12 pb-4">
             <label for="costo_inpt_recepcionista"><b>*</b>Costo de la cita (MXN)</label>
-            <input <?php echo ($tipo_formulario == "modificar" && $pagos_id['Efectivo'] != $infoPago['IdMetodoPago'] ? "disabled" : "")?>  id="CostoCita" name="CostoCita" type="number" class="form-control formModificarInput" placeholder="$00.00" value="<?php print($infoCita["Costo"]);?>">
+            <input readonly id="CostoCita" name="CostoCita" type="number" class="form-control formModificarInput" placeholder="$00.00" value="<?php print($infoCita["Costo"]);?>">
         </div>
     </div>
     <div class="form-row row justify-content-center">
         <div class="form-group col-xl-12 col-md-12 pb-4">
             <label for="descripcion_inpt">Descripción del servicio</label>
-            <textarea <?php echo ($tipo_formulario == "modificar" ? "disabled" : "")?> class="form-control" id="" rows="4" placeholder="Descripción"><?php print($infoCita["Descripcion"]);?></textarea>
+            <textarea <?php if(isset($infoCita["Descripcion"])) echo "readonly"?> class="form-control" id="" rows="4" placeholder="Descripción"><?php print($infoCita["Descripcion"]);?></textarea>
         </div>
     </div>
     <div id="formPago" class="form-row row justify-content-center shadow">
@@ -76,7 +76,7 @@
             </div>
             <div id="pagoEfectivo" class="containerMethod <?php echo ($tipo_formulario == "modificar" ?( $pagos_id['Efectivo'] != $infoPago['IdMetodoPago'] ? "visually-hidden" : "")  : "visually-hidden")?>">
                 <label class="pt-2 pb-2">Total pagado</label>
-                <input id="txtEfectivo" type="number" <?php echo ($tipo_formulario == "modificar" ? "disabled" : "" )?>  value="<?php print($infoCita["Costo"]);?>" autocomplete="off" class="form-control" placeholder="$00.00">
+                <input id="txtEfectivo" type="number" readonly value="<?php print($infoCita["Costo"]);?>" autocomplete="off" class="form-control" placeholder="$00.00">
             </div>
             <div id="pagoTransferencia" class="containerMethod <?php echo ($tipo_formulario == "modificar" ?( $pagos_id['Transferencia'] != $infoPago['IdMetodoPago'] ? "visually-hidden" : "")  : "visually-hidden")?>">
                 <label class="pt-2 pb-2">Número de referencia</label>

@@ -2,8 +2,6 @@
 const stripe = Stripe("pk_test_51M6YdrDAwqSpvGj6WfjgstQzI6wHmEjTdhSLHMTfXCEjE00Irdutlv9jXopA9DjKWJSnkcLcSveijV0mUemHs1c200292dGRs3");
 const token_stripe = $('#Token-Stripe').val()
 const citaFacturar = $('#citaFacturar').val()
-
-
 let elements;
 
 initialize();
@@ -24,9 +22,7 @@ async function initialize() {
       dinero: valor,
       token: token_stripe,
     }),
-  })
-  .then((res) => res.json())
-  ;
+  }).then((res) => res.json());
 
   elements = stripe.elements({ clientSecret });
 
@@ -42,56 +38,66 @@ async function handleSubmit(e) {
   e.preventDefault();
   setLoading(true);
   await Swal.fire({
-    title: '¿Estas seguro de hacer los pagos con los datos dados?',
+    title: '¿Estas seguro de realizar el pago con estos datos?',
     icon: 'info',
-    showCloseButton: true,
-    showCancelButton: false,
+    showCloseButton: false,
+    showCancelButton: true,
     showConfirmButton: true,
     // confirmButtonColor: '#28a745',
     confirmButtonText: 'Aceptar',
-  })
-  const { error } = await stripe.confirmPayment({
-    elements,
-    confirmParams: {
-      // Make sure to change this to your payment completion page
-      return_url: `../PagoPaciente.php?token=${token_stripe}`,
-    },
-  })
-  .then((res) => {
-    console.log(res)
-    Swal.fire({
-      title: 'Se ha hecho el pago correctamente',
-      text: '¿Desea solicitar factura?',
-      icon: 'success',
-      showCloseButton: true,
-      showCancelButton: true,
-      showConfirmButton: true,
-      confirmButtonColor: '#28a745',
-      confirmButtonText: 'Aceptar',
-    }).then((res) => {
-      if(res.isConfirmed){
-          window.location = "facturacion.php?idCita=" +  citaFacturar;
-      }
-      else{
-          window.location = "index.php";
-      }
-    })
-  })
-  
-  ;
+    cancelButtonText: 'Cancelar',
+  }).then((res) => {
+    if(res.isConfirmed){
+      stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: 'http://localhost/jireh-php', 
+        },
+        redirect: 'if_required',
+      }).then((res) => {
+        if(!res.error){
+          setLoading(false);
+          Swal.fire({
+            title: 'Se ha hecho el pago correctamente',
+            text: '¿Desea solicitar factura?',
+            icon: 'success',
+            showCloseButton: false,
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonColor: '#28a745',
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar',
+          }).then((res) => {
+            if(res.isConfirmed){
+                window.location = "facturacion.php?idCita=" +  citaFacturar;
+            }
+            else{
+                window.location = "index.php";
+            }
+          })
+        }
+        else {
+          setLoading(false);
+          Swal.fire({
+            title: 'Ocurrió un error',
+            text: res.error.message,
+            icon: 'error',
+            showConfirmButton: true,
+            confirmButtonText: 'Aceptar',
+          });
+        }
+      })
+    }
+    else{
+      setLoading(false);
+    }
+  });
 
   // This point will only be reached if there is an immediate error when
   // confirming the payment. Otherwise, your customer will be redirected to
   // your `return_url`. For some payment methods like iDEAL, your customer will
   // be redirected to an intermediate site first to authorize the payment, then
   // redirected to the `return_url`.
-  if (error.type === "card_error" || error.type === "validation_error") {
-    showMessage(error.message);
-  } else {
-    showMessage("An unexpected error occurred.");
-  }
-
-  setLoading(false);
 }
 
 // Fetches the payment intent status after payment submission

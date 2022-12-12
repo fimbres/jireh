@@ -7,9 +7,9 @@
     $response = [];
 
     //Query hacia la base de datos
-    $query = "SELECT IdCita, td.IdDoctor, FechaInicio, FechaFinal, CONCAT('DR ',td.Nombre,' ',td.APaterno) as Doctor, 
-    tc.Descripcion  
-    FROM Tb_Cita tc, Tb_Doctor td, Tb_Paciente tp, Tb_Status ts  
+    $query = "SELECT IdCita, td.IdDoctor, FechaInicio, ts.IdStatus, FechaFinal, CONCAT('DR ',td.Nombre,' ',td.APaterno) as Doctor, 
+    tc.Descripcion
+    FROM Tb_Cita tc, Tb_Doctor td, Tb_Paciente tp, Tb_Status ts
     WHERE tc.IdPaciente = tp.IdPaciente and tc.IdStatus = ts.IdStatus ";
     $input['id_doctor'] ? $query .= "and tc.IdDoctor = " . $input['id_doctor'] : $query .= "and tc.IdDoctor = td.IdDoctor";
     $query .= " group by tc.IdCita";

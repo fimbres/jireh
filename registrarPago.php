@@ -30,7 +30,6 @@
         <div id="displayActions" class="d-flex bg-white p-4 flex-column">
             <div class="d-flex flex-row justify-content-between" style="margin-bottom: 60px; margin-top: 30px;">
                 <h1 class="text-center">Registrar Pagos</h1>
-                <a href="./RegistrarPaciente.php"><button class="btn btn-primary w-40 m-1">Registrar Pago</button></a>
             </div>
             <div id="tablaPacientes" class="card mb-4 w-100">
                 <div class="card-header">
@@ -78,13 +77,12 @@
                                     <td class="td-status"><?php print($fila['statusDescripcion']);?></td>
                                     <td>
                                         <div class="d-flex justify-content-center">
-                                            <input type="button" class="btn btn-secondary w-40 m-1" onclick="pagarCita(<?php print($fila['citaIdCita']);?>)" value="Pagar"/>
+                                            <input <?php if($fila['statusDescripcion'] == 'Cancelada') echo "disabled"; ?> type="button" class="btn btn-success w-40 m-1" onclick="pagarCita(<?php print($fila['citaIdCita']);?>)" value="Pagar"/>
                                         </div>
                                     </td>
                                 </tr>
                             <?php
                                 }
-
                                 $conexion->close();
                             ?>
                         </tbody>

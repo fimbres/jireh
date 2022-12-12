@@ -45,11 +45,14 @@ function selectMenu(idItem) {
 
   //OBTENIENDO EL METODO DE PAGO SEGUN LA SELECCION DEL USUARIO
   metodoPago = ""+idItem;
-  console.log(metodoPago);
 }
 
 formulario.addEventListener("submit", function (e) {
   e.preventDefault();
+});
+
+btnCancelar.addEventListener("click", () => {
+  window.location = "listarPagos.php";
 });
 
 //INTENTO DE REGISTRAR EL PAGO
@@ -71,14 +74,14 @@ btnPagar.addEventListener("click", function () {
             title: "Correcto!",
             text: "Se ha registrado el pago\n¿Quieres solicitar una factura?",
             showCancelButton: true,
-            confirmButtonText: 'Solicitar Factura',
-            denyButtonText: `Cancelar`,
+            confirmButtonText: '"Solicitar Factura"',
+            denyButtonText: `"Cancelar"`,
           }).then((result) => {
             if(result.isConfirmed){
               window.location = "facturacion.php?idCita=" + data.idCita;
             }
             else{
-              window.location = "index.php";
+              window.location = "listarPagos.php";
             }
           });
         }
@@ -88,7 +91,7 @@ btnPagar.addEventListener("click", function () {
             title: "Correcto!",
             text: "El registro se realizó exitosamente",
           }).then(() => {
-              window.location = "index.php";
+              window.location = "listarPagos.php";
           });
         }
       }
