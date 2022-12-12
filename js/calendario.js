@@ -36,6 +36,7 @@ const mostrarInfoEvento = (info) => {
       $("#costoCita").val(cita.Costo);
       $("#id-cita").val(cita.IdCita);
       $('#editar-modal').attr('href', 'ModificarAgenda.php?id=' + cita.IdCita);
+      $('#cancelar-modal').attr('href', 'CancelarAgenda.php?id=' + cita.IdCita);
 
       let fechaCompletaInicio = ""+cita.FechaInicio;
       let fechaCompletaFinal = ""+cita.FechaFinal;
@@ -55,26 +56,10 @@ const mostrarInfoEvento = (info) => {
   
 }
 
-
-const coloresDoctores = (citas) => {
-  let doc = [...new Set(citas.map(item => parseInt(item.IdDoctor)))];
-  let doc_ordenado = doc.sort()
-  let array_colores = {}
-  let colores = ['#E74C3C','#9B59B6','#2980B9','#1ABC9C','#2ECC71','#F1C40F','#E67E22']
-  for (let i = 0; i < doc_ordenado.length; i++) {
-    if(i >= 6)
-      array_colores[doc_ordenado[i]] = colores[i];
-    else
-      array_colores[doc_ordenado[i]] = colores[0];
-  }
-  return array_colores;
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendario');
     var calendar;
-    const doctor = $('#calendario').attr('data-doctor') 
-    console.log(doctor);
+    const doctor = $('#calendario').attr('data-doctor');
     calendar = new FullCalendar.Calendar(calendarEl, {
         timeZone: 'UTC',
         themeSystem: 'bootstrap5',
@@ -108,15 +93,14 @@ document.addEventListener('DOMContentLoaded', function() {
       let exito = res.respuesta
       if(exito == 'Exito'){
         let citas = res.resultados;
-        const colores = coloresDoctores(citas)
         citas.forEach(element => {
           let objeto_cita = {
             title: element.Descripcion,
             start: element.FechaInicio,
             end: element.FechaFinal,
             id: element.IdCita,
-            backgroundColor: colores[element.IdDoctor],
-            borderColor: colores[element.IdDoctor]
+            backgroundColor: "fff",
+            borderColor: element.IdStatus == 2 ? "red" : "fff"
           }
           calendar.addEvent(objeto_cita)
         });

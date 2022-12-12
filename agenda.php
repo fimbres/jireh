@@ -113,7 +113,7 @@
                             </div>
                             <div class="col-9 justify-content-end m-0 d-flex"> 
                                 <?php if(comprobar_sesion_y_rol("Tb_Recepcionista")): ?>
-                                    <a class="btn btn-danger mx-2" id="motivo1">Eliminar</a>
+                                    <a class="btn btn-danger mx-2" id="cancelar-modal" href="CancelarAgenda.php">Cancelar</a>
                                     <a class="btn btn-warning mx-2" id="editar-modal" href="ModificarAgenda.php">Modificar</a>
                                 <?php endif;?>
                             </div>
@@ -122,89 +122,25 @@
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="motivo" data-bs-keyboard="false" tabindex="-1" aria-labelledby="motivolbl" aria-hidden="true">
-                <div id="modalContainer" class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header bg-custom-primary">
-                            <h4 class="modal-title text-white fw-bold" id="motivolbl">Información de la cita</h4>
-                            <button type="button" class="btn btn-close btn-danger bg-danger text-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body row justify-content-center">
-                            <div class="col-6 mt-2">
-                                <h6 class="text justify-content-center">Motivo de cancelacion</h6>
-                                <div class="mb-6">
-                                    <input id="motivoCancel" type="text" class="form-control" placeholder=""/>
-                                </div>
-                                <input type="hidden" id="id-cita" value="<?php echo $valor?>">
-                                <?php
-                                    $al = new Alerta("¿Deseas eliminar la cita?");
-                                    $al->setOpcion('icon',"'error'");
-                                    //$al->setOpcion('input');
-                                    $al->setOpcion("confirmButtonColor","'#dc3545'");
-                                    $al->setOpcion("confirmButtonText","'Eliminar'");
-                                    $al->setOpcion('showCancelButton',"true");
-                                    $al->setOpcion('cancelButtonText',"'Cancelar'");
-                                    $al->setEscuchar('#eliminar-modal');
-                                    $al->setThen("
-                                        if(res.isConfirmed){
-                                            let id_cita = parseInt($('#id-cita').val())
-                                            let motivo=$('#motivoCancel').val()
-                                            $.ajax({
-                                            type: 'POST',
-                                            url: 'EliminarCita.php',
-                                            data: { id: id_cita, motivoC : motivo},
-                                            dataType: 'json',
-                                            success: function (data) {
-                                                if (data.response === 'success') {
-                                                    Swal.fire(data.message, '', 'success')
-                                                    .then(e => {
-                                                        location.reload();
-                                                    })
-                                                } else if (data.response === 'invalid') {
-                                                    Swal.fire(data.message, '', 'error')
-                                                }
-                                            },
-                                            error: function (xhr, exception) {
-                                                    console.log('error', xhr);
-                                            },
-                                        });
-                                    }       
-                                    ");
-                                ?>
-                            </div>
-                        </div>
-                        <div class=" d-flex">
-                            <div class="col-12 justify-content-center  d-flex"> 
-                                <?php if(comprobar_sesion_y_rol("Tb_Recepcionista")): ?>
-                                    <a class="btn btn-danger mx-2" id="eliminar-modal" >Eliminar</a>
-                                    <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <?php endif;?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
+    </div>
     </main>
     <footer>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
         <script src='js/fullcalendar/main.min.js'></script>
         <script src='js/fullcalendar/locales/es.js'></script>
         <script src="js/calendario.js"></script>
         <script src="js/systemFunctions.js"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <?php
-        echo "
-        <script type='text/javascript'>
-            document.addEventListener('DOMContentLoaded',() =>{
-                {$al->activar_sweet_alert()}
-            })
-        </script>
-        "
-    ?> 
-</body>
-
+        <?php
+            echo "
+            <script type='text/javascript'>
+                document.addEventListener('DOMContentLoaded',() =>{
+                    {$al->activar_sweet_alert()}
+                })
+            </script>
+            "
+        ?> 
+    </body>
 </html>
