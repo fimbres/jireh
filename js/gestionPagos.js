@@ -74,8 +74,8 @@ btnPagar.addEventListener("click", function () {
             title: "Correcto!",
             text: "Se ha registrado el pago\n¿Quieres solicitar una factura?",
             showCancelButton: true,
-            confirmButtonText: 'Solicitar Factura',
-            denyButtonText: `Cancelar`,
+            confirmButtonText: '"Solicitar Factura"',
+            denyButtonText: `"Cancelar"`,
           }).then((result) => {
             if(result.isConfirmed){
               window.location = "facturacion.php?idCita=" + data.idCita;
