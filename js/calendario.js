@@ -13,9 +13,6 @@ const mostrarInfoEvento = (info) => {
       const cita = res.cita[0];
       const paciente = res.paciente[0];
       const doctor = res.doctor[0];
-      console.log(res.cita[0]);
-      console.log(res.paciente[0]);
-      console.log(res.doctor[0]);
 
       var NombreCompletoP = "";//PACIENTE
       var NombreCompletoD = "";//DOCTOR
@@ -23,6 +20,54 @@ const mostrarInfoEvento = (info) => {
       paciente.Nombre ? NombreCompletoP += paciente.Nombre : "";
       paciente.APaterno ? NombreCompletoP += " "+paciente.APaterno : "";
       paciente.AMaterno ? NombreCompletoP += " "+paciente.AMaterno : "";
+
+      $("#rol").val() === "Tb_Doctor" && $.ajax({
+        type: "POST",
+        url: "utils/getExpediente.php",
+        data: { pacienteId: cita.IdPaciente },
+        dataType: "json",
+        success: function (data) {
+          for (let item in data) {
+            let fieldValue;
+
+            switch (item) {
+            case "IdSexo":
+                fieldValue = data[item] === "1" ? "Masculino" : "Femenino";
+                break;
+            case "IdStatus":
+                if (data[item] >= "3")
+                fieldValue = data[item] === "3" ? "Activo" : "Inactivo";
+                break;
+            default:
+                fieldValue = data[item];
+                break;
+            }
+
+            //ASIGNAMOS UN VALOR DIFERENTE CADA VEZ QUE RECORREMOS
+            if (
+                item === "ArchivoAntecedentes" ||
+                item === "ArchivoPresupuesto" ||
+                item === "Archivo"
+            ) {
+                if (fieldValue) {
+                    $("#" + item).attr("src", fieldValue);
+                    $("#" + item).removeClass("visually-hidden");
+                    $("#container-" + item).removeClass("visually-hidden");
+                }
+                else{
+                    $("#container-" + item).addClass("visually-hidden");
+                }
+            } else {
+                $("#" + item).val(fieldValue);
+            }
+            }
+          },
+          error: function (xhr, exception) {
+          console.log("error", xhr);
+          },
+        });
+
+      $("#IdCita").val(cita.IdCita);
 
       $("#nombrePaciente").val(NombreCompletoP);
       $("#tratamiento").val(cita.Descripcion);

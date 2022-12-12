@@ -22,9 +22,7 @@ async function initialize() {
       dinero: valor,
       token: token_stripe,
     }),
-  })
-  .then((res) => res.json())
-  ;
+  }).then((res) => res.json());
 
   elements = stripe.elements({ clientSecret });
 
