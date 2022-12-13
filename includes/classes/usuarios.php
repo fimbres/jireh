@@ -301,14 +301,14 @@ class Recepcionista extends Usuario
         $this->telefono = $datos['telefono'];
         $this->correo = $datos['correo'];
         $this->usuario_nombre = $datos['usuario'];
-        $this->contra = $datos['contra'];
+        // $this->contra = $datos['contra'];
         if(!$this->id)
             return [false,"Hubo un error al cargar los datos, inténtalo de nuevo"];
         $BD->next_result();
         $sql = "UPDATE Tb_Recepcionista SET Nombre = '{$this->nombre}', APaterno = '{$this->apellido_p}',";
         $sql .= ($this->apellido_m ? " AMaterno = '{$this->apellido_m}', " : " AMaterno = NULL, ");
-        $sql .=" Email = '{$this->correo}', NumTelefono = '{$this->telefono}', Usuario = '{$this->usuario_nombre}',
-        Contrasena = '{$this->contra}'  WHERE IdRecepcionista = {$this->id}";
+        $sql .=" Email = '{$this->correo}', NumTelefono = '{$this->telefono}', Usuario = '{$this->usuario_nombre}' 
+        WHERE IdRecepcionista = {$this->id}";
         try {
             $BD->query($sql);
             return [true, "Se han hecho los cambios"];
@@ -386,9 +386,9 @@ class Recepcionista extends Usuario
         !isset($datos['telefono']) ? array_push($res, 'Teléfono') : false;
         !isset($datos['correo']) ? array_push($res, 'Correo Electrónico') : false;
         !isset($datos['usuario']) ? array_push($res, 'Usuario') : false;
-        !isset($datos['contra']) ? array_push($res, 'Contraseña') : false;
 
         if($tipo == 'agregar'){
+            !isset($datos['contra']) ? array_push($res, 'Contraseña') : false;
             !isset($datos['correo_conf']) ? array_push($res, 'Confirmación Correo Electrónico') : false;
             !isset($datos['contra_conf']) ? array_push($res, 'Confirmación Contraseña') : false;
             strcmp($datos['correo'], $datos['correo_conf']) != 0 ? array_push($res, 'No coinciden los Correos Electrónicos') : false;
@@ -475,14 +475,14 @@ class Doctor extends Usuario
         $this->telefono = $datos['telefono'];
         $this->correo = $datos['correo'];
         $this->usuario = $datos['usuario'];
-        $this->contra = $datos['contra'];
+        // $this->contra = $datos['contra'];
         if(!$this->id)
             return [false,"Hubo un error al cargar los datos, intentarlo de nuevo"];
         $BD->next_result();
         $sql = "UPDATE Tb_Doctor
         SET Nombre='{$this->nombre}', APaterno='{$this->apellido_p}',"; 
         $sql .= ($this->apellido_m ?  "AMaterno='{$this->apellido_m}', ": "AMaterno = NULL ,");
-        $sql .=" Email='{$this->correo}', NumTelefono='{$this->telefono}', Usuario='{$this->usuario}', Contrasena='{$this->contra}'
+        $sql .=" Email='{$this->correo}', NumTelefono='{$this->telefono}', Usuario='{$this->usuario}' 
         WHERE IdDoctor={$this->id}";
         try {
             $BD->query($sql);
@@ -555,9 +555,9 @@ class Doctor extends Usuario
         !isset($datos['telefono']) ? array_push($res, 'Telfono') : false;
         !isset($datos['correo']) ? array_push($res, 'Correo') : false;
         !isset($datos['usuario']) ? array_push($res, 'Usuario') : false;
-        !isset($datos['contra']) ? array_push($res, 'Contraseña') : false;
 
         if($tipo == 'agregar'){
+            !isset($datos['contra']) ? array_push($res, 'Contraseña') : false;
             !isset($datos['correo_conf']) ? array_push($res, 'Confirmacion Correo Electronico') : false;
             !isset($datos['contra_conf']) ? array_push($res, 'Confirmacion Contraseña') : false;
             strcmp($datos['correo'], $datos['correo_conf']) !=0 ? array_push($res , 'No coinciden los Correos Electronicos'): false;

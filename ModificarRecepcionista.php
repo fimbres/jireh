@@ -171,7 +171,7 @@ $BD->close();
                                     >
                             </div>
                         </div>
-                        <div class="form-row row justify-content-center">
+                        <!-- <div class="form-row row justify-content-center">
                             
                             <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="contra_inpt_recepcionista"><b>*</b>Contraseña</label>
@@ -179,14 +179,13 @@ $BD->close();
                                     id="contra_inpt_recepcionista" 
                                     name="contra" 
                                     type="password" 
-                                    class="form-control 
-                                    <?php if(isset($mensaje) && in_array("Contraseña",$mensaje)) echo "is-invalid"; ?>" 
+                                    class="form-control" 
                                     placeholder="*******" 
                                     required
                                     maxlength="15"
                                     >
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-row row justify-content-center pt-3">
                             <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Actualizar</button>
                             <a class="row btn btn-danger mx-3 col-md-3  col-5" href="gestionRecepcionistas.php">Cancelar</a>
