@@ -192,7 +192,7 @@ class Paciente extends Usuario
         CodigoPostal,Email,NumTelefono,FechaNacimiento,IdEstadoCivil,IdPoliza,MedicoEnvia,Representante,ArchivoAntecedentes,ArchivoPresupuesto,RFC,IdStatus)";
         $sql .= " values('{$this->nombre}','{$this->apellido_p}','{$this->apellido_p}',{$this->id_sexo},";
         $this->direccion ? $sql .= "'{$this->direccion}'," : $sql .= "NULL,"; 
-        $this->codigo_postal ? $sql .= "'{$this->codigo_postal}'," : "NULL,";
+        $this->codigo_postal ? $sql .= "'{$this->codigo_postal}'," : $sql .= "NULL,";
 
         $sql .= "'{$this->correo}','{$this->telefono}','{$this->fecha->format('Y-m-d')}',{$estado_civil['IdEstadoCivil']},";
         $this->id_poliza ? $sql .= "{$this->id_poliza}," : $sql .= " NULL,";
