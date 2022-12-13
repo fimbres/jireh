@@ -173,19 +173,18 @@ $BD->close();
                         </div>
                         <div class="form-row row justify-content-center">
                             
-                            <div class="form-group col-xl-6 col-md-12 pb-4">
+                            <!-- <div class="form-group col-xl-6 col-md-12 pb-4">
                                 <label for="contra_inpt_doctor"><b>*</b>Contraseña</label>
                                 <input 
                                     id="contra_inpt_doctor" 
                                     name="contra" 
                                     type="password" 
-                                    class="form-control 
-                                    <?php if(isset($mensaje) && in_array("Contraseña",$mensaje)) echo "is-invalid"; ?>" 
+                                    class="form-control" 
                                     placeholder="*******" 
                                     required
                                     maxlength="15"
                                     >
-                            </div>
+                            </div> -->
                         </div>
                         <div class="form-row row justify-content-center pt-3">
                             <button type="submit" class="btn btn-primary mx-3 col-md-3 col-5">Actualizar</button>
