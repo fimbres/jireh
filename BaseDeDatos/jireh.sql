@@ -304,6 +304,8 @@ CREATE TABLE `tb_tratamiento` (
 -- -----------------------------------------------------------
 -- blhfarhgxzvfusb9hkvg.Tb_Comentario definition
 
+-- blhfarhgxzvfusb9hkvg.Tb_Comentario definition
+
 CREATE TABLE `Tb_Comentario` (
   `IdComentario` int NOT NULL AUTO_INCREMENT,
   `Comentario` varchar(600) DEFAULT NULL,
@@ -312,7 +314,6 @@ CREATE TABLE `Tb_Comentario` (
   KEY `IdCita` (`IdCita`),
   CONSTRAINT `Tb_Comentario_ibfk_1` FOREIGN KEY (`IdCita`) REFERENCES `Tb_Cita` (`IdCita`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
 --
 -- Volcado de datos para la tabla `tb_tratamiento`
 --
