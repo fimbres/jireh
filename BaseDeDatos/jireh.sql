@@ -301,6 +301,19 @@ CREATE TABLE `tb_tratamiento` (
   `Descripcion` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- -----------------------------------------------------------
+-- blhfarhgxzvfusb9hkvg.Tb_Comentario definition
+
+-- blhfarhgxzvfusb9hkvg.Tb_Comentario definition
+
+CREATE TABLE `Tb_Comentario` (
+  `IdComentario` int NOT NULL AUTO_INCREMENT,
+  `Comentario` varchar(600) DEFAULT NULL,
+  `IdCita` int NOT NULL,
+  PRIMARY KEY (`IdComentario`),
+  KEY `IdCita` (`IdCita`),
+  CONSTRAINT `Tb_Comentario_ibfk_1` FOREIGN KEY (`IdCita`) REFERENCES `Tb_Cita` (`IdCita`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 --
 -- Volcado de datos para la tabla `tb_tratamiento`
 --
@@ -575,6 +588,8 @@ ALTER TABLE `tb_pago`
 ALTER TABLE `tb_recepcionista`
   ADD CONSTRAINT `Tb_Recepcionista_FK` FOREIGN KEY (`IdStatus`) REFERENCES `tb_status` (`IdStatus`);
 COMMIT;
+
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
